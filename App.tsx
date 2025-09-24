@@ -52,6 +52,8 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 import CognateComparisonToggle from './components/CognateComparisonToggle';
 import CognateDisplay from './components/CognateDisplay';
 import TextScannerModal from './components/TextScannerModal';
+import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
+import SpeakerIcon from './components/icons/SpeakerIcon';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -152,6 +154,7 @@ const App: React.FC = () => {
   const [isListening, setIsListening] = useState<boolean>(false);
   const [isSpeechRecognitionSupported, setIsSpeechRecognitionSupported] = useState<boolean>(false);
   const speechRecognition = useRef<SpeechRecognition | null>(null);
+  const { speak, cancel, isSpeaking, supported: isTtsSupported } = useSpeechSynthesis();
 
   const [isComparisonMode, setIsComparisonMode] = useState<boolean>(false);
   const [comparisonResults, setComparisonResults] = useState<Record<string, TransliterationOutput> | null>(null);
@@ -502,6 +505,22 @@ const App: React.FC = () => {
     }
   };
 
+  const getLangCodeForTTS = (lang: Language): string => {
+    switch (lang) {
+      case Language.ENGLISH: return 'en-US';
+      case Language.FRENCH: return 'fr-FR';
+      case Language.ARABIC: return 'ar-SA';
+      case Language.SPANISH: return 'es-ES';
+      case Language.ITALIAN: return 'it-IT';
+      case Language.GERMAN: return 'de-DE';
+      case Language.CHINESE: return 'zh-CN';
+      case Language.JAPANESE: return 'ja-JP';
+      case Language.GREEK: return 'el-GR';
+      case Language.TURKISH: return 'tr-TR';
+      default: return 'en-US';
+    }
+  };
+
   const handleToggleListen = () => {
     if (!speechRecognition.current || sourceLang === Language.PHOENICIAN || sourceLang === Language.PUNIC) return;
 
@@ -541,7 +560,7 @@ const App: React.FC = () => {
     setSourceText('');
     setTranslationResult('');
     try {
-        const { transcription, translation } = await getTranslationHintsFromImage(base64Data);
+        const { transcription, translation } = await getTranslationHintsFromImage(base64Data, phoenicianDialect);
         setSourceLang(Language.PUNIC);
         setTargetLang(Language.ENGLISH);
         setSourceText(transcription);
@@ -632,6 +651,32 @@ const App: React.FC = () => {
         console.error('Failed to copy text: ', err);
         setError(t('copyError'));
     });
+  };
+
+  const handleSpeak = () => {
+    if (isSpeaking) {
+      cancel();
+      return;
+    }
+    if (!translationResult) return;
+  
+    let textToSpeak = '';
+    let langCode = '';
+  
+    const isTargetPhoenicianFamily = targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC;
+  
+    if (typeof translationResult === 'object' && 'phoenician' in translationResult && isTargetPhoenicianFamily) {
+      textToSpeak = translationResult.latin; // Read the Latin transliteration
+      // Use Hebrew as a phonetic proxy for a Semitic language. Ar-SA is another option.
+      langCode = 'he-IL'; 
+    } else if (typeof translationResult === 'string') {
+      textToSpeak = translationResult;
+      langCode = getLangCodeForTTS(targetLang);
+    }
+  
+    if (textToSpeak && langCode) {
+      speak(textToSpeak, langCode);
+    }
   };
 
   const handleDictionaryWordSelect = (word: string) => {
@@ -786,6 +831,7 @@ const App: React.FC = () => {
                       onModeChange={setTransliterationMode}
                       isDisabled={isLoading}
                       t={t}
+                      dialect={phoenicianDialect}
                   />
               )}
             </div>
@@ -888,6 +934,15 @@ const App: React.FC = () => {
                       <div className="absolute top-3 right-3 z-10 flex space-x-1">
                         {currentTranslatedTextString && !isGroupEditMode && (
                           <>
+                              <button
+                                  onClick={handleSpeak}
+                                  disabled={!isTtsSupported}
+                                  className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:text-gray-600 disabled:cursor-not-allowed"
+                                  aria-label={isSpeaking ? t('stopSpeaking') : t('speakTranslation')}
+                                  title={isTtsSupported ? (isSpeaking ? t('stopSpeaking') : t('speakTranslation')) : t('ttsNotSupported')}
+                              >
+                                  <SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking} />
+                              </button>
                               {hasPhoenicianResult && (
                                   <button
                                       onClick={() => setIsGroupEditMode(true)}
@@ -903,7 +958,7 @@ const App: React.FC = () => {
                                   className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
                                   aria-label={isCopied ? t('copySuccess') : t('copyTitle')}
                                   title={isCopied ? t('copySuccess') : t('copyTitle')}
-                              >
+                                >
                                   {isCopied ? <CheckIcon className="w-5 h-5" /> : <CopyIcon className="w-5 h-5" />}
                               </button>
                               <button

@@ -273,7 +273,8 @@ export const getPhoenicianWordDetails = async (word: string): Promise<Phoenician
 };
 
 export const getTranslationHintsFromImage = async (
-  base64ImageData: string
+  base64ImageData: string,
+  dialect: PhoenicianDialect
 ): Promise<{ transcription: string; translation: string }> => {
   const imagePart = {
     inlineData: {
@@ -282,8 +283,10 @@ export const getTranslationHintsFromImage = async (
     },
   };
 
+  const scriptName = dialect === PhoenicianDialect.PUNIC ? "Punic" : "Standard Phoenician";
+
   const textPart = {
-    text: "You are an expert OCR tool for ancient scripts. Transcribe any Punic text in this image. Then, provide a simple, literal English translation of the transcribed text. If no text is found, return empty strings for both fields. Respond ONLY in a valid JSON format. Do not add any markdown formatting like ```json. The JSON should have two keys: 'transcription' (the Punic text using Unicode characters U+10900–U+1091F) and 'translation' (the English text).",
+    text: `You are an expert OCR tool for ancient scripts. Transcribe any ${scriptName} text in this image. Then, provide a simple, literal English translation of the transcribed text. If no text is found, return empty strings for both fields. Respond ONLY in a valid JSON format. Do not add any markdown formatting like \`\`\`json. The JSON should have two keys: 'transcription' (the ${scriptName} text using Unicode characters U+10900–U+1091F) and 'translation' (the English text).`,
   };
   
   const hintSchema = {
@@ -291,7 +294,7 @@ export const getTranslationHintsFromImage = async (
     properties: {
       transcription: {
         type: Type.STRING,
-        description: "The transcribed text in Punic script (Unicode range U+10900–U+1091F).",
+        description: `The transcribed text in ${scriptName} script (Unicode range U+10900–U+1091F).`,
       },
       translation: {
         type: Type.STRING,
