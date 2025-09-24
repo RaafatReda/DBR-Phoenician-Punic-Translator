@@ -17,11 +17,12 @@ interface KeyboardProps {
   onClose: () => void;
   onEnter?: () => void;
   t: (key: string) => string;
+  onLayoutChange?: (layout: KeyboardLayoutName) => void;
 }
 
 const keyboardLayoutNames: KeyboardLayoutName[] = ['phoenician', 'punic', 'english', 'french', 'arabic'];
 
-const Keyboard: React.FC<KeyboardProps> = ({ isOpen, sourceLang, dialect, onKeyPress, onBackspace, onClose, onEnter, t }) => {
+const Keyboard: React.FC<KeyboardProps> = ({ isOpen, sourceLang, dialect, onKeyPress, onBackspace, onClose, onEnter, t, onLayoutChange }) => {
   const [layoutName, setLayoutName] = useState<KeyboardLayoutName>(() => {
     return (localStorage.getItem('dbr-translator-keyboard-layout') as KeyboardLayoutName) || 'phoenician';
   });
@@ -31,7 +32,8 @@ const Keyboard: React.FC<KeyboardProps> = ({ isOpen, sourceLang, dialect, onKeyP
 
   useEffect(() => {
     localStorage.setItem('dbr-translator-keyboard-layout', layoutName);
-  }, [layoutName]);
+    onLayoutChange?.(layoutName);
+  }, [layoutName, onLayoutChange]);
 
   useEffect(() => {
     if (isInitialMount.current) {

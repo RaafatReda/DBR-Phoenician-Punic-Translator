@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 import { ChatMessage, Language, PhoenicianDialect } from '../types';
 import CloseIcon from './icons/CloseIcon';
@@ -8,6 +8,7 @@ import Keyboard from './Keyboard';
 import KeyboardIcon from './icons/KeyboardIcon';
 import { UILang } from '../lib/i18n';
 import ScriptModeToggle from './ScriptModeToggle';
+import { KeyboardLayoutName } from '../lib/keyboardLayouts';
 
 interface ChatModalProps {
   onClose: () => void;
@@ -82,6 +83,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
     const [isAiThinking, setIsAiThinking] = useState(true);
     const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
     const [scriptMode, setScriptMode] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
+    const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutName>('phoenician');
     const chat = useRef<Chat | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -184,16 +186,35 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
         inputRef.current?.focus();
     };
 
-    const fontClass = scriptMode === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-xl' : '[font-family:var(--font-phoenician)] text-lg';
+    const { inputFontClass, inputDir } = useMemo(() => {
+        switch (keyboardLayout) {
+            case 'phoenician':
+                return { inputFontClass: '[font-family:var(--font-phoenician)] text-lg', inputDir: 'rtl' as 'rtl' | 'ltr' };
+            case 'punic':
+                return { inputFontClass: '[font-family:var(--font-punic)] text-xl', inputDir: 'rtl' as 'rtl' | 'ltr' };
+            case 'arabic':
+                return { inputFontClass: 'font-sans text-lg', inputDir: 'rtl' as 'rtl' | 'ltr' };
+            default:
+                return { inputFontClass: 'font-sans text-base', inputDir: 'ltr' as 'rtl' | 'ltr' };
+        }
+    }, [keyboardLayout]);
 
     const renderMessage = (msg: ChatMessage) => {
         const isUser = msg.sender === 'user';
         const { phoenician, hint } = isUser ? { phoenician: msg.text, hint: '' } : parseAiResponse(msg.text);
 
+        const aiFontClass = scriptMode === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-xl' : '[font-family:var(--font-phoenician)] text-lg';
+        
+        // For user messages, try to detect if it's a Phoenician/Punic or RTL script to apply the correct font and direction.
+        const isPhoenicianScript = /[\u10900-\u1091F]/.test(msg.text);
+        const isRtlScript = isPhoenicianScript || /[\u0600-\u06FF]/.test(msg.text); // Check for Phoenician or Arabic characters
+        const userMessageFontClass = isPhoenicianScript ? aiFontClass : 'font-sans';
+        const userMessageDir = isRtlScript ? 'rtl' : 'ltr';
+
         return (
             <div key={msg.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-                <div dir="rtl" className={`max-w-xs md:max-w-md lg:max-w-lg px-4 py-3 rounded-2xl ${isUser ? 'bg-[color:var(--color-primary)] text-[color:var(--color-bg-start)] rounded-br-none' : 'bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)] rounded-bl-none'}`}>
-                    <p className={`${fontClass} leading-tight`}>{phoenician}</p>
+                <div dir={isUser ? userMessageDir : 'rtl'} className={`max-w-xs md:max-w-md lg:max-w-lg px-4 py-3 rounded-2xl ${isUser ? 'bg-[color:var(--color-primary)] text-[color:var(--color-bg-start)] rounded-br-none' : 'bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)] rounded-bl-none'}`}>
+                    <p className={`${isUser ? userMessageFontClass : aiFontClass} leading-tight`}>{isUser ? msg.text : phoenician}</p>
                     {hint && <p dir={uiLang === 'ar' ? 'rtl' : 'ltr'} lang={uiLang} className="text-xs text-[color:var(--color-text-muted)] italic mt-2">{hint}</p>}
                 </div>
             </div>
@@ -202,9 +223,9 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
 
     return (
         <>
-            <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-end sm:items-center z-50 transition-all duration-300 ${isKeyboardOpen ? 'pb-[270px]' : ''}`} onClick={onClose}>
+            <div className={`fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-end sm:items-center z-50`} onClick={onClose}>
                 <div 
-                    className="glass-panel w-full sm:max-w-lg h-[90vh] sm:h-[80vh] max-h-[700px] flex flex-col rounded-t-2xl sm:rounded-2xl shadow-2xl"
+                    className={`glass-panel w-full sm:max-w-lg h-[90vh] sm:h-[80vh] max-h-[700px] flex flex-col rounded-t-2xl sm:rounded-2xl shadow-2xl transition-all duration-300 ${isKeyboardOpen ? 'mb-[270px] sm:mb-0' : ''}`}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0">
@@ -240,10 +261,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder={scriptMode === PhoenicianDialect.PUNIC ? t('chatPlaceholderPunic') : t('chatPlaceholderPhoenician')}
-                                className={`flex-1 bg-transparent text-[color:var(--color-text)] border border-[color:var(--color-border)] rounded-full py-2 px-4 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)] ${fontClass}`}
+                                className={`flex-1 bg-transparent text-[color:var(--color-text)] border border-[color:var(--color-border)] rounded-full py-2 px-4 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)] ${inputFontClass}`}
                                 disabled={isAiThinking}
                                 autoFocus
-                                dir="rtl"
+                                dir={inputDir}
                             />
                              <button
                                 type="button"
@@ -270,6 +291,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
                 onClose={() => setIsKeyboardOpen(false)}
                 onEnter={sendMessage}
                 t={t}
+                onLayoutChange={setKeyboardLayout}
             />
         </>
     );
