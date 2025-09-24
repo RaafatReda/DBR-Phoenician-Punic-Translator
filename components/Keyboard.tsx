@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Key from './Key';
 import { layouts, KeyboardLayoutName } from '../lib/keyboardLayouts';
 import BackspaceIcon from './icons/BackspaceIcon';
@@ -22,11 +22,23 @@ interface KeyboardProps {
 const keyboardLayoutNames: KeyboardLayoutName[] = ['phoenician', 'punic', 'english', 'french', 'arabic'];
 
 const Keyboard: React.FC<KeyboardProps> = ({ isOpen, sourceLang, dialect, onKeyPress, onBackspace, onClose, onEnter, t }) => {
-  const [layoutName, setLayoutName] = useState<KeyboardLayoutName>('phoenician');
+  const [layoutName, setLayoutName] = useState<KeyboardLayoutName>(() => {
+    return (localStorage.getItem('dbr-translator-keyboard-layout') as KeyboardLayoutName) || 'phoenician';
+  });
   const [isShifted, setIsShifted] = useState(false);
   const [showSymbols, setShowSymbols] = useState(false);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
+    localStorage.setItem('dbr-translator-keyboard-layout', layoutName);
+  }, [layoutName]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return; // On initial mount, respect the layout loaded from localStorage.
+    }
+    
     const mapLangAndDialectToLayout = (lang: Language, dialect?: PhoenicianDialect): KeyboardLayoutName | null => {
         if (lang === Language.PUNIC) return 'punic';
         if (lang === Language.PHOENICIAN) {
