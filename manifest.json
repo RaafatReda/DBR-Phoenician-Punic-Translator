@@ -1,0 +1,17 @@
+{
+  "short_name": "DBR Translator",
+  "name": "DBR Phoenician & Punic Translator",
+  "description": "Translate between English and the ancient Phoenician language with AI",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2A0D45",
+  "background_color": "#010409"
+}

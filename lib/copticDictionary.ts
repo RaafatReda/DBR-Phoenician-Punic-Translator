@@ -1,0 +1,2 @@
+
+export const copticDictionary: string[] = [];

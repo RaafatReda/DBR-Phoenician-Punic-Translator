@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2A0D45" />
+      <stop offset="100%" stop-color="#010409" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="50" fill="url(#logoGradient)" />
+  <text 
+    x="50" 
+    y="52" 
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Phoenician', Roboto, Helvetica, Arial, sans-serif"
+    font-size="65" 
+    font-weight="500"
+    fill="#9F7AEA"
+    text-anchor="middle"
+    dominant-baseline="central"
+    style="filter: drop-shadow(0px 0px 4px #BF9CF1);"
+  >
+    𐤀
+  </text>
+</svg>
