@@ -1,5 +1,5 @@
 {
-  "name": "Copy of DBR - Phoenician and Punic Translator",
+  "name": "DBR - Phoenician and Punic Translator",
   "description": "An advanced web tool utilizing AI to provide accurate translations and deeper understanding of the Phoenician and Punic linguistic heritage.",
   "requestFramePermissions": [
     "microphone",
