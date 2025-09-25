@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PhoenicianDialect } from '../types';
-import { recognizeSymbolInImage, recognizeObjectsInImage, RecognizedObject } from '../services/geminiService';
+// FIX: Corrected the import path for the 'RecognizedObject' type. It is defined in 'types.ts', not 'services/geminiService.ts'. This resolves the module export error.
+import { PhoenicianDialect, RecognizedObject } from '../types';
+import { recognizeSymbolInImage, recognizeObjectsInImage } from '../services/geminiService';
 import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import ImageEditor from './ImageEditor';
@@ -11,7 +12,7 @@ import CameraIcon from './icons/CameraIcon';
 import SymbolResultCard from './SymbolResultCard';
 import UploadIcon from './icons/UploadIcon';
 import SwitchCameraIcon from './icons/SwitchCameraIcon';
-import { UILang } from '../lib/i18n';
+import { UILang } from '../lib/i1n';
 
 type Mode = 'PHOTO' | 'SCAN' | 'SYMBOL' | 'AR';
 const MODES: { id: Mode, labelKey: string, icon: React.FC<{className?: string}> }[] = [
