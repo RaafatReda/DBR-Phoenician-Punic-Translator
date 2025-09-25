@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails } from '../types';
+import { UILang } from "../lib/i18n";
 
 // FIX: Initialize Gemini API client. The API key must be an environment variable.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
@@ -272,19 +273,31 @@ export const getPhoenicianWordDetails = async (word: string): Promise<Phoenician
     }
 };
 
+const getLanguageName = (langCode: UILang): string => {
+    switch (langCode) {
+        case 'fr': return 'French';
+        case 'ar': return 'Arabic';
+        case 'en':
+        default: return 'English';
+    }
+};
+
 export const recognizeSymbolInImage = async (
-  base64ImageData: string
+  base64ImageData: string,
+  uiLang: UILang
 ): Promise<{ name: string; description: string }> => {
   const imagePart = {
     inlineData: {
-      mimeType: 'image/jpeg',
+      mimeType: 'image/png',
       data: base64ImageData,
     },
   };
 
+  const languageName = getLanguageName(uiLang);
+
   const textPart = {
     text: `Analyze the provided image for specific ancient Phoenician or Punic iconographic symbols. Identify ONLY ONE of the following symbols if present: Tanit symbol, lunar motif (crescent), solar disk (winged or simple), betyl stone, lotus flower, or bottle-shaped idol.
-If a symbol is identified, respond with a JSON object containing 'name' and 'description'. The 'name' should be the English name of the symbol (e.g., "Tanit Symbol"). The 'description' should be a concise, one-paragraph explanation of its cultural and historical significance.
+If a symbol is identified, respond with a JSON object containing 'name' and 'description'. The 'name' should be the ${languageName} name of the symbol. The 'description' should be a concise, one-paragraph explanation of its cultural and historical significance, written in ${languageName}.
 If no symbol from the list is clearly identifiable, respond with a JSON object where both 'name' and 'description' are empty strings: {"name": "", "description": ""}.
 Do not identify any other objects. Respond ONLY with the JSON object, without any markdown formatting like \`\`\`json.`,
   };
@@ -294,11 +307,11 @@ Do not identify any other objects. Respond ONLY with the JSON object, without an
     properties: {
       name: {
         type: Type.STRING,
-        description: "The English name of the identified symbol.",
+        description: `The ${languageName} name of the identified symbol.`,
       },
       description: {
         type: Type.STRING,
-        description: "A concise, one-paragraph explanation of the symbol's significance.",
+        description: `A concise, one-paragraph explanation of the symbol's significance in ${languageName}.`,
       },
     },
     required: ["name", "description"],
@@ -334,7 +347,7 @@ export const getTranslationHintsFromImage = async (
 ): Promise<{ transcription: string; translation: string }> => {
   const imagePart = {
     inlineData: {
-      mimeType: 'image/jpeg',
+      mimeType: 'image/png',
       data: base64ImageData,
     },
   };

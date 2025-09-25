@@ -1152,6 +1152,7 @@ const App: React.FC = () => {
             onScan={handleScanCapture}
             dialect={phoenicianDialect}
             t={t}
+            uiLang={uiLang}
         />
       )}
       <ChatFAB onOpen={() => setIsChatOpen(true)} t={t} />

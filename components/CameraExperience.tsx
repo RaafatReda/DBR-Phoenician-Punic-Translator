@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { PhoenicianDialect } from '../types';
 import { recognizeSymbolInImage } from '../services/geminiService';
 import Loader from './Loader';
@@ -11,6 +11,8 @@ import CameraIcon from './icons/CameraIcon';
 import SymbolResultCard from './SymbolResultCard';
 import UploadIcon from './icons/UploadIcon';
 import SwitchCameraIcon from './icons/SwitchCameraIcon';
+import { UILang } from '../lib/i18n';
+import { phoenicianDictionary } from '../lib/phoenicianDictionary';
 
 type Mode = 'PHOTO' | 'SCAN' | 'SYMBOL' | 'AR';
 const MODES: { id: Mode, labelKey: string, icon: React.FC<{className?: string}> }[] = [
@@ -27,9 +29,10 @@ interface CameraExperienceProps {
     onScan: (imageData: string) => void;
     dialect: PhoenicianDialect;
     t: (key: string) => string;
+    uiLang: UILang;
 }
 
-const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, onScan, dialect, t }) => {
+const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, onScan, dialect, t, uiLang }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
     const wheelRef = useRef<HTMLDivElement>(null);
@@ -156,7 +159,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
         if (!context) return;
         
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        const dataUrl = canvas.toDataURL('image/png');
         
         setCapturedImage(dataUrl);
         setIsEditing(true);
@@ -177,7 +180,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
             setIsProcessingSymbol(true);
             setSymbolResult(null);
             try {
-                const result = await recognizeSymbolInImage(base64Data);
+                const result = await recognizeSymbolInImage(base64Data, uiLang);
                 setSymbolResult(result);
             } catch (e) {
                 setError(e instanceof Error ? e.message : 'Symbol recognition failed');
@@ -190,7 +193,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
     const handleDownloadPhoto = (dataUrl: string) => {
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = `dbr-photo-${Date.now()}.jpg`;
+        link.download = `dbr-photo-${Date.now()}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -216,7 +219,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
         }
     };
 
-    const ARCharacters = '𐤀𐤁𐤂𐤃𐤄𐤅𐤆𐤇𐤈𐤉𐤊𐤋𐤌𐤍𐤎𐤏𐤐𐤑𐤒𐤓𐤔𐤕';
+    const arWords = useMemo(() => phoenicianDictionary.filter(word => word.length >= 2 && word.length <= 4), []);
     const ArOverlay = () => (
         <div className="ar-overlay">
             {Array.from({ length: 15 }).map((_, i) => (
@@ -230,7 +233,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
                         animationDelay: `${Math.random() * -18}s`,
                     }}
                 >
-                    {ARCharacters[Math.floor(Math.random() * ARCharacters.length)]}
+                    {arWords[Math.floor(Math.random() * arWords.length)]}
                 </span>
             ))}
         </div>

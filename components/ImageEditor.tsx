@@ -37,7 +37,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         const image = imageRef.current;
-        if (!canvas || !ctx || !image.src) return;
+        if (!canvas || !ctx || !image.src || !image.complete || image.naturalWidth === 0) return;
 
         const parent = canvas.parentElement;
         if (!parent) return;
@@ -46,26 +46,38 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-        
-        ctx.save();
-        
-        ctx.beginPath();
-        ctx.rect(crop.x, crop.y, crop.width, crop.height);
-        ctx.clip();
-
         const scale = Math.min(canvasWidth / image.naturalWidth, canvasHeight / image.naturalHeight);
         const imgDisplayWidth = image.naturalWidth * scale;
         const imgDisplayHeight = image.naturalHeight * scale;
         const imgX = (canvasWidth - imgDisplayWidth) / 2;
         const imgY = (canvasHeight - imgDisplayHeight) / 2;
         
-        ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayscale ? 1 : 0})`;
-        ctx.drawImage(image, imgX, imgY, imgDisplayWidth, imgDisplayHeight);
+        const filterStyle = `brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayscale ? 1 : 0})`;
+
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         
+        // 1. Draw the base, filtered image
+        ctx.save();
+        ctx.filter = filterStyle;
+        ctx.drawImage(image, imgX, imgY, imgDisplayWidth, imgDisplayHeight);
+        ctx.restore();
+
+        // 2. Draw dimming overlay using path subtraction
+        ctx.save();
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.beginPath();
+        // Outer rectangle (covers the whole canvas)
+        ctx.rect(0, 0, canvasWidth, canvasHeight);
+        // Inner rectangle (the "hole"), wound counter-clockwise
+        ctx.moveTo(crop.x, crop.y);
+        ctx.lineTo(crop.x, crop.y + crop.height);
+        ctx.lineTo(crop.x + crop.width, crop.y + crop.height);
+        ctx.lineTo(crop.x + crop.width, crop.y);
+        ctx.closePath();
+        ctx.fill();
         ctx.restore();
         
+        // 3. Draw crop box border and handles
         ctx.strokeStyle = '#FBBF24'; // amber-400
         ctx.lineWidth = 2;
         ctx.strokeRect(crop.x, crop.y, crop.width, crop.height);
@@ -220,7 +232,7 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
             if (tempCtx) {
                 tempCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayscale ? 1 : 0})`;
                 tempCtx.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
-                onConfirm(tempCanvas.toDataURL('image/jpeg'));
+                onConfirm(tempCanvas.toDataURL('image/png'));
             } else {
                 setIsProcessing(false);
             }
