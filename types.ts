@@ -86,3 +86,9 @@ export interface ChatMessage {
     sender: 'user' | 'ai';
     text: string;
 }
+
+export interface RecognizedObject {
+    name: string;
+    phoenician: string;
+    box: { x: number; y: number; width: number; height: number; };
+}

@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails } from '../types';
+import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject } from '../types';
 import { UILang } from "../lib/i18n";
 
 // FIX: Initialize Gemini API client. The API key must be an environment variable.
@@ -422,12 +422,6 @@ export const recognizePhoenicianTextInImage = async (
         throw new Error('Failed to recognize text from image. The AI service may be temporarily unavailable.');
     }
 };
-
-export interface RecognizedObject {
-    name: string;
-    phoenician: string;
-    box: { x: number; y: number; width: number; height: number; };
-}
 
 export const recognizeObjectsInImage = async (
     base64ImageData: string,
