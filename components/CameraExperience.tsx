@@ -12,7 +12,7 @@ import CameraIcon from './icons/CameraIcon';
 import SymbolResultCard from './SymbolResultCard';
 import UploadIcon from './icons/UploadIcon';
 import SwitchCameraIcon from './icons/SwitchCameraIcon';
-import { UILang } from '../lib/i1n';
+import { UILang } from '../lib/i18n';
 
 type Mode = 'PHOTO' | 'SCAN' | 'SYMBOL' | 'AR';
 const MODES: { id: Mode, labelKey: string, icon: React.FC<{className?: string}> }[] = [
@@ -29,6 +29,7 @@ interface ArObject {
     id: string; // Unique ID, e.g., "person-168..."
     name: string;
     phoenician: string;
+    translation: string;
     // Animation properties
     currentX: number;
     currentY: number;
@@ -146,7 +147,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
         ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
         const base64Data = tempCanvas.toDataURL('image/png').split(',')[1];
     
-        const results = await recognizeObjectsInImage(base64Data, dialect);
+        const results = await recognizeObjectsInImage(base64Data, dialect, uiLang);
     
         const canvas = arCanvasRef.current!;
         if (!canvas) {
@@ -196,6 +197,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
                         id: `${res.name}-${now}`,
                         name: res.name,
                         phoenician: res.phoenician,
+                        translation: res.translation,
                         currentX: targetX,
                         currentY: targetY,
                         targetX,
@@ -218,7 +220,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
         });
     
         setIsRecognizing(false);
-    }, [isRecognizing, dialect]);
+    }, [isRecognizing, dialect, uiLang]);
 
     const runArOverlayAnimation = useCallback(() => {
         if (activeMode !== 'AR') {
@@ -238,6 +240,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
 
         const punicFont = getComputedStyle(document.documentElement).getPropertyValue('--font-punic').trim();
         const phoenicianFont = getComputedStyle(document.documentElement).getPropertyValue('--font-phoenician').trim();
+        const sansFont = getComputedStyle(document.documentElement).getPropertyValue('--font-sans').trim();
         const fontName = dialect === PhoenicianDialect.PUNIC ? punicFont : phoenicianFont;
         const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
         
@@ -258,16 +261,27 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
                     hasActiveObjects = true;
                     ctx.save();
                     ctx.globalAlpha = newObj.opacity;
-                    const fontSize = 28;
-                    ctx.font = `${fontSize}px ${fontName}`;
-                    ctx.fillStyle = primaryColor;
-                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
-                    ctx.lineWidth = 5;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     
+                    // Main Phoenician label
+                    const phoenicianFontSize = 28;
+                    ctx.font = `${phoenicianFontSize}px ${fontName}`;
+                    ctx.fillStyle = primaryColor;
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+                    ctx.lineWidth = 5;
                     ctx.strokeText(newObj.phoenician, newObj.currentX, newObj.currentY);
                     ctx.fillText(newObj.phoenician, newObj.currentX, newObj.currentY);
+
+                    // Sub-label translation
+                    const translationFontSize = 16;
+                    ctx.font = `600 ${translationFontSize}px ${sansFont}`;
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                    ctx.lineWidth = 4;
+                    const subLabelY = newObj.currentY + (phoenicianFontSize / 2) + 8;
+                    ctx.strokeText(newObj.translation, newObj.currentX, subLabelY);
+                    ctx.fillText(newObj.translation, newObj.currentX, subLabelY);
+
                     ctx.restore();
                 }
                 return newObj;

@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect, useRef, useMemo, ChangeEvent, KeyboardEvent } from 'react';
 import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate } from './types';
 import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage } from './services/geminiService';
@@ -158,7 +159,8 @@ const App: React.FC = () => {
 
   const [isComparisonMode, setIsComparisonMode] = useState<boolean>(false);
   const [comparisonResults, setComparisonResults] = useState<Record<string, TransliterationOutput> | null>(null);
-  const [transliterationMode, setTransliterationMode] = useState<TransliterationMode>(TransliterationMode.PHOENICIAN);
+  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+  const [transliterationMode, setTransliterationMode] = useState<TransliterationMode>(TransliterationMode.PHOENician);
   const [isGrammarHelperOn, setIsGrammarHelperOn] = useState<boolean>(false);
   const [isCognateComparisonOn, setIsCognateComparisonOn] = useState<boolean>(false);
   const [selectedGrammarToken, setSelectedGrammarToken] = useState<GrammarToken | null>(null);
@@ -692,7 +694,8 @@ const App: React.FC = () => {
     
   const hasPhoenicianResult = !isComparisonMode && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC) && typeof translationResult === 'object' && translationResult.phoenician;
   
-  const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && transliterationMode === TransliterationMode.PHOENICIAN && typeof translationResult === 'object' && !!translationResult.grammar;
+  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+  const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && transliterationMode === TransliterationMode.PHOENician && typeof translationResult === 'object' && !!translationResult.grammar;
 
   const showPhoenicianControls = (!isComparisonMode && isPhoenicianFamilySelected) || isComparisonMode;
   const targetLangIsPhoenicianFamily = !isComparisonMode && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC);
@@ -1013,7 +1016,8 @@ const App: React.FC = () => {
                               value={currentTranslatedTextString}
                               placeholder={t('translationPlaceholder')}
                               isReadOnly={true}
-                              className={`pr-32 ${transliterationMode === TransliterationMode.PHOENICIAN ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
+                              // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+                              className={`pr-32 ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
                           />
                       )}
                       

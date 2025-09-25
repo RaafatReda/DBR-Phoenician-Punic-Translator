@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TransliterationOutput, TransliterationMode, PhoenicianDialect } from '../types';
 
@@ -38,7 +39,8 @@ const ScriptDisplay: React.FC<ScriptDisplayProps> = ({ result, mode, dialect, t 
   const value = result[key];
   const text = typeof value === 'string' ? value || result.phoenician : result.phoenician;
   
-  const isPhoenician = mode === TransliterationMode.PHOENICIAN;
+  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+  const isPhoenician = mode === TransliterationMode.PHOENician;
   const isArabic = mode === TransliterationMode.ARABIC;
 
   let fontClass = 'text-2xl'; // Base size for Latin

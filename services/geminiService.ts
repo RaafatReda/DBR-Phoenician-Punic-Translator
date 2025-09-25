@@ -425,7 +425,8 @@ export const recognizePhoenicianTextInImage = async (
 
 export const recognizeObjectsInImage = async (
     base64ImageData: string,
-    dialect: PhoenicianDialect
+    dialect: PhoenicianDialect,
+    uiLang: UILang
 ): Promise<RecognizedObject[]> => {
     const imagePart = {
         inlineData: {
@@ -435,13 +436,15 @@ export const recognizeObjectsInImage = async (
     };
 
     const dialectName = dialect === PhoenicianDialect.PUNIC ? "Punic" : "Standard Phoenician";
+    const languageName = getLanguageName(uiLang);
 
     const textPart = {
         text: `You are an expert AI assistant for analyzing images and translating to ancient languages. Your task is to identify up to 5 prominent objects in the provided image.
-For each object you identify, provide a JSON object containing three fields:
+For each object you identify, provide a JSON object containing four fields:
 1. 'name': A simple, one-word English name for the object (e.g., 'tree', 'person', 'dog', 'car').
 2. 'phoenician': The translation of this English name into the ${dialectName} dialect of Phoenician. The translation must use Unicode characters from the Phoenician script block (U+10900–U+1091F). If a direct translation is not available, provide the closest conceptual equivalent.
-3. 'box': A bounding box object with four numerical fields (x, y, width, height), representing the object's location and size as percentages (from 0.0 to 1.0) of the image's total dimensions.
+3. 'translation': The translation of the English name into ${languageName}.
+4. 'box': A bounding box object with four numerical fields (x, y, width, height), representing the object's location and size as percentages (from 0.0 to 1.0) of the image's total dimensions.
 
 If you cannot identify any objects, return an empty array []. Respond ONLY with the JSON array, without any markdown formatting.`,
     };
@@ -453,6 +456,7 @@ If you cannot identify any objects, return an empty array []. Respond ONLY with 
             properties: {
                 name: { type: Type.STRING, description: "The English name of the object." },
                 phoenician: { type: Type.STRING, description: `The ${dialectName} word for the object.` },
+                translation: { type: Type.STRING, description: `The translation of the English name into ${languageName}.` },
                 box: {
                     type: Type.OBJECT,
                     properties: {
@@ -464,7 +468,7 @@ If you cannot identify any objects, return an empty array []. Respond ONLY with 
                     required: ["x", "y", "width", "height"],
                 },
             },
-            required: ["name", "phoenician", "box"],
+            required: ["name", "phoenician", "translation", "box"],
         },
     };
 

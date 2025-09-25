@@ -23,7 +23,7 @@ export enum PhoenicianDialect {
 }
 
 export enum TransliterationMode {
-  PHOENICIAN = 'Phoenician',
+  PHOENician = 'Phoenician',
   LATIN = 'Latin',
   ARABIC = 'Arabic',
   BOTH = 'Both',
@@ -90,5 +90,6 @@ export interface ChatMessage {
 export interface RecognizedObject {
     name: string;
     phoenician: string;
+    translation: string;
     box: { x: number; y: number; width: number; height: number; };
 }

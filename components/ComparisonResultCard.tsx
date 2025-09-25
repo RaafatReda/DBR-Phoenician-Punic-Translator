@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import { TransliterationOutput, TransliterationMode, GrammarToken, PhoenicianDialect } from '../types';
 import GrammarHighlightedText from './GrammarHighlightedText';
@@ -26,7 +27,8 @@ const ComparisonResultCard: React.FC<ComparisonResultCardProps> = ({ dialect, re
   const value = result[key];
   const text = typeof value === 'string' ? value || result.phoenician : result.phoenician;
   
-  const isPhoenician = mode === TransliterationMode.PHOENICIAN;
+  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+  const isPhoenician = mode === TransliterationMode.PHOENician;
   const isArabic = mode === TransliterationMode.ARABIC;
 
   let fontClass = 'text-xl';
