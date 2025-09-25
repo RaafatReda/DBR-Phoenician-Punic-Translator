@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject } from '../types';
+import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject, AIAssistantResponse } from '../types';
 import { UILang } from "../lib/i18n";
 
 // FIX: Initialize Gemini API client. The API key must be an environment variable.
@@ -279,6 +279,66 @@ const getLanguageName = (langCode: UILang): string => {
         case 'ar': return 'Arabic';
         case 'en':
         default: return 'English';
+    }
+};
+
+export const getTranslationCorrection = async (
+  sourceText: string,
+  sourceLang: Language,
+  originalTranslation: TransliterationOutput,
+  userRequest: string,
+  uiLang: UILang
+): Promise<AIAssistantResponse> => {
+    const languageName = getLanguageName(uiLang);
+
+    const systemInstruction = `You are an expert AI linguistic assistant specializing in Phoenician. Your task is to help a user refine a translation.
+- You will receive a source text, its original Phoenician translation, and a user's request for modification.
+- You MUST respond in the requested JSON format.
+- The 'improvedTranslation' object must be a complete, valid translation output, including Phoenician script, Latin and Arabic transliterations, and a full grammatical analysis, even if only one word was changed.
+- The 'explanation' field MUST clearly and concisely explain the changes you made based on the user's request, written in ${languageName}.
+- Phoenician text must use Unicode characters from the Phoenician block (U+10900–U+1091F).`;
+
+    const prompt = `Context: The user wants to adjust a translation from ${sourceLang} to Phoenician.
+- Source Text: "${sourceText}"
+- Original Phoenician Translation (in Phoenician script): "${originalTranslation.phoenician}"
+- User Request: "${userRequest}"
+
+Please analyze the request and provide an improved translation and an explanation of the changes in ${languageName}. If the request is nonsensical or impossible, explain why in a helpful manner and return the original translation.`;
+
+    const correctionSchema = {
+        type: Type.OBJECT,
+        properties: {
+            improvedTranslation: translationSchema,
+            explanation: {
+                type: Type.STRING,
+                description: `An explanation of the changes made, written in ${languageName}.`,
+            },
+        },
+        required: ["improvedTranslation", "explanation"],
+    };
+    
+    try {
+        const response = await ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                systemInstruction,
+                responseMimeType: "application/json",
+                responseSchema: correctionSchema,
+            },
+        });
+
+        const jsonText = response.text.trim();
+        const result = JSON.parse(jsonText);
+
+        if (result.improvedTranslation && result.explanation) {
+            return result as AIAssistantResponse;
+        } else {
+            throw new Error("Received malformed JSON from AI Assistant.");
+        }
+    } catch (error) {
+        console.error('Gemini API assistant error:', error);
+        throw new Error('Failed to get a response from the AI assistant.');
     }
 };
 

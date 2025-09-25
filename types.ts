@@ -93,3 +93,8 @@ export interface RecognizedObject {
     translation: string;
     box: { x: number; y: number; width: number; height: number; };
 }
+
+export interface AIAssistantResponse {
+  improvedTranslation: TransliterationOutput;
+  explanation: string;
+}

@@ -10,9 +10,10 @@ interface TextAreaProps {
   children?: ReactNode;
   onBlur?: () => void;
   className?: string;
+  iconPosition?: 'left' | 'right';
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ id, value, onChange, onKeyDown, placeholder, isReadOnly = false, children, onBlur, className }) => {
+const TextArea: React.FC<TextAreaProps> = ({ id, value, onChange, onKeyDown, placeholder, isReadOnly = false, children, onBlur, className, iconPosition = 'right' }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const TextArea: React.FC<TextAreaProps> = ({ id, value, onChange, onKeyDown, pla
         className={`w-full min-h-[10rem] max-h-[50vh] p-4 glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-muted)] focus:outline-none focus:shadow-[0_0_15px_var(--color-glow)] resize-none transition-height duration-200 ease-in-out ${className || ''}`}
       />
       {children && (
-        <div className="absolute top-3 right-3">
+        <div className={`absolute top-3 ${iconPosition === 'left' ? 'left-3' : 'right-3'}`}>
           {children}
         </div>
       )}

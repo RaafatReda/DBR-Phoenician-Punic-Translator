@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback, useEffect, useRef, useMemo, ChangeEvent, KeyboardEvent } from 'react';
-import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate } from './types';
+import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse } from './types';
 import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage } from './services/geminiService';
 import LanguageSelector from './components/LanguageSelector';
 import DialectSelector from './components/DialectSelector';
@@ -55,6 +55,8 @@ import CognateDisplay from './components/CognateDisplay';
 import CameraExperience from './components/CameraExperience';
 import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
 import SpeakerIcon from './components/icons/SpeakerIcon';
+import AIAssistantModal from './components/AIAssistantModal';
+import SparklesIcon from './components/icons/SparklesIcon';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -183,6 +185,7 @@ const App: React.FC = () => {
   });
   const [isFontSizeManagerOpen, setIsFontSizeManagerOpen] = useState(false);
   const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
+  const [isAssistantModalOpen, setIsAssistantModalOpen] = useState<boolean>(false);
 
   const t = useCallback((key: keyof typeof translations.en) => {
     return translations[uiLang]?.[key] || translations.en[key];
@@ -664,6 +667,11 @@ const App: React.FC = () => {
         sourceTextAreaRef.current?.querySelector('textarea')?.focus();
     }, 0);
   };
+  
+  const handleApplyAssistantChanges = (newTranslation: TransliterationOutput) => {
+    setTranslationResult(newTranslation);
+    setIsAssistantModalOpen(false);
+  };
 
   const isMicDisabled = !isSpeechRecognitionSupported || sourceLang === Language.PHOENICIAN || sourceLang === Language.PUNIC;
   const micButtonTitle = isListening ? t('micStop') : isMicDisabled ? t('micNotAvailable') : t('micStart');
@@ -688,6 +696,9 @@ const App: React.FC = () => {
   const comparisonInputFontClass = phoenicianDialect === PhoenicianDialect.PUNIC 
     ? '[font-family:var(--font-punic)] text-2xl' 
     : '[font-family:var(--font-phoenician)] text-xl';
+  
+  const iconContainerClasses = `absolute top-3 z-10 flex space-x-1 ${targetLangIsPhoenicianFamily ? 'left-3' : 'right-3'}`;
+  const resultPaddingClass = targetLangIsPhoenicianFamily ? 'pl-44' : 'pr-44';
 
   const actionButton = (
     <div className="w-full max-w-5xl mt-8 flex justify-center">
@@ -850,8 +861,9 @@ const App: React.FC = () => {
                     onChange={handleSourceTextChange}
                     onKeyDown={handleSourceKeyDown}
                     placeholder={`${t('enterTextPlaceholder')} ${t(sourceLang.toLowerCase())}... ${getFlagForLanguage(sourceLang)}`}
-                    className={`pr-24 ${sourceInputFontClass}`}
+                    className={`${isPhoenicianSource ? 'pl-24' : 'pr-24'} ${sourceInputFontClass}`}
                     onBlur={() => setTimeout(() => setSuggestions([]), 200)}
+                    iconPosition={isPhoenicianSource ? 'left' : 'right'}
                   >
                      <div className="grid grid-cols-2 gap-2">
                          {isProcessingImage ? (
@@ -910,9 +922,19 @@ const App: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="relative">
-                      <div className="absolute top-3 right-3 z-10 flex space-x-1">
+                      <div className={iconContainerClasses}>
                         {currentTranslatedTextString && !isGroupEditMode && (
                           <>
+                              {hasPhoenicianResult && (
+                                <button
+                                  onClick={() => setIsAssistantModalOpen(true)}
+                                  className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
+                                  aria-label={t('aiAssistantTitle')}
+                                  title={t('aiAssistantTitle')}
+                                >
+                                  <SparklesIcon className="w-5 h-5" />
+                                </button>
+                              )}
                               <button
                                   onClick={handleSpeak}
                                   disabled={!isTtsSupported}
@@ -962,7 +984,7 @@ const App: React.FC = () => {
                           />
                       ) : showGrammarUI ? (
                           <div className="w-full min-h-[10rem] glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] transition-shadow duration-200 flex flex-col shadow-lg">
-                              <div className="p-4 pr-44" dir="rtl">
+                              <div className={`p-4 ${resultPaddingClass}`} dir="rtl">
                                   <GrammarHighlightedText
                                       grammar={(translationResult as TransliterationOutput).grammar!}
                                       className={`${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}`}
@@ -975,7 +997,7 @@ const App: React.FC = () => {
                               </div>
                           </div>
                       ) : (hasPhoenicianResult && transliterationMode === TransliterationMode.BOTH && typeof translationResult === 'object') ? (
-                          <div className="w-full min-h-[10rem] p-4 pr-44 glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] flex flex-col justify-center items-center text-center">
+                          <div className={`w-full min-h-[10rem] p-4 ${resultPaddingClass} glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] flex flex-col justify-center items-center text-center`}>
                               <p className={`${resultFontClass} ${isPunicTranslation ? 'text-4xl' : 'text-3xl'} mb-2`} dir="rtl">
                                   {translationResult.phoenician}
                               </p>
@@ -993,7 +1015,7 @@ const App: React.FC = () => {
                               placeholder={t('translationPlaceholder')}
                               isReadOnly={true}
                               // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-                              className={`pr-44 ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
+                              className={`${resultPaddingClass} ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
                           />
                       )}
                       
@@ -1123,6 +1145,18 @@ const App: React.FC = () => {
             onClose={() => setIsDictionaryOpen(false)}
             onWordSelect={handleDictionaryWordSelect}
             t={t}
+        />
+      )}
+      {isAssistantModalOpen && typeof translationResult === 'object' && (
+        <AIAssistantModal
+          isOpen={isAssistantModalOpen}
+          onClose={() => setIsAssistantModalOpen(false)}
+          onApply={handleApplyAssistantChanges}
+          sourceText={sourceText}
+          sourceLang={sourceLang}
+          originalTranslation={translationResult}
+          t={t}
+          uiLang={uiLang}
         />
       )}
       {isCameraExperienceOpen && (
