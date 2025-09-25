@@ -986,7 +986,7 @@ const App: React.FC = () => {
                           />
                       ) : showGrammarUI ? (
                           <div className="w-full min-h-[10rem] glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] transition-shadow duration-200 flex flex-col shadow-lg">
-                              <div className="p-4 pr-32" dir="rtl">
+                              <div className="p-4 pr-44" dir="rtl">
                                   <GrammarHighlightedText
                                       grammar={(translationResult as TransliterationOutput).grammar!}
                                       className={`${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}`}
@@ -999,7 +999,7 @@ const App: React.FC = () => {
                               </div>
                           </div>
                       ) : (hasPhoenicianResult && transliterationMode === TransliterationMode.BOTH && typeof translationResult === 'object') ? (
-                          <div className="w-full min-h-[10rem] p-4 pr-32 glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] flex flex-col justify-center items-center text-center">
+                          <div className="w-full min-h-[10rem] p-4 pr-44 glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] flex flex-col justify-center items-center text-center">
                               <p className={`${resultFontClass} ${isPunicTranslation ? 'text-4xl' : 'text-3xl'} mb-2`} dir="rtl">
                                   {translationResult.phoenician}
                               </p>
@@ -1017,7 +1017,7 @@ const App: React.FC = () => {
                               placeholder={t('translationPlaceholder')}
                               isReadOnly={true}
                               // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-                              className={`pr-32 ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
+                              className={`pr-44 ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
                           />
                       )}
                       
