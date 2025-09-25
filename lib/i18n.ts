@@ -575,6 +575,6 @@ export const translations: Record<UILang, Record<string, string>> = {
     photo: 'صورة',
     scan: 'مسح',
     symbol: 'رمز',
-    ar: 'الواقع المعزز المباشر',
+    ar: 'الواقع المعزز المباشر للكائنات',
   },
 };

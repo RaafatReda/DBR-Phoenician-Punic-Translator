@@ -22,7 +22,7 @@ const MODES: { id: Mode, labelKey: string, icon: React.FC<{className?: string}> 
 ];
 const WHEEL_RADIUS = 120; // in pixels
 const ANALYSIS_INTERVAL = 2000; // ms between recognition calls
-const LERP_FACTOR = 0.15; // For smooth animation
+const LERP_FACTOR = 0.1; // For smooth animation
 
 interface ArObject {
     id: string; // Unique ID, e.g., "person-168..."
@@ -126,39 +126,68 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
 
     const analyzeFrame = useCallback(async () => {
         if (isRecognizing || !videoRef.current || videoRef.current.readyState < 2) return;
-        
+    
         setIsRecognizing(true);
         const video = videoRef.current;
         const tempCanvas = document.createElement('canvas');
-        
-        const MAX_WIDTH = 640;
-        const scale = MAX_WIDTH / video.videoWidth;
+    
+        const MAX_WIDTH = 512;
+        const scaleFactorForAnalysis = MAX_WIDTH / video.videoWidth;
         tempCanvas.width = MAX_WIDTH;
-        tempCanvas.height = video.videoHeight * scale;
-        
+        tempCanvas.height = video.videoHeight * scaleFactorForAnalysis;
+    
         const ctx = tempCanvas.getContext('2d');
         if (!ctx) {
             setIsRecognizing(false);
             return;
         }
-
+    
         ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
         const base64Data = tempCanvas.toDataURL('image/png').split(',')[1];
-
+    
         const results = await recognizeObjectsInImage(base64Data, dialect);
-        
+    
+        const canvas = arCanvasRef.current!;
+        if (!canvas) {
+            setIsRecognizing(false);
+            return;
+        }
+    
+        // Calculate scale and offset to handle 'object-cover' video display
+        const videoAR = video.videoWidth / video.videoHeight;
+        const canvasAR = canvas.width / canvas.height;
+        let scale, offsetX, offsetY;
+    
+        if (videoAR > canvasAR) { // Video is wider, scaled to fit height, sides cropped
+            scale = canvas.height / video.videoHeight;
+            const displayWidth = video.videoWidth * scale;
+            offsetX = (displayWidth - canvas.width) / 2;
+            offsetY = 0;
+        } else { // Video is taller, scaled to fit width, top/bottom cropped
+            scale = canvas.width / video.videoWidth;
+            const displayHeight = video.videoHeight * scale;
+            offsetX = 0;
+            offsetY = (displayHeight - canvas.height) / 2;
+        }
+    
         setArObjects(prevObjects => {
             const now = Date.now();
             const updatedObjects: ArObject[] = [];
             const matchedNames = new Set<string>();
-
-            // Update existing and add new objects
+    
             results.forEach(res => {
+                const naturalCenterX = (res.box.x + res.box.width / 2) * video.videoWidth;
+                const naturalCenterY = (res.box.y + res.box.height / 2) * video.videoHeight;
+    
+                const targetX = (naturalCenterX * scale) - offsetX;
+                const targetY = (naturalCenterY * scale) - offsetY;
+    
+                if (targetX < 0 || targetX > canvas.width || targetY < 0 || targetY > canvas.height) {
+                    return;
+                }
+    
                 const existing = prevObjects.find(p => p.name === res.name);
-                const canvas = arCanvasRef.current!;
-                const targetX = res.box.x * canvas.width + (res.box.width * canvas.width) / 2;
-                const targetY = res.box.y * canvas.height + (res.box.height * canvas.height) / 2;
-
+    
                 if (existing) {
                     updatedObjects.push({ ...existing, targetX, targetY, targetOpacity: 1, isDead: false });
                 } else {
@@ -166,24 +195,27 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
                         id: `${res.name}-${now}`,
                         name: res.name,
                         phoenician: res.phoenician,
-                        currentX: targetX, currentY: targetY,
-                        targetX, targetY,
-                        opacity: 0, targetOpacity: 1, isDead: false,
+                        currentX: targetX,
+                        currentY: targetY,
+                        targetX,
+                        targetY,
+                        opacity: 0,
+                        targetOpacity: 1,
+                        isDead: false,
                     });
                 }
                 matchedNames.add(res.name);
             });
-
-            // Mark unmatched objects for fade out
+    
             prevObjects.forEach(p => {
                 if (!matchedNames.has(p.name)) {
                     updatedObjects.push({ ...p, targetOpacity: 0 });
                 }
             });
-
+    
             return updatedObjects;
         });
-
+    
         setIsRecognizing(false);
     }, [isRecognizing, dialect]);
 
@@ -427,7 +459,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
                    <SwitchCameraIcon className="h-6 w-6" />
                 </button>
                 <button onClick={onClose} className="p-2 rounded-full glass-panel" aria-label={t('textScannerClose')}>
-                    <CloseIcon className="w-6 h-6" />
+                    <CloseIcon className="w-6 w-6" />
                 </button>
             </header>
 
