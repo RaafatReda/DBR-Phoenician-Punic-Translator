@@ -187,7 +187,11 @@ export const translations: Record<UILang, Record<string, string>> = {
     close: 'Close',
     downloadPhoto: 'Download Photo',
     useThisPhoto: 'Use This Photo',
-    recognizeSymbol: 'Recognize Symbol'
+    recognizeSymbol: 'Recognize Symbol',
+    photo: 'Photo',
+    scan: 'Scan',
+    symbol: 'Symbol',
+    ar: 'Live Object AR',
   },
   fr: {
     mainTitle: 'Traducteur DBR',
@@ -375,7 +379,11 @@ export const translations: Record<UILang, Record<string, string>> = {
     close: 'Fermer',
     downloadPhoto: 'Télécharger la Photo',
     useThisPhoto: 'Utiliser Cette Photo',
-    recognizeSymbol: 'Reconnaître le Symbole'
+    recognizeSymbol: 'Reconnaître le Symbole',
+    photo: 'Photo',
+    scan: 'Scanner',
+    symbol: 'Symbole',
+    ar: 'RA Objets en Direct',
   },
   ar: {
     mainTitle: 'مترجم DBR',
@@ -563,6 +571,10 @@ export const translations: Record<UILang, Record<string, string>> = {
     close: 'إغلاق',
     downloadPhoto: 'تنزيل الصورة',
     useThisPhoto: 'استخدام هذه الصورة',
-    recognizeSymbol: 'التعرف على الرمز'
+    recognizeSymbol: 'التعرف على الرمز',
+    photo: 'صورة',
+    scan: 'مسح',
+    symbol: 'رمز',
+    ar: 'الواقع المعزز المباشر',
   },
 };

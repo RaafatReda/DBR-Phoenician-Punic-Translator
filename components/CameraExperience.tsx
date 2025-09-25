@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { PhoenicianDialect } from '../types';
-import { recognizeSymbolInImage } from '../services/geminiService';
+import { recognizeSymbolInImage, recognizeObjectsInImage, RecognizedObject } from '../services/geminiService';
 import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import ImageEditor from './ImageEditor';
@@ -21,13 +21,22 @@ const MODES: { id: Mode, labelKey: string, icon: React.FC<{className?: string}> 
     { id: 'AR', labelKey: 'ar', icon: ArIcon },
 ];
 const WHEEL_RADIUS = 120; // in pixels
+const ANALYSIS_INTERVAL = 2000; // ms between recognition calls
+const LERP_FACTOR = 0.15; // For smooth animation
 
-// Words for the new AR face-tracking feature
-const faceFeatureMap: Record<string, { phoenician: string; latin: string }> = {
-  eye: { phoenician: '𐤏𐤍', latin: 'ʿen' },
-  mouth: { phoenician: '𐤐𐤄', latin: 'peh' },
-  nose: { phoenician: '𐤀𐤐', latin: "'ap" },
-};
+interface ArObject {
+    id: string; // Unique ID, e.g., "person-168..."
+    name: string;
+    phoenician: string;
+    // Animation properties
+    currentX: number;
+    currentY: number;
+    targetX: number;
+    targetY: number;
+    opacity: number;
+    targetOpacity: number;
+    isDead: boolean;
+}
 
 interface CameraExperienceProps {
     isOpen: boolean;
@@ -45,8 +54,8 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
     const wheelRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const interactionRef = useRef<{ isDragging: boolean; startAngle: number; startRotation: number; }>({ isDragging: false, startAngle: 0, startRotation: 0 });
-    const faceDetectorRef = useRef<FaceDetector | null>(null);
     const animationFrameId = useRef<number | null>(null);
+    const analysisIntervalId = useRef<number | null>(null);
 
     const [rotationAngle, setRotationAngle] = useState(0);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -58,19 +67,27 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
     const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
     const [symbolResult, setSymbolResult] = useState<{ name: string; description: string } | null>(null);
     const [isProcessingSymbol, setIsProcessingSymbol] = useState(false);
+    const [isRecognizing, setIsRecognizing] = useState(false);
+    const [arObjects, setArObjects] = useState<ArObject[]>([]);
 
     const activeMode = MODES[activeIndex]?.id;
     const anglePerItem = 360 / MODES.length;
 
-    const stopArDetection = useCallback(() => {
+    const stopAr = useCallback(() => {
         if (animationFrameId.current) {
             cancelAnimationFrame(animationFrameId.current);
             animationFrameId.current = null;
         }
+        if (analysisIntervalId.current) {
+            clearInterval(analysisIntervalId.current);
+            analysisIntervalId.current = null;
+        }
+        setArObjects([]);
+        setIsRecognizing(false);
         const canvas = arCanvasRef.current;
-        const ctx = canvas?.getContext('2d');
-        if (canvas && ctx) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx?.clearRect(0, 0, canvas.width, canvas.height);
         }
     }, []);
 
@@ -79,8 +96,8 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;
         }
-        stopArDetection();
-    }, [stopArDetection]);
+        stopAr();
+    }, [stopAr]);
 
     const startStream = useCallback(async (mode: 'user' | 'environment') => {
         stopStream();
@@ -107,70 +124,129 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
         }
     }, [stopStream, t]);
 
-    const runArDetection = useCallback(async () => {
+    const analyzeFrame = useCallback(async () => {
+        if (isRecognizing || !videoRef.current || videoRef.current.readyState < 2) return;
+        
+        setIsRecognizing(true);
         const video = videoRef.current;
-        const canvas = arCanvasRef.current;
-        const detector = faceDetectorRef.current;
-    
-        if (activeMode !== 'AR' || !video || video.readyState < 2 || !canvas || !detector) {
-            if (activeMode === 'AR') {
-                animationFrameId.current = requestAnimationFrame(runArDetection);
-            }
+        const tempCanvas = document.createElement('canvas');
+        
+        const MAX_WIDTH = 640;
+        const scale = MAX_WIDTH / video.videoWidth;
+        tempCanvas.width = MAX_WIDTH;
+        tempCanvas.height = video.videoHeight * scale;
+        
+        const ctx = tempCanvas.getContext('2d');
+        if (!ctx) {
+            setIsRecognizing(false);
             return;
         }
+
+        ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+        const base64Data = tempCanvas.toDataURL('image/png').split(',')[1];
+
+        const results = await recognizeObjectsInImage(base64Data, dialect);
         
-        try {
-            const faces = await detector.detect(video);
-            
-            canvas.width = video.clientWidth;
-            canvas.height = video.clientHeight;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
-    
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-            const videoAspectRatio = video.videoWidth / video.videoHeight;
-            const canvasAspectRatio = canvas.width / canvas.height;
-            let scale = 1, offsetX = 0, offsetY = 0;
-    
-            if (canvasAspectRatio > videoAspectRatio) {
-                scale = canvas.width / video.videoWidth;
-                offsetY = (canvas.height - video.videoHeight * scale) / 2;
-            } else {
-                scale = canvas.height / video.videoHeight;
-                offsetX = (canvas.width - video.videoWidth * scale) / 2;
-            }
-    
-            const punicFont = getComputedStyle(document.documentElement).getPropertyValue('--font-punic').trim();
-            const phoenicianFont = getComputedStyle(document.documentElement).getPropertyValue('--font-phoenician').trim();
-            const fontName = dialect === PhoenicianDialect.PUNIC ? punicFont : phoenicianFont;
-            const fontSize = 24 * scale;
-            ctx.font = `${fontSize}px ${fontName}`;
-            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.lineWidth = 4;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            for (const face of faces) {
-                for (const landmark of face.landmarks) {
-                    const feature = faceFeatureMap[landmark.type];
-                    if (feature) {
-                        const x = landmark.location.x * scale + offsetX;
-                        const y = landmark.location.y * scale + offsetY;
-                        ctx.strokeText(feature.phoenician, x, y);
-                        ctx.fillText(feature.phoenician, x, y);
-                    }
+        setArObjects(prevObjects => {
+            const now = Date.now();
+            const updatedObjects: ArObject[] = [];
+            const matchedNames = new Set<string>();
+
+            // Update existing and add new objects
+            results.forEach(res => {
+                const existing = prevObjects.find(p => p.name === res.name);
+                const canvas = arCanvasRef.current!;
+                const targetX = res.box.x * canvas.width + (res.box.width * canvas.width) / 2;
+                const targetY = res.box.y * canvas.height + (res.box.height * canvas.height) / 2;
+
+                if (existing) {
+                    updatedObjects.push({ ...existing, targetX, targetY, targetOpacity: 1, isDead: false });
+                } else {
+                    updatedObjects.push({
+                        id: `${res.name}-${now}`,
+                        name: res.name,
+                        phoenician: res.phoenician,
+                        currentX: targetX, currentY: targetY,
+                        targetX, targetY,
+                        opacity: 0, targetOpacity: 1, isDead: false,
+                    });
                 }
-            }
-        } catch (e) {
-            console.error("Face detection error:", e);
-            stopArDetection();
+                matchedNames.add(res.name);
+            });
+
+            // Mark unmatched objects for fade out
+            prevObjects.forEach(p => {
+                if (!matchedNames.has(p.name)) {
+                    updatedObjects.push({ ...p, targetOpacity: 0 });
+                }
+            });
+
+            return updatedObjects;
+        });
+
+        setIsRecognizing(false);
+    }, [isRecognizing, dialect]);
+
+    const runArOverlayAnimation = useCallback(() => {
+        if (activeMode !== 'AR') {
+            stopAr();
+            return;
         }
-    
-        animationFrameId.current = requestAnimationFrame(runArDetection);
-    }, [activeMode, dialect, stopArDetection]);
-    
+
+        const canvas = arCanvasRef.current;
+        if (!canvas) return;
+        
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const punicFont = getComputedStyle(document.documentElement).getPropertyValue('--font-punic').trim();
+        const phoenicianFont = getComputedStyle(document.documentElement).getPropertyValue('--font-phoenician').trim();
+        const fontName = dialect === PhoenicianDialect.PUNIC ? punicFont : phoenicianFont;
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
+        
+        let hasActiveObjects = false;
+        
+        setArObjects(prev => {
+            const nextObjects = prev.map(obj => {
+                const newObj = { ...obj };
+                newObj.currentX += (newObj.targetX - newObj.currentX) * LERP_FACTOR;
+                newObj.currentY += (newObj.targetY - newObj.currentY) * LERP_FACTOR;
+                newObj.opacity += (newObj.targetOpacity - newObj.opacity) * LERP_FACTOR;
+
+                if (newObj.targetOpacity === 0 && newObj.opacity < 0.01) {
+                    newObj.isDead = true;
+                }
+
+                if (!newObj.isDead) {
+                    hasActiveObjects = true;
+                    ctx.save();
+                    ctx.globalAlpha = newObj.opacity;
+                    const fontSize = 28;
+                    ctx.font = `${fontSize}px ${fontName}`;
+                    ctx.fillStyle = primaryColor;
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+                    ctx.lineWidth = 5;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    ctx.strokeText(newObj.phoenician, newObj.currentX, newObj.currentY);
+                    ctx.fillText(newObj.phoenician, newObj.currentX, newObj.currentY);
+                    ctx.restore();
+                }
+                return newObj;
+            });
+            return nextObjects.filter(obj => !obj.isDead);
+        });
+
+        if (hasActiveObjects || arObjects.length > 0) {
+            animationFrameId.current = requestAnimationFrame(runArOverlayAnimation);
+        }
+    }, [activeMode, dialect, stopAr, arObjects.length]);
+
     useEffect(() => {
         if (isOpen && !capturedImage) {
             startStream(facingMode);
@@ -179,37 +255,19 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
         }
         return () => stopStream();
     }, [isOpen, facingMode, capturedImage, startStream, stopStream]);
-    
+
     useEffect(() => {
-        if (isOpen && activeMode === 'AR' && videoRef.current) {
-            if ('FaceDetector' in window) {
-                if (!faceDetectorRef.current) {
-                    try {
-                        faceDetectorRef.current = new window.FaceDetector();
-                    } catch (e) {
-                        console.error("Failed to create FaceDetector:", e);
-                        setError("AR face tracking is not supported on this device/browser.");
-                        return;
-                    }
-                }
-                const video = videoRef.current;
-                const checkVideoReady = () => {
-                    if (video.readyState >= 2) {
-                        stopArDetection();
-                        animationFrameId.current = requestAnimationFrame(runArDetection);
-                    } else {
-                        setTimeout(checkVideoReady, 100);
-                    }
-                };
-                checkVideoReady();
-            } else {
-                setError("AR face tracking is not supported on this device/browser.");
-            }
+        if (isOpen && activeMode === 'AR') {
+            stopAr(); // Clear previous state
+            analysisIntervalId.current = window.setInterval(analyzeFrame, ANALYSIS_INTERVAL);
+            animationFrameId.current = requestAnimationFrame(runArOverlayAnimation);
         } else {
-            stopArDetection();
+            stopAr();
         }
-    }, [isOpen, activeMode, runArDetection, stopArDetection]);
-    
+
+        return () => stopAr();
+    }, [isOpen, activeMode, analyzeFrame, runArOverlayAnimation, stopAr]);
+
     const snapToNearest = useCallback((angle: number) => {
         const closestIndex = Math.round(angle / anglePerItem);
         const snappedAngle = closestIndex * anglePerItem;
@@ -375,7 +433,9 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, on
 
             <main className="flex-grow bg-black relative flex items-center justify-center overflow-hidden">
                 <video ref={videoRef} autoPlay playsInline className={`w-full h-full object-cover transition-opacity ${isLoading ? 'opacity-0' : 'opacity-100'}`} />
-                {activeMode === 'AR' && <canvas ref={arCanvasRef} className="ar-canvas" />}
+                <canvas ref={arCanvasRef} className="ar-canvas" />
+                {activeMode === 'AR' && isRecognizing && <div className="ar-recognizing-indicator"></div>}
+                
                 {isLoading && <Loader className="w-10 h-10 text-[color:var(--color-primary)]" />}
                 {error && <div className="absolute text-center text-red-400 p-4 bg-black/50 rounded-md z-30">{error}</div>}
                 

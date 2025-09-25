@@ -422,3 +422,73 @@ export const recognizePhoenicianTextInImage = async (
         throw new Error('Failed to recognize text from image. The AI service may be temporarily unavailable.');
     }
 };
+
+export interface RecognizedObject {
+    name: string;
+    phoenician: string;
+    box: { x: number; y: number; width: number; height: number; };
+}
+
+export const recognizeObjectsInImage = async (
+    base64ImageData: string,
+    dialect: PhoenicianDialect
+): Promise<RecognizedObject[]> => {
+    const imagePart = {
+        inlineData: {
+            mimeType: 'image/png',
+            data: base64ImageData,
+        },
+    };
+
+    const dialectName = dialect === PhoenicianDialect.PUNIC ? "Punic" : "Standard Phoenician";
+
+    const textPart = {
+        text: `You are an expert AI assistant for analyzing images and translating to ancient languages. Your task is to identify up to 5 prominent objects in the provided image.
+For each object you identify, provide a JSON object containing three fields:
+1. 'name': A simple, one-word English name for the object (e.g., 'tree', 'person', 'dog', 'car').
+2. 'phoenician': The translation of this English name into the ${dialectName} dialect of Phoenician. The translation must use Unicode characters from the Phoenician script block (U+10900–U+1091F). If a direct translation is not available, provide the closest conceptual equivalent.
+3. 'box': A bounding box object with four numerical fields (x, y, width, height), representing the object's location and size as percentages (from 0.0 to 1.0) of the image's total dimensions.
+
+If you cannot identify any objects, return an empty array []. Respond ONLY with the JSON array, without any markdown formatting.`,
+    };
+
+    const objectSchema = {
+        type: Type.ARRAY,
+        items: {
+            type: Type.OBJECT,
+            properties: {
+                name: { type: Type.STRING, description: "The English name of the object." },
+                phoenician: { type: Type.STRING, description: `The ${dialectName} word for the object.` },
+                box: {
+                    type: Type.OBJECT,
+                    properties: {
+                        x: { type: Type.NUMBER, description: "The x-coordinate of the top-left corner as a percentage (0-1)." },
+                        y: { type: Type.NUMBER, description: "The y-coordinate of the top-left corner as a percentage (0-1)." },
+                        width: { type: Type.NUMBER, description: "The width of the box as a percentage (0-1)." },
+                        height: { type: Type.NUMBER, description: "The height of the box as a percentage (0-1)." },
+                    },
+                    required: ["x", "y", "width", "height"],
+                },
+            },
+            required: ["name", "phoenician", "box"],
+        },
+    };
+
+    try {
+        const response = await ai.models.generateContent({
+            model,
+            contents: { parts: [imagePart, textPart] },
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: objectSchema,
+            },
+        });
+        const jsonText = response.text.trim();
+        const result = JSON.parse(jsonText);
+        return result as RecognizedObject[];
+    } catch (error) {
+        console.error('Gemini API object recognition error:', error);
+        // Return an empty array on failure to avoid crashing the AR view
+        return [];
+    }
+};

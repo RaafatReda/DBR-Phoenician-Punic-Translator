@@ -132,24 +132,6 @@ declare global {
     webkitSpeechRecognition: SpeechRecognitionStatic;
     html2canvas: any;
     jspdf: any;
-
-    // Add types for the experimental Face Detector API
-    FaceDetector: new (faceDetectorOptions?: any) => FaceDetector;
-  }
-
-  // Define the types for the Face Detector API results
-  interface FaceDetector {
-    detect(image: ImageBitmapSource): Promise<DetectedFace[]>;
-  }
-
-  interface DetectedFace {
-    boundingBox: DOMRectReadOnly;
-    landmarks: Landmark[];
-  }
-
-  interface Landmark {
-    location: { x: number; y: number };
-    type: 'mouth' | 'eye' | 'nose';
   }
 }
 
