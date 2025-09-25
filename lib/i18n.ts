@@ -182,6 +182,12 @@ export const translations: Record<UILang, Record<string, string>> = {
     grayscale: 'Grayscale',
     resetAdjustments: 'Reset adjustments',
     scanText: 'Scan Text',
+    noSymbolFound: 'No Recognizable Symbol Found',
+    tryAgainHint: 'Please try again with a clearer image.',
+    close: 'Close',
+    downloadPhoto: 'Download Photo',
+    useThisPhoto: 'Use This Photo',
+    recognizeSymbol: 'Recognize Symbol'
   },
   fr: {
     mainTitle: 'Traducteur DBR',
@@ -364,6 +370,12 @@ export const translations: Record<UILang, Record<string, string>> = {
     grayscale: 'Niveaux de gris',
     resetAdjustments: 'Réinitialiser',
     scanText: 'Scanner le Texte',
+    noSymbolFound: 'Aucun Symbole Reconnaissable Trouvé',
+    tryAgainHint: 'Veuillez réessayer avec une image plus claire.',
+    close: 'Fermer',
+    downloadPhoto: 'Télécharger la Photo',
+    useThisPhoto: 'Utiliser Cette Photo',
+    recognizeSymbol: 'Reconnaître le Symbole'
   },
   ar: {
     mainTitle: 'مترجم DBR',
@@ -546,5 +558,11 @@ export const translations: Record<UILang, Record<string, string>> = {
     grayscale: 'تدرج الرمادي',
     resetAdjustments: 'إعادة ضبط',
     scanText: 'مسح النص',
+    noSymbolFound: 'لم يتم العثور على رمز يمكن التعرف عليه',
+    tryAgainHint: 'يرجى المحاولة مرة أخرى بصورة أوضح.',
+    close: 'إغلاق',
+    downloadPhoto: 'تنزيل الصورة',
+    useThisPhoto: 'استخدام هذه الصورة',
+    recognizeSymbol: 'التعرف على الرمز'
   },
 };

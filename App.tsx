@@ -51,7 +51,7 @@ import FontSizeManager from './components/FontSizeManager';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import CognateComparisonToggle from './components/CognateComparisonToggle';
 import CognateDisplay from './components/CognateDisplay';
-import TextScannerModal from './components/TextScannerModal';
+import CameraExperience from './components/CameraExperience';
 import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
 import SpeakerIcon from './components/icons/SpeakerIcon';
 
@@ -180,7 +180,7 @@ const App: React.FC = () => {
     return (localStorage.getItem('dbr-translator-fontsize') as FontSize) || 'medium';
   });
   const [isFontSizeManagerOpen, setIsFontSizeManagerOpen] = useState(false);
-  const [isTextScannerOpen, setIsTextScannerOpen] = useState<boolean>(false);
+  const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
 
   const t = useCallback((key: keyof typeof translations.en) => {
     return translations[uiLang]?.[key] || translations.en[key];
@@ -553,8 +553,8 @@ const App: React.FC = () => {
     setIsHandwritingCanvasOpen(false);
   };
 
-  const handleImageCapture = async (base64Data: string) => {
-    setIsTextScannerOpen(false);
+  const handleScanCapture = async (base64Data: string) => {
+    setIsCameraExperienceOpen(false);
     setIsProcessingImage(true);
     setError(null);
     setSourceText('');
@@ -882,7 +882,7 @@ const App: React.FC = () => {
                          ) : (
                              <>
                                 <button
-                                  onClick={() => setIsTextScannerOpen(true)}
+                                  onClick={() => setIsCameraExperienceOpen(true)}
                                   disabled={isLoading}
                                   className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50"
                                   aria-label={t('textScannerTitle')}
@@ -1145,10 +1145,12 @@ const App: React.FC = () => {
             t={t}
         />
       )}
-      {isTextScannerOpen && (
-        <TextScannerModal
-            onClose={() => setIsTextScannerOpen(false)}
-            onCapture={handleImageCapture}
+      {isCameraExperienceOpen && (
+        <CameraExperience
+            isOpen={isCameraExperienceOpen}
+            onClose={() => setIsCameraExperienceOpen(false)}
+            onScan={handleScanCapture}
+            dialect={phoenicianDialect}
             t={t}
         />
       )}

@@ -9,12 +9,14 @@ interface ImageEditorProps {
     onConfirm: (croppedDataUrl: string) => void;
     onCancel: () => void;
     t: (key: string) => string;
+    confirmText: string;
+    cancelText: string;
+    titleText: string;
 }
 
-// FIX: Define HANDLE_SIZE at the module scope so it can be accessed by all functions within the component.
 const HANDLE_SIZE = 12;
 
-const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t }) => {
+const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, confirmText, cancelText, titleText }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imageRef = useRef<HTMLImageElement>(new Image());
     const interactionRef = useRef<{
@@ -233,6 +235,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t }
 
     return (
         <div className="w-full h-full flex flex-col bg-[#0D1117] text-white/90">
+             <header className="flex justify-between items-center p-4 border-b border-white/10 flex-shrink-0">
+                <h2 id="scanner-title" className="text-lg font-semibold text-amber-300">{titleText}</h2>
+             </header>
+
             <div className="flex-grow relative cursor-grab active:cursor-grabbing bg-black">
                 <canvas 
                     ref={canvasRef} 
@@ -272,10 +278,10 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t }
             </div>
             <div className="p-4 border-t border-white/10 flex-shrink-0 flex items-center justify-center space-x-4">
                  <button onClick={onCancel} className="px-8 py-2.5 font-semibold text-white bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors">
-                    {t('retakePhoto')}
+                    {cancelText}
                 </button>
-                 <button onClick={handleConfirm} disabled={isProcessing} className="flex items-center justify-center w-40 px-8 py-3 font-semibold text-black bg-amber-400 rounded-lg shadow-md hover:bg-amber-300 transition-all disabled:opacity-50">
-                    {isProcessing ? <Loader className="w-5 h-5"/> : t('scanText')}
+                 <button onClick={handleConfirm} disabled={isProcessing} className="flex items-center justify-center w-48 px-8 py-3 font-semibold text-black bg-amber-400 rounded-lg shadow-md hover:bg-amber-300 transition-all disabled:opacity-50">
+                    {isProcessing ? <Loader className="w-5 h-5"/> : confirmText}
                 </button>
             </div>
         </div>

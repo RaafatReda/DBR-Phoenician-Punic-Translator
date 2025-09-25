@@ -272,6 +272,62 @@ export const getPhoenicianWordDetails = async (word: string): Promise<Phoenician
     }
 };
 
+export const recognizeSymbolInImage = async (
+  base64ImageData: string
+): Promise<{ name: string; description: string }> => {
+  const imagePart = {
+    inlineData: {
+      mimeType: 'image/jpeg',
+      data: base64ImageData,
+    },
+  };
+
+  const textPart = {
+    text: `Analyze the provided image for specific ancient Phoenician or Punic iconographic symbols. Identify ONLY ONE of the following symbols if present: Tanit symbol, lunar motif (crescent), solar disk (winged or simple), betyl stone, lotus flower, or bottle-shaped idol.
+If a symbol is identified, respond with a JSON object containing 'name' and 'description'. The 'name' should be the English name of the symbol (e.g., "Tanit Symbol"). The 'description' should be a concise, one-paragraph explanation of its cultural and historical significance.
+If no symbol from the list is clearly identifiable, respond with a JSON object where both 'name' and 'description' are empty strings: {"name": "", "description": ""}.
+Do not identify any other objects. Respond ONLY with the JSON object, without any markdown formatting like \`\`\`json.`,
+  };
+  
+  const symbolSchema = {
+    type: Type.OBJECT,
+    properties: {
+      name: {
+        type: Type.STRING,
+        description: "The English name of the identified symbol.",
+      },
+      description: {
+        type: Type.STRING,
+        description: "A concise, one-paragraph explanation of the symbol's significance.",
+      },
+    },
+    required: ["name", "description"],
+  };
+
+  try {
+    const response = await ai.models.generateContent({
+      model,
+      contents: { parts: [imagePart, textPart] },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: symbolSchema,
+      },
+    });
+
+    const jsonText = response.text.trim();
+    const result = JSON.parse(jsonText);
+    
+    if (typeof result.name === 'string' && typeof result.description === 'string') {
+        return result;
+    } else {
+        throw new Error("Received malformed JSON for symbol recognition from API.");
+    }
+  } catch (error) {
+    console.error('Gemini API symbol recognition error:', error);
+    throw new Error('Failed to recognize symbol from image. The AI service may be temporarily unavailable.');
+  }
+};
+
 export const getTranslationHintsFromImage = async (
   base64ImageData: string,
   dialect: PhoenicianDialect
