@@ -554,30 +554,6 @@ const App: React.FC = () => {
     setSourceText(prev => prev + text);
     setIsHandwritingCanvasOpen(false);
   };
-
-  const handleScanCapture = async (base64Data: string) => {
-    setIsCameraExperienceOpen(false);
-    setIsProcessingImage(true);
-    setError(null);
-    setSourceText('');
-    setTranslationResult('');
-    try {
-        const { transcription, translation } = await getTranslationHintsFromImage(base64Data, phoenicianDialect);
-        setSourceLang(Language.PUNIC);
-        setTargetLang(Language.ENGLISH);
-        setSourceText(transcription);
-        setTranslationResult(translation);
-        setIsComparisonMode(false);
-        if (!transcription) {
-          setError(t('noTextFoundInImage'));
-        }
-    } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : t('imageProcessError');
-        setError(errorMessage);
-    } finally {
-        setIsProcessingImage(false);
-    }
-  };
   
   const isPhoenicianFamilySelected = sourceLang === Language.PHOENICIAN || targetLang === Language.PHOENICIAN || sourceLang === Language.PUNIC || targetLang === Language.PUNIC;
   
@@ -1153,7 +1129,6 @@ const App: React.FC = () => {
         <CameraExperience
             isOpen={isCameraExperienceOpen}
             onClose={() => setIsCameraExperienceOpen(false)}
-            onScan={handleScanCapture}
             dialect={phoenicianDialect}
             t={t}
             uiLang={uiLang}
