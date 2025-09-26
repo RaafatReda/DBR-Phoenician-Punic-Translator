@@ -13,8 +13,7 @@ import WhiteBalanceIcon from './icons/WhiteBalanceIcon';
 import ZoomInIcon from './icons/ZoomInIcon';
 import ZoomOutIcon from './icons/ZoomOutIcon';
 
-// FIX: Add type definitions for experimental MediaTrackCapabilities properties.
-// These are not yet part of the standard TypeScript DOM library and are needed for advanced camera controls.
+// Add type definitions for experimental MediaTrackCapabilities properties.
 interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
     zoom?: { min: number; max: number; step: number; };
     focusDistance?: { min: number; max: number; step: number; };
@@ -51,7 +50,7 @@ interface CameraExperienceProps {
 }
 
 const LERP_FACTOR = 0.1; // For smooth animation of AR tags
-const ANALYSIS_INTERVAL = 2500; // ms between AR recognition calls
+const ANALYSIS_INTERVAL = 2000; // ms between AR recognition calls
 
 const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, dialect, t, uiLang }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -104,12 +103,11 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         setError(null);
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: mode, width: { ideal: 1280 }, height: { ideal: 720 } }
+                video: { facingMode: mode, width: { ideal: 1920 }, height: { ideal: 1080 } }
             });
             streamRef.current = stream;
             if (videoRef.current) videoRef.current.srcObject = stream;
             
-            // Wait for the stream to be ready to get capabilities
             await new Promise(resolve => setTimeout(resolve, 200));
             const track = stream.getVideoTracks()[0];
             if (!track) throw new Error("No video track found");
@@ -117,15 +115,11 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             const caps = track.getCapabilities() as ExtendedMediaTrackCapabilities;
             setCapabilities(caps);
 
-            // Attempt to set auto exposure mode for better initial quality
             if (caps.exposureMode?.includes('continuous')) {
-                // FIX: Cast constraint object to 'any' to apply the experimental 'exposureMode' property.
-                // This resolves a TypeScript error as 'exposureMode' is not part of the standard MediaTrackConstraintSet type definition.
                 await track.applyConstraints({ advanced: [{ exposureMode: 'continuous' } as any] })
                     .catch(e => console.warn("Could not set continuous exposure.", e));
             }
 
-            // Initialize sliders to default/min values
             setZoom(caps.zoom?.min ?? 1);
             setFocus(caps.focusDistance?.min ?? 0);
             setExposure(caps.exposureTime?.min ?? 0);
@@ -148,7 +142,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         return () => stopStream();
     }, [isOpen, facingMode, startStream, stopStream]);
 
-    // Effect to apply manual camera constraints from sliders
     useEffect(() => {
         const track = streamRef.current?.getVideoTracks()[0];
         if (!track || !capabilities) return;
@@ -164,7 +157,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         }
     }, [zoom, focus, exposure, whiteBalance, capabilities]);
     
-    // Effect to resize AR canvas when container or video resizes
     useEffect(() => {
         const canvas = arCanvasRef.current;
         const container = containerRef.current;
@@ -208,7 +200,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
 
         try {
             const results: RecognizedObject[] = await recognizeObjectsInImage(base64Data, dialect, uiLang);
-
             const canvas = arCanvasRef.current;
             if (!canvas) return;
 
@@ -283,7 +274,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
 
-                    // Measure texts
                     const phFontSize = 32;
                     ctx.font = `${phFontSize}px ${fontName}`;
                     const phMetrics = ctx.measureText(newObj.phoenician);
@@ -292,33 +282,45 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     ctx.font = `italic ${latinFontSize}px Poppins, sans-serif`;
                     const latinMetrics = ctx.measureText(newObj.latin);
 
-                    // Calculate bubble dimensions
-                    const textPadding = 24;
+                    const textPadding = 28;
                     const boxWidth = Math.max(phMetrics.width, latinMetrics.width) + textPadding;
-                    const boxHeight = phFontSize + latinFontSize + 18; // height of both texts + padding
+                    const boxHeight = phFontSize + latinFontSize + 20;
 
                     const bubbleX = newObj.currentX - boxWidth / 2;
-                    const bubbleY = newObj.currentY - boxHeight - 10;
+                    const bubbleY = newObj.currentY - boxHeight - 15;
 
-                    // Draw bubble background
-                    ctx.fillStyle = 'rgba(17, 24, 39, 0.8)';
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-                    ctx.lineWidth = 1;
+                    // Glassmorphism Effect
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                    ctx.shadowBlur = 8;
+                    ctx.shadowOffsetX = 2;
+                    ctx.shadowOffsetY = 4;
+
+                    const gradient = ctx.createLinearGradient(bubbleX, bubbleY, bubbleX, bubbleY + boxHeight);
+                    gradient.addColorStop(0, 'rgba(30, 41, 59, 0.7)');
+                    gradient.addColorStop(1, 'rgba(17, 24, 39, 0.6)');
+
+                    ctx.fillStyle = gradient;
+                    ctx.strokeStyle = 'rgba(200, 215, 255, 0.3)';
+                    ctx.lineWidth = 1.5;
+
                     ctx.beginPath();
-                    ctx.roundRect(bubbleX, bubbleY, boxWidth, boxHeight, 16);
+                    ctx.roundRect(bubbleX, bubbleY, boxWidth, boxHeight, 20);
                     ctx.fill();
                     ctx.stroke();
 
-                    // Draw Phoenician text
+                    // Reset shadow for text
+                    ctx.shadowColor = 'transparent';
+                    
+                    // Phoenician Text
                     ctx.font = `${phFontSize}px ${fontName}`;
-                    ctx.fillStyle = '#E5E7EB'; // Off-white for readability
-                    const phY = bubbleY + phFontSize / 2 + 10;
+                    ctx.fillStyle = '#F3F4F6'; 
+                    const phY = bubbleY + phFontSize / 2 + 12;
                     ctx.fillText(newObj.phoenician, newObj.currentX, phY);
                     
-                    // Draw Latin transcription
+                    // Latin Transcription
                     ctx.font = `italic ${latinFontSize}px Poppins, sans-serif`;
-                    ctx.fillStyle = '#9CA3AF'; // Muted gray
-                    const latinY = phY + phFontSize / 2 + latinFontSize / 2 + 2;
+                    ctx.fillStyle = '#9CA3AF';
+                    const latinY = phY + phFontSize / 2 + latinFontSize / 2 + 4;
                     ctx.fillText(newObj.latin, newObj.currentX, latinY);
                     
                     ctx.restore();
@@ -334,7 +336,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     useEffect(() => {
         if (isArEnabled) {
             stopAr();
-            analyzeFrame(); // Analyze immediately
+            analyzeFrame();
             analysisIntervalId.current = window.setInterval(analyzeFrame, ANALYSIS_INTERVAL);
             animationFrameId.current = requestAnimationFrame(runArAnimation);
         } else {
