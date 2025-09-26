@@ -195,6 +195,9 @@ export const translations: Record<UILang, Record<string, string>> = {
     aiAssistantExplanation: 'Explanation',
     aiAssistantApply: 'Apply Changes',
     aiAssistantError: 'The assistant could not process your request.',
+    arAnalysisFailed: 'AR analysis failed. Please try again.',
+    grayscale: 'Grayscale',
+    resetAdjustments: 'Reset adjustments',
   },
   fr: {
     mainTitle: 'Traducteur DBR',
@@ -390,6 +393,9 @@ export const translations: Record<UILang, Record<string, string>> = {
     aiAssistantExplanation: 'Explication',
     aiAssistantApply: 'Appliquer',
     aiAssistantError: "L'assistant n'a pas pu traiter votre demande.",
+    arAnalysisFailed: "L'analyse RA a échoué. Veuillez réessayer.",
+    grayscale: 'Niveaux de gris',
+    resetAdjustments: 'Réinitialiser les ajustements',
   },
   ar: {
     mainTitle: 'مترجم DBR',
@@ -585,5 +591,8 @@ export const translations: Record<UILang, Record<string, string>> = {
     aiAssistantExplanation: 'الشرح',
     aiAssistantApply: 'تطبيق التغييرات',
     aiAssistantError: 'لم يتمكن المساعد من معالجة طلبك.',
+    arAnalysisFailed: 'فشل تحليل الواقع المعزز. الرجاء المحاولة مرة أخرى.',
+    grayscale: 'تدرج الرمادي',
+    resetAdjustments: 'إعادة ضبط التعديلات',
   },
 };

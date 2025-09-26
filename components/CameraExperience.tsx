@@ -1,18 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PhoenicianDialect } from '../types';
+import { PhoenicianDialect, RecognizedObject } from '../types';
 import { recognizeObjectsInImage } from '../services/geminiService';
 import { UILang } from '../lib/i18n';
 import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import SettingsIcon from './icons/SettingsIcon';
-import UploadIcon from './icons/UploadIcon';
 import SwitchCameraIcon from './icons/SwitchCameraIcon';
 import EyeIcon from './icons/EyeIcon';
 import FocusIcon from './icons/FocusIcon';
 import ExposureIcon from './icons/ExposureIcon';
 import WhiteBalanceIcon from './icons/WhiteBalanceIcon';
-import SunIcon from './icons/SunIcon';
-import ContrastIcon from './icons/ContrastIcon';
 import ZoomInIcon from './icons/ZoomInIcon';
 import ZoomOutIcon from './icons/ZoomOutIcon';
 
@@ -33,6 +30,7 @@ interface ArObject {
     id: string; 
     name: string;
     phoenician: string;
+    latin: string;
     translation: string;
     // Animation properties
     currentX: number;
@@ -53,13 +51,13 @@ interface CameraExperienceProps {
 }
 
 const LERP_FACTOR = 0.1; // For smooth animation of AR tags
-const ANALYSIS_INTERVAL = 2000; // ms between AR recognition calls
+const ANALYSIS_INTERVAL = 2500; // ms between AR recognition calls
 
 const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, dialect, t, uiLang }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const arCanvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const animationFrameId = useRef<number | null>(null);
     const analysisIntervalId = useRef<number | null>(null);
 
@@ -69,11 +67,8 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     
     // Camera Capabilities State
-    // FIX: Changed MediaTrackCapabilities to the extended interface to support experimental features.
     const [capabilities, setCapabilities] = useState<ExtendedMediaTrackCapabilities | null>(null);
     const [zoom, setZoom] = useState(1);
-    const [brightness, setBrightness] = useState(100);
-    const [contrast, setContrast] = useState(100);
     const [focus, setFocus] = useState(0);
     const [exposure, setExposure] = useState(0);
     const [whiteBalance, setWhiteBalance] = useState(0);
@@ -82,6 +77,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const [isArEnabled, setIsArEnabled] = useState(false);
     const [isRecognizing, setIsRecognizing] = useState(false);
     const [arObjects, setArObjects] = useState<ArObject[]>([]);
+    const [arError, setArError] = useState<string | null>(null);
 
     const stopAr = useCallback(() => {
         if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
@@ -108,21 +104,32 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         setError(null);
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: mode }
+                video: { facingMode: mode, width: { ideal: 1280 }, height: { ideal: 720 } }
             });
             streamRef.current = stream;
             if (videoRef.current) videoRef.current.srcObject = stream;
             
+            // Wait for the stream to be ready to get capabilities
+            await new Promise(resolve => setTimeout(resolve, 200));
             const track = stream.getVideoTracks()[0];
-            // FIX: Cast capabilities to the extended interface to access experimental properties.
+            if (!track) throw new Error("No video track found");
+
             const caps = track.getCapabilities() as ExtendedMediaTrackCapabilities;
             setCapabilities(caps);
 
-            // Initialize sliders
-            if (caps.zoom) setZoom(caps.zoom.min);
-            if (caps.focusDistance) setFocus(caps.focusDistance.min);
-            if (caps.exposureTime) setExposure(caps.exposureTime.min);
-            if (caps.whiteBalanceMode) setWhiteBalance(caps.colorTemperature?.min || 0);
+            // Attempt to set auto exposure mode for better initial quality
+            if (caps.exposureMode?.includes('continuous')) {
+                // FIX: Cast constraint object to 'any' to apply the experimental 'exposureMode' property.
+                // This resolves a TypeScript error as 'exposureMode' is not part of the standard MediaTrackConstraintSet type definition.
+                await track.applyConstraints({ advanced: [{ exposureMode: 'continuous' } as any] })
+                    .catch(e => console.warn("Could not set continuous exposure.", e));
+            }
+
+            // Initialize sliders to default/min values
+            setZoom(caps.zoom?.min ?? 1);
+            setFocus(caps.focusDistance?.min ?? 0);
+            setExposure(caps.exposureTime?.min ?? 0);
+            setWhiteBalance(caps.colorTemperature?.min ?? 0);
 
         } catch (err) {
             console.error("Camera access error:", err);
@@ -141,7 +148,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         return () => stopStream();
     }, [isOpen, facingMode, startStream, stopStream]);
 
-    // Effect to apply camera constraints
+    // Effect to apply manual camera constraints from sliders
     useEffect(() => {
         const track = streamRef.current?.getVideoTracks()[0];
         if (!track || !capabilities) return;
@@ -157,102 +164,110 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         }
     }, [zoom, focus, exposure, whiteBalance, capabilities]);
     
-    const handleCapture = () => {
+    // Effect to resize AR canvas when container or video resizes
+    useEffect(() => {
+        const canvas = arCanvasRef.current;
+        const container = containerRef.current;
         const video = videoRef.current;
-        if (!video) return;
+        if (!canvas || !container || !video) return;
 
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        const resizeCanvas = () => {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        };
         
-        ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = `dbr-capture-${Date.now()}.png`;
-        link.click();
-    };
-    
+        const resizeObserver = new ResizeObserver(resizeCanvas);
+        resizeObserver.observe(container);
+        video.addEventListener('loadedmetadata', resizeCanvas);
+
+        resizeCanvas();
+
+        return () => {
+            resizeObserver.disconnect();
+            if (video) video.removeEventListener('loadedmetadata', resizeCanvas);
+        };
+    }, [isOpen]);
+
     const analyzeFrame = useCallback(async () => {
-        if (isRecognizing || !videoRef.current || videoRef.current.readyState < 2 || !arCanvasRef.current) return;
+        if (isRecognizing || !videoRef.current || videoRef.current.readyState < 2) return;
         
         setIsRecognizing(true);
         const video = videoRef.current;
         const tempCanvas = document.createElement('canvas');
         
-        const MAX_WIDTH = 480;
-        const scale = MAX_WIDTH / video.videoWidth;
-        tempCanvas.width = MAX_WIDTH;
+        const MAX_WIDTH = 640;
+        const scale = video.videoWidth > MAX_WIDTH ? MAX_WIDTH / video.videoWidth : 1;
+        tempCanvas.width = video.videoWidth * scale;
         tempCanvas.height = video.videoHeight * scale;
         
         const ctx = tempCanvas.getContext('2d');
         if(!ctx) { setIsRecognizing(false); return; }
 
         ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-        const base64Data = tempCanvas.toDataURL('image/png').split(',')[1];
+        const base64Data = tempCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
 
-        const results = await recognizeObjectsInImage(base64Data, dialect, uiLang);
+        try {
+            const results: RecognizedObject[] = await recognizeObjectsInImage(base64Data, dialect, uiLang);
 
-        const canvas = arCanvasRef.current;
-        const videoAR = video.videoWidth / video.videoHeight;
-        const canvasAR = canvas.width / canvas.height;
-        let displayScale, offsetX = 0, offsetY = 0;
+            const canvas = arCanvasRef.current;
+            if (!canvas) return;
 
-        if (videoAR > canvasAR) { // Video is wider than canvas
-            displayScale = canvas.height / video.videoHeight;
-            offsetX = (video.videoWidth * displayScale - canvas.width) / 2;
-        } else { // Video is taller than canvas
-            displayScale = canvas.width / video.videoWidth;
-            offsetY = (video.videoHeight * displayScale - canvas.height) / 2;
+            const videoAR = video.videoWidth / video.videoHeight;
+            const canvasAR = canvas.width / canvas.height;
+            let displayScale, offsetX = 0, offsetY = 0;
+
+            if (videoAR > canvasAR) { 
+                displayScale = canvas.height / video.videoHeight;
+                offsetX = (canvas.width - video.videoWidth * displayScale) / 2;
+            } else {
+                displayScale = canvas.width / video.videoWidth;
+                offsetY = (canvas.height - video.videoHeight * displayScale) / 2;
+            }
+
+            setArObjects(prev => {
+                const matchedIds = new Set<string>();
+                const nextObjects: ArObject[] = results.map(res => {
+                    const id = res.name;
+                    matchedIds.add(id);
+                    const targetX = res.box.x * (video.videoWidth * displayScale) + offsetX + (res.box.width * (video.videoWidth * displayScale) / 2);
+                    const targetY = res.box.y * (video.videoHeight * displayScale) + offsetY + (res.box.height * (video.videoHeight * displayScale) / 2);
+                    
+                    const existing = prev.find(p => p.id === id);
+                    if (existing) {
+                        return { ...existing, targetX, targetY, targetOpacity: 1, isDead: false };
+                    }
+                    return {
+                        id, name: res.name, phoenician: res.phoenician, latin: res.latin, translation: res.translation,
+                        currentX: targetX, currentY: targetY, targetX, targetY,
+                        opacity: 0, targetOpacity: 1, isDead: false,
+                    };
+                });
+                prev.forEach(p => {
+                    if (!matchedIds.has(p.id)) {
+                        nextObjects.push({ ...p, targetOpacity: 0 });
+                    }
+                });
+                return nextObjects;
+            });
+        } catch (err) {
+            console.error("AR analysis failed:", err);
+            setArError(t('arAnalysisFailed'));
+            setTimeout(() => setArError(null), 4000);
+        } finally {
+            setIsRecognizing(false);
         }
-
-        setArObjects(prev => {
-            const matchedIds = new Set<string>();
-            const nextObjects: ArObject[] = results.map(res => {
-                const id = res.name;
-                matchedIds.add(id);
-                const targetX = (res.box.x + res.box.width / 2) * video.videoWidth * displayScale - offsetX;
-                const targetY = (res.box.y + res.box.height / 2) * video.videoHeight * displayScale - offsetY;
-                
-                const existing = prev.find(p => p.id === id);
-                if (existing) {
-                    return { ...existing, targetX, targetY, targetOpacity: 1, isDead: false };
-                }
-                return {
-                    id, name: res.name, phoenician: res.phoenician, translation: res.translation,
-                    currentX: targetX, currentY: targetY, targetX, targetY,
-                    opacity: 0, targetOpacity: 1, isDead: false,
-                };
-            });
-            prev.forEach(p => {
-                if (!matchedIds.has(p.id)) {
-                    nextObjects.push({ ...p, targetOpacity: 0 });
-                }
-            });
-            return nextObjects;
-        });
-        
-        setIsRecognizing(false);
-    }, [isRecognizing, dialect, uiLang]);
+    }, [isRecognizing, dialect, uiLang, t]);
     
     const runArAnimation = useCallback(() => {
         if (!isArEnabled) { stopAr(); return; }
 
         const canvas = arCanvasRef.current;
-        if (!canvas) return;
-
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        const ctx = canvas?.getContext('2d');
+        if (!canvas || !ctx) return;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         const fontName = dialect === PhoenicianDialect.PUNIC ? 'Punic LDR' : 'Noto Sans Phoenician';
-        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
         
         setArObjects(prev => {
             const next = prev.map(obj => {
@@ -266,18 +281,45 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     ctx.save();
                     ctx.globalAlpha = newObj.opacity;
                     ctx.textAlign = 'center';
-                    ctx.textBaseline = 'bottom';
-                    
-                    const phFontSize = 28;
+                    ctx.textBaseline = 'middle';
+
+                    // Measure texts
+                    const phFontSize = 32;
                     ctx.font = `${phFontSize}px ${fontName}`;
-                    ctx.fillStyle = 'rgba(0,0,0,0.7)';
-                    ctx.fillRect(newObj.currentX - 50, newObj.currentY - 45, 100, 55);
-                    ctx.fillStyle = primaryColor;
-                    ctx.fillText(newObj.phoenician, newObj.currentX, newObj.currentY - 15);
+                    const phMetrics = ctx.measureText(newObj.phoenician);
+
+                    const latinFontSize = 14;
+                    ctx.font = `italic ${latinFontSize}px Poppins, sans-serif`;
+                    const latinMetrics = ctx.measureText(newObj.latin);
+
+                    // Calculate bubble dimensions
+                    const textPadding = 24;
+                    const boxWidth = Math.max(phMetrics.width, latinMetrics.width) + textPadding;
+                    const boxHeight = phFontSize + latinFontSize + 18; // height of both texts + padding
+
+                    const bubbleX = newObj.currentX - boxWidth / 2;
+                    const bubbleY = newObj.currentY - boxHeight - 10;
+
+                    // Draw bubble background
+                    ctx.fillStyle = 'rgba(17, 24, 39, 0.8)';
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.roundRect(bubbleX, bubbleY, boxWidth, boxHeight, 16);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Draw Phoenician text
+                    ctx.font = `${phFontSize}px ${fontName}`;
+                    ctx.fillStyle = '#E5E7EB'; // Off-white for readability
+                    const phY = bubbleY + phFontSize / 2 + 10;
+                    ctx.fillText(newObj.phoenician, newObj.currentX, phY);
                     
-                    ctx.font = `600 14px Poppins, sans-serif`;
-                    ctx.fillStyle = 'white';
-                    ctx.fillText(newObj.translation, newObj.currentX, newObj.currentY);
+                    // Draw Latin transcription
+                    ctx.font = `italic ${latinFontSize}px Poppins, sans-serif`;
+                    ctx.fillStyle = '#9CA3AF'; // Muted gray
+                    const latinY = phY + phFontSize / 2 + latinFontSize / 2 + 2;
+                    ctx.fillText(newObj.latin, newObj.currentX, latinY);
                     
                     ctx.restore();
                 }
@@ -292,6 +334,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     useEffect(() => {
         if (isArEnabled) {
             stopAr();
+            analyzeFrame(); // Analyze immediately
             analysisIntervalId.current = window.setInterval(analyzeFrame, ANALYSIS_INTERVAL);
             animationFrameId.current = requestAnimationFrame(runArAnimation);
         } else {
@@ -300,12 +343,18 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         return () => stopAr();
     }, [isArEnabled, analyzeFrame, runArAnimation, stopAr]);
     
-    const sliderProps = { min: 0, max: 0, step: 1 };
+    if (!isOpen) return null;
     
     return (
-        <div className="camera-experience-modal">
-            <video id="camera-feed" ref={videoRef} autoPlay playsInline style={{ filter: `brightness(${brightness}%) contrast(${contrast}%)` }} />
+        <div className="camera-experience-modal" ref={containerRef}>
+            <video id="camera-feed" ref={videoRef} autoPlay playsInline muted />
             <canvas id="ar-canvas" ref={arCanvasRef} className="ar-canvas" />
+
+            {arError && (
+                <div className="absolute top-24 left-1/2 -translate-x-1/2 bg-red-500/80 text-white px-4 py-2 rounded-lg z-30 text-sm font-semibold transition-opacity duration-300">
+                    {arError}
+                </div>
+            )}
 
             <div className="camera-ui-overlay">
                 <header className="flex justify-between items-center px-4">
@@ -323,7 +372,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     </div>
                 </header>
 
-                <div className="ar-crosshair" />
+                {!isArEnabled && <div className="ar-crosshair" />}
                 
                 {isArEnabled && isRecognizing && <div className="ar-recognizing-indicator"></div>}
 
@@ -344,16 +393,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                         <label className="camera-slider-label"><WhiteBalanceIcon className="w-5 h-5"/>{t('whiteBalance')}</label>
                         <input type="range" min={capabilities.colorTemperature.min} max={capabilities.colorTemperature.max} step={capabilities.colorTemperature.step} value={whiteBalance} onChange={e => setWhiteBalance(parseFloat(e.target.value))} className="range-slider" />
                     </div>}
-
-                    <div className="camera-slider-container">
-                        <label className="camera-slider-label"><SunIcon className="w-5 h-5"/>{t('brightness')}</label>
-                        <input type="range" min="50" max="200" value={brightness} onChange={e => setBrightness(parseInt(e.target.value))} className="range-slider" />
-                    </div>
-
-                    <div className="camera-slider-container">
-                        <label className="camera-slider-label"><ContrastIcon className="w-5 h-5"/>{t('contrast')}</label>
-                        <input type="range" min="50" max="200" value={contrast} onChange={e => setContrast(parseInt(e.target.value))} className="range-slider" />
-                    </div>
                 </div>
 
                 {capabilities?.zoom && <div className="camera-zoom-control">
@@ -362,7 +401,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     <ZoomOutIcon className="w-6 h-6 opacity-80"/>
                 </div>}
 
-
                 <footer className="camera-bottom-bar px-4">
                      <div className="w-24 flex justify-start">
                         <button onClick={() => setIsArEnabled(e => !e)} className={`camera-action-button ${isArEnabled ? 'active' : ''}`} title={t('arToggle')}>
@@ -370,9 +408,9 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                             <span>{t('arView')}</span>
                         </button>
                      </div>
-                     <button onClick={handleCapture} className="shutter-button"><div className="shutter-button-inner"></div></button>
+                     <button className="shutter-button"><div className="shutter-button-inner"></div></button>
                      <div className="w-24 flex justify-end">
-                        <button onClick={analyzeFrame} disabled={isRecognizing} className="camera-action-button" title={t('analyzeObjects')}>
+                        <button onClick={analyzeFrame} disabled={isRecognizing || !isArEnabled} className="camera-action-button" title={t('analyzeObjects')}>
                             {isRecognizing ? <Loader className="w-6 h-6" /> : <span className="[font-family:var(--font-phoenician)] text-2xl">𐤀?</span>}
                             <span>{t('analyzeObjects')}</span>
                         </button>
