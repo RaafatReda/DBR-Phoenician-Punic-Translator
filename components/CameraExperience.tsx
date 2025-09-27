@@ -13,6 +13,8 @@ import ContrastIcon from './icons/ContrastIcon';
 import UploadIcon from './icons/UploadIcon';
 import RefreshIcon from './icons/RefreshIcon';
 import ScriptModeToggle from './ScriptModeToggle';
+import EyeIcon from './icons/EyeIcon';
+import ResetIcon from './icons/ResetIcon';
 
 
 // Add type definitions for experimental MediaTrackCapabilities properties.
@@ -85,6 +87,11 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const [arError, setArError] = useState<string | null>(null);
     const [arDialect, setArDialect] = useState<PhoenicianDialect>(dialect);
     const [expandedBubbleId, setExpandedBubbleId] = useState<string | null>(null);
+    
+    const handleResetAdjustments = () => {
+        setBrightness(100);
+        setContrast(100);
+    };
 
     const stopAr = useCallback(() => {
         if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
@@ -107,7 +114,12 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         setError(null);
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: mode, width: { ideal: 1920 }, height: { ideal: 1080 } }
+                video: { 
+                    facingMode: mode, 
+                    width: { ideal: 1920 }, 
+                    height: { ideal: 1080 },
+                    frameRate: { ideal: 30 }
+                }
             });
             streamRef.current = stream;
             if (videoRef.current) videoRef.current.srcObject = stream;
@@ -362,7 +374,10 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     </div>
 
                     <div className="flex items-center gap-2">
-                         <button onClick={() => analyzeFrame()} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('analyzeObjects')}>
+                        <button onClick={() => setIsArEnabled(e => !e)} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('arToggle')}>
+                           <EyeIcon className="h-6 w-6" isSlashed={!isArEnabled}/>
+                        </button>
+                        <button onClick={() => analyzeFrame()} disabled={isLoading || !isArEnabled || isRecognizing} className="p-3 rounded-full bg-black/30 backdrop-blur-sm disabled:opacity-50" title={t('analyzeObjects')}>
                            <RefreshIcon className="h-6 w-6" />
                         </button>
                         <button onClick={() => setIsSettingsOpen(o => !o)} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('advancedSettings')}>
@@ -390,6 +405,22 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                         <label className="camera-slider-label"><WhiteBalanceIcon className="w-5 h-5"/>{t('whiteBalance')}</label>
                         <input type="range" min={capabilities.colorTemperature.min} max={capabilities.colorTemperature.max} step={capabilities.colorTemperature.step} value={whiteBalance} onChange={e => setWhiteBalance(parseFloat(e.target.value))} className="range-slider" />
                     </div>}
+                    
+                    <div className="camera-slider-container">
+                        <label className="camera-slider-label"><SunIcon className="w-5 h-5"/>{t('brightness')}</label>
+                        <input type="range" min="50" max="200" value={brightness} onChange={e => setBrightness(parseFloat(e.target.value))} className="range-slider" />
+                    </div>
+                    <div className="camera-slider-container">
+                        <label className="camera-slider-label"><ContrastIcon className="w-5 h-5"/>{t('contrast')}</label>
+                        <input type="range" min="50" max="200" value={contrast} onChange={e => setContrast(parseFloat(e.target.value))} className="range-slider" />
+                    </div>
+                    <button 
+                        onClick={handleResetAdjustments} 
+                        className="flex items-center justify-center gap-2 w-full mt-auto px-4 py-2 text-sm font-semibold rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                    >
+                        <ResetIcon className="w-5 h-5" />
+                        {t('resetAdjustments')}
+                    </button>
                 </div>
 
                 {capabilities?.zoom && <div className="camera-zoom-control">
@@ -398,16 +429,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 </div>}
 
                 <footer className="camera-bottom-bar px-4">
-                     <div className="camera-controls-panel">
-                        <div className="flex items-center space-x-2">
-                            <SunIcon className="w-5 h-5 text-gray-300"/>
-                            <input type="range" min="50" max="200" value={brightness} onChange={e => setBrightness(parseFloat(e.target.value))} className="range-slider" />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <ContrastIcon className="w-5 h-5 text-gray-300"/>
-                            <input type="range" min="50" max="200" value={contrast} onChange={e => setContrast(parseFloat(e.target.value))} className="range-slider" />
-                        </div>
-                    </div>
                     <ScriptModeToggle scriptMode={arDialect} setScriptMode={setArDialect} t={t} />
                 </footer>
             </div>
