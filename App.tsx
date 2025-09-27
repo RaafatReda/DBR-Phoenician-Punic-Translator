@@ -7,7 +7,6 @@ import DialectSelector from './components/DialectSelector';
 import TextArea from './components/TextArea';
 import Loader from './components/Loader';
 import SavedTranslationsModal from './components/SavedTranslationsModal';
-import HistoryIcon from './components/icons/HistoryIcon';
 import BookmarkIcon from './components/icons/BookmarkIcon';
 import MicrophoneIcon from './components/icons/MicrophoneIcon';
 import ScriptDisplay from './components/CopticScriptDisplay';
@@ -57,8 +56,11 @@ import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
 import SpeakerIcon from './components/icons/SpeakerIcon';
 import AIAssistantModal from './components/AIAssistantModal';
 import SparklesIcon from './components/icons/SparklesIcon';
-import BookOpenIcon from './components/icons/BookOpenIcon';
 import LessonsPage from './components/LessonsPage';
+import DatabaseIcon from './components/icons/DatabaseIcon';
+import DictionaryIcon from './components/icons/DictionaryIcon';
+import ManualIcon from './components/icons/ManualIcon';
+import NewspaperIcon from './components/icons/NewspaperIcon';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -766,38 +768,38 @@ const App: React.FC = () => {
             </p>
           </div>
           <div className="flex-1 flex justify-end items-center space-x-1 flex-wrap">
-             <button
-              onClick={() => setIsManualModalOpen(true)}
-              className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-              aria-label={t('manualTitle')}
-              title={t('manualTitle')}
-            >
-              <span className="[font-family:var(--font-phoenician)] text-2xl font-bold w-6 h-6 flex items-center justify-center">𐤀</span>
-            </button>
-            <button
-                onClick={() => setIsLessonsPageOpen(true)}
+              <button
+                  onClick={() => setIsDictionaryOpen(true)}
+                  className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
+                  aria-label={t('dictionaryTitle')}
+                  title={t('dictionaryTitle')}
+              >
+                  <DictionaryIcon className="w-6 h-6" />
+              </button>
+              <button
+                  onClick={() => setIsLessonsPageOpen(true)}
+                  className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
+                  aria-label={t('lessonsTitle')}
+                  title={t('lessonsTitle')}
+              >
+                  <NewspaperIcon className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => setIsManualModalOpen(true)}
                 className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-                aria-label={t('lessonsTitle')}
-                title={t('lessonsTitle')}
-            >
-                <BookOpenIcon className="w-6 h-6" />
-            </button>
-            <button
-                onClick={() => setIsDictionaryOpen(true)}
+                aria-label={t('manualTitle')}
+                title={t('manualTitle')}
+              >
+                <ManualIcon className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => setIsModalOpen(true)}
                 className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-                aria-label={t('dictionaryTitle')}
-                title={t('dictionaryTitle')}
-            >
-                <span className="text-2xl w-6 h-6 flex items-center justify-center" aria-hidden="true">🕮</span>
-            </button>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-              aria-label={t('savedTranslationsTitle')}
-              title={t('savedTranslationsTitle')}
-            >
-              <HistoryIcon className="w-6 h-6" />
-            </button>
+                aria-label={t('savedTranslationsTitle')}
+                title={t('savedTranslationsTitle')}
+              >
+                <DatabaseIcon className="w-6 h-6" />
+              </button>
           </div>
         </header>
 

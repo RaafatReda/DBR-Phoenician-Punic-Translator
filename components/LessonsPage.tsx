@@ -32,7 +32,7 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
 
     const renderAlphabet = () => (
         <div className="animate-text-glow-fade-in" style={{animationDuration: '0.5s'}}>
-            <p className="text-center mb-6 text-[color:var(--color-text-muted)]">{t('alphabetIntro')}</p>
+            <p className="text-center mb-6 text-[color:var(--color-text-muted)]" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{t('alphabetIntro')}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {alphabetData.map(letter => (
                     <div key={letter.char} className="papyrus-display rounded-lg p-4 flex flex-col items-center justify-center aspect-square transition-transform hover:scale-105">
@@ -63,7 +63,7 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
                 className="glass-panel rounded-[var(--border-radius)] shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
-                <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0">
+                <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
                     <h2 id="lessons-title" className="text-xl font-semibold text-[color:var(--color-primary)]">{t('lessonsHeader')}</h2>
                     <button onClick={onClose} className="text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] transition-colors" aria-label={t('lessonsClose')}>
                         <CloseIcon className="w-6 h-6" />

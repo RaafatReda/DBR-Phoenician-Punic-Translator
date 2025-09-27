@@ -1,3 +1,4 @@
+
 export type UILang = 'en' | 'fr' | 'ar';
 
 export const translations: Record<UILang, Record<string, string>> = {
@@ -34,6 +35,7 @@ export const translations: Record<UILang, Record<string, string>> = {
     manualTitle: 'How to Use',
     dictionaryTitle: 'Phoenician Glossary',
     savedTranslationsTitle: 'Saved Translations',
+    lessonsTitle: 'Lessons',
     translatorMode: 'Translator',
     dialectMode: 'Dialect Variants',
     grammarHelper: 'Grammar Helper',
@@ -198,6 +200,70 @@ export const translations: Record<UILang, Record<string, string>> = {
     arAnalysisFailed: 'AR analysis failed. Please try again.',
     grayscale: 'Grayscale',
     resetAdjustments: 'Reset adjustments',
+    lessonsHeader: 'Phoenician & Punic Lessons',
+    lessonsClose: 'Close Lessons',
+    alphabetTab: 'Alphabet',
+    grammarTab: 'Grammar',
+    alphabetIntro: 'The Phoenician alphabet consists of 22 consonants. Vowels were generally not written. The Punic script is a later, more cursive form of this alphabet.',
+    aleph: 'Aleph', ox: 'Ox',
+    bet: 'Bet', house: 'House',
+    gimel: 'Gimel', camel: 'Camel',
+    dalet: 'Dalet', door: 'Door',
+    he: 'He', window: 'Window',
+    waw: 'Waw', hook: 'Hook',
+    zayin: 'Zayin', weapon: 'Weapon',
+    het: 'Het', fence: 'Fence',
+    tet: 'Tet', wheel: 'Wheel',
+    yod: 'Yod', hand: 'Hand',
+    kaph: 'Kaph', palm_of_hand: 'Palm of Hand',
+    lamed: 'Lamed', goad: 'Goad',
+    mem: 'Mem', water: 'Water',
+    nun: 'Nun', fish: 'Fish',
+    samekh: 'Samekh', pillar: 'Pillar',
+    ayin: 'Ayin', eye: 'Eye',
+    pe: 'Pe', mouth: 'Mouth',
+    sade: 'Sade', plant: 'Plant',
+    qoph: 'Qoph', monkey: 'Monkey',
+    resh: 'Resh', head: 'Head',
+    shin: 'Shin', tooth: 'Tooth',
+    taw: 'Taw', mark: 'Mark',
+    grammarContentPhoenicianHtml: `
+      <h3>Sentence Structure</h3>
+      <p>Phoenician primarily uses a <strong>Verb-Subject-Object (VSO)</strong> word order. This is different from English's SVO order.</p>
+      <ul>
+        <li>Example: <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work" (Lit: "Did the man the work").</li>
+        <li>A key feature is the common omission of the verb "to be" in the present tense. A sentence like "The king is great" would be <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Lit: "The king great."</li>
+      </ul>
+      <h3>Nouns</h3>
+      <p>Nouns have gender (masculine/feminine) and number (singular/plural). Feminine nouns often end in <code class="phoenician">𐤕</code> (-t) or <code class="phoenician">𐤀</code> (-a).</p>
+      <ul>
+        <li>Masculine: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, king) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, kings)</li>
+        <li>Feminine: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queen) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queens)</li>
+        <li><strong>Construct State:</strong> When a noun possesses another, it enters the construct state, often shortening the word. "King of the city" is <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt), not <code class="phoenician">𐤌𐤋𐤊 𐤄𐤒𐤓𐤕</code>.</li>
+      </ul>
+      <h3>Verbs</h3>
+      <p>Verbs are based on a three-consonant root. They are conjugated based on aspect (perfect for completed actions, imperfect for incomplete actions) rather than tense.</p>
+      <ul>
+        <li>Root: <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - to write</li>
+        <li>Perfect (he wrote): <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
+        <li>Imperfect (he will write / is writing): <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+      </ul>`,
+    grammarContentPunicHtml: `
+      <h3>Sentence Structure</h3>
+      <p>Punic grammar is a direct descendant of Phoenician, retaining the core <strong>Verb-Subject-Object (VSO)</strong> word order and the omission of the present-tense "to be."</p>
+      <ul>
+        <li>Example: <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work."</li>
+      </ul>
+      <h3>Key Differences from Standard Phoenician</h3>
+      <p>Punic evolved over centuries, showing distinct changes, particularly in its later forms (Neo-Punic).</p>
+      <ul>
+        <li><strong>Orthography (Spelling):</strong> Punic script became more cursive and simplified. A key change was the weakening of guttural consonants like <code class="punic">𐤇</code> (ḥ) and <code class="punic">𐤏</code> (ʿ). Sometimes they were dropped entirely in spelling.</li>
+        <li><strong>Vowel Indication:</strong> Later Punic increasingly used <em>matres lectionis</em>—using consonant letters like <code class="punic">𐤀</code>, <code class="punic">𐤅</code>, and <code class="punic">𐤉</code> to indicate vowels, which was rare in early Phoenician.</li>
+        <li><strong>Phonology (Sound):</strong> Vowels shifted. For example, the vowel 'o' often shifted to 'u'. The pronunciation of certain consonants also changed under the influence of neighboring languages like Berber.</li>
+        <li><strong>Morphology:</strong> There were subtle changes in pronoun suffixes and verb endings over time. For example, the 3rd person masculine singular pronoun <code class="phoenician">𐤄𐤅𐤀</code> (hw') could sometimes be written differently or dropped.</li>
+      </ul>
+      <h3>Nouns & Verbs</h3>
+      <p>The fundamental systems of noun gender/number and the triliteral verb root remain the same as in Phoenician, but spelling and pronunciation reflect the changes mentioned above.</p>`
   },
   fr: {
     mainTitle: 'Traducteur DBR',
@@ -232,6 +298,7 @@ export const translations: Record<UILang, Record<string, string>> = {
     manualTitle: 'Mode d\'emploi',
     dictionaryTitle: 'Glossaire Phénicien',
     savedTranslationsTitle: 'Traductions Enregistrées',
+    lessonsTitle: 'Leçons',
     translatorMode: 'Traducteur',
     dialectMode: 'Variantes Dialectales',
     grammarHelper: 'Assistant Grammatical',
@@ -396,6 +463,70 @@ export const translations: Record<UILang, Record<string, string>> = {
     arAnalysisFailed: "L'analyse RA a échoué. Veuillez réessayer.",
     grayscale: 'Niveaux de gris',
     resetAdjustments: 'Réinitialiser les ajustements',
+    lessonsHeader: 'Leçons de Phénicien & Punique',
+    lessonsClose: 'Fermer les Leçons',
+    alphabetTab: 'Alphabet',
+    grammarTab: 'Grammaire',
+    alphabetIntro: 'L\'alphabet phénicien se compose de 22 consonnes. Les voyelles n\'étaient généralement pas écrites. L\'écriture punique est une forme plus tardive et plus cursive de cet alphabet.',
+    aleph: 'Aleph', ox: 'Bœuf',
+    bet: 'Bet', house: 'Maison',
+    gimel: 'Gimel', camel: 'Chameau',
+    dalet: 'Dalet', door: 'Porte',
+    he: 'He', window: 'Fenêtre',
+    waw: 'Waw', hook: 'Crochet',
+    zayin: 'Zayin', weapon: 'Arme',
+    het: 'Het', fence: 'Clôture',
+    tet: 'Tet', wheel: 'Roue',
+    yod: 'Yod', hand: 'Main',
+    kaph: 'Kaph', palm_of_hand: 'Paume de main',
+    lamed: 'Lamed', goad: 'Aiguillon',
+    mem: 'Mem', water: 'Eau',
+    nun: 'Nun', fish: 'Poisson',
+    samekh: 'Samekh', pillar: 'Pilier',
+    ayin: 'Ayin', eye: 'Œil',
+    pe: 'Pe', mouth: 'Bouche',
+    sade: 'Sade', plant: 'Plante',
+    qoph: 'Qoph', monkey: 'Singe',
+    resh: 'Resh', head: 'Tête',
+    shin: 'Shin', tooth: 'Dent',
+    taw: 'Taw', mark: 'Marque',
+    grammarContentPhoenicianHtml: `
+      <h3>Structure de la Phrase</h3>
+      <p>Le phénicien utilise principalement un ordre des mots <strong>Verbe-Sujet-Objet (VSO)</strong>. C'est différent de l'ordre SVO du français.</p>
+      <ul>
+        <li>Exemple : <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail" (Litt : "A fait l'homme le travail").</li>
+        <li>Une caractéristique clé est l'omission fréquente du verbe "être" au présent. Une phrase comme "Le roi est grand" serait <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Litt : "Le roi grand."</li>
+      </ul>
+      <h3>Noms</h3>
+      <p>Les noms ont un genre (masculin/féminin) et un nombre (singulier/pluriel). Les noms féminins se terminent souvent par <code class="phoenician">𐤕</code> (-t) ou <code class="phoenician">𐤀</code> (-a).</p>
+      <ul>
+        <li>Masculin : <code class="phoenician">𐤌𐤋𐤊</code> (mlk, roi) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, rois)</li>
+        <li>Féminin : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reine) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reines)</li>
+        <li><strong>État Construit :</strong> Quand un nom en possède un autre, il entre dans l'état construit, ce qui raccourcit souvent le mot. "Roi de la cité" est <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt), et non <code class="phoenician">𐤌𐤋𐤊 𐤄𐤒𐤓𐤕</code>.</li>
+      </ul>
+      <h3>Verbes</h3>
+      <p>Les verbes sont basés sur une racine de trois consonnes. Ils sont conjugués selon l'aspect (parfait pour les actions achevées, imparfait pour les actions inachevées) plutôt que le temps.</p>
+      <ul>
+        <li>Racine : <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - écrire</li>
+        <li>Parfait (il a écrit) : <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
+        <li>Imparfait (il écrira / écrit) : <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+      </ul>`,
+    grammarContentPunicHtml: `
+      <h3>Structure de la Phrase</h3>
+      <p>La grammaire punique est une descendante directe du phénicien, conservant l'ordre des mots de base <strong>Verbe-Sujet-Objet (VSO)</strong> et l'omission du verbe "être" au présent.</p>
+      <ul>
+        <li>Exemple : <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail."</li>
+      </ul>
+      <h3>Différences Clés avec le Phénicien Standard</h3>
+      <p>Le punique a évolué au fil des siècles, montrant des changements distincts, en particulier dans ses formes tardives (néo-punique).</p>
+      <ul>
+        <li><strong>Orthographe :</strong> L'écriture punique est devenue plus cursive et simplifiée. Un changement clé a été l'affaiblissement des consonnes gutturales comme <code class="punic">𐤇</code> (ḥ) et <code class="punic">𐤏</code> (ʿ). Parfois, elles étaient entièrement omises à l'écrit.</li>
+        <li><strong>Indication des Voyelles :</strong> Le punique tardif utilisait de plus en plus les <em>matres lectionis</em>—l'utilisation de lettres consonnes comme <code class="punic">𐤀</code>, <code class="punic">𐤅</code>, et <code class="punic">𐤉</code> pour indiquer les voyelles, ce qui était rare en phénicien ancien.</li>
+        <li><strong>Phonologie (Son) :</strong> Les voyelles ont changé. Par exemple, la voyelle 'o' a souvent évolué en 'u'. La prononciation de certaines consonnes a également changé sous l'influence des langues voisines comme le berbère.</li>
+        <li><strong>Morphologie :</strong> Il y a eu des changements subtils dans les suffixes pronominaux et les terminaisons verbales au fil du temps. Par exemple, le pronom de la 3ème personne du singulier masculin <code class="phoenician">𐤄𐤅𐤀</code> (hw') pouvait parfois être écrit différemment ou omis.</li>
+      </ul>
+      <h3>Noms & Verbes</h3>
+      <p>Les systèmes fondamentaux de genre/nombre des noms et de la racine verbale trilitère restent les mêmes qu'en phénicien, mais l'orthographe et la prononciation reflètent les changements mentionnés ci-dessus.</p>`
   },
   ar: {
     mainTitle: 'مترجم DBR',
@@ -428,8 +559,9 @@ export const translations: Record<UILang, Record<string, string>> = {
     keySymbols: '؟123',
     keyLetters: 'أبت',
     manualTitle: 'دليل الاستخدام',
-    dictionaryTitle: 'مسرد فينيقي',
-    savedTranslationsTitle: 'الترجمات المحفوظة',
+    dictionaryTitle: 'قاموس',
+    savedTranslationsTitle: 'عرض الترجمات المحفوظة',
+    lessonsTitle: 'دروس',
     translatorMode: 'مترجم',
     dialectMode: 'لهجات مختلفة',
     grammarHelper: 'مساعد القواعد',
@@ -594,5 +726,69 @@ export const translations: Record<UILang, Record<string, string>> = {
     arAnalysisFailed: 'فشل تحليل الواقع المعزز. الرجاء المحاولة مرة أخرى.',
     grayscale: 'تدرج الرمادي',
     resetAdjustments: 'إعادة ضبط التعديلات',
+    lessonsHeader: 'دروس في الفينيقية والبونيقية',
+    lessonsClose: 'إغلاق الدروس',
+    alphabetTab: 'الأبجدية',
+    grammarTab: 'القواعد',
+    alphabetIntro: 'تتكون الأبجدية الفينيقية من 22 حرفًا ساكنًا. لم تكن الحروف المتحركة تُكتب بشكل عام. الخط البونيقي هو شكل لاحق وأكثر تعقيدًا من هذه الأبجدية.',
+    aleph: 'ألف', ox: 'ثور',
+    bet: 'بيت', house: 'بيت',
+    gimel: 'جيمل', camel: 'جمل',
+    dalet: 'دالت', door: 'باب',
+    he: 'هي', window: 'نافذة',
+    waw: 'واو', hook: 'خطاف',
+    zayin: 'زاين', weapon: 'سلاح',
+    het: 'حيت', fence: 'سياج',
+    tet: 'تيت', wheel: 'عجلة',
+    yod: 'يود', hand: 'يد',
+    kaph: 'كاف', palm_of_hand: 'راحة اليد',
+    lamed: 'لامد', goad: 'مهماز',
+    mem: 'ميم', water: 'ماء',
+    nun: 'نون', fish: 'سمكة',
+    samekh: 'سامخ', pillar: 'عمود',
+    ayin: 'عاين', eye: 'عين',
+    pe: 'پي', mouth: 'فم',
+    sade: 'صادي', plant: 'نبات',
+    qoph: 'قوف', monkey: 'قرد',
+    resh: 'ريش', head: 'رأس',
+    shin: 'شين', tooth: 'سن',
+    taw: 'تاو', mark: 'علامة',
+    grammarContentPhoenicianHtml: `
+      <h3>بنية الجملة</h3>
+      <p>تستخدم الفينيقية بشكل أساسي ترتيب الكلمات <strong>فعل-فاعل-مفعول به (VSO)</strong>. هذا يختلف عن ترتيب SVO في الإنجليزية.</p>
+      <ul>
+        <li>مثال: <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
+        <li>ميزة رئيسية هي الحذف الشائع لفعل "الكينونة" في زمن المضارع. جملة مثل "الملك عظيم" ستكون <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - حرفياً: "الملك عظيم".</li>
+      </ul>
+      <h3>الأسماء</h3>
+      <p>للأسماء جنس (مذكر/مؤنث) وعدد (مفرد/جمع). غالبًا ما تنتهي الأسماء المؤنثة بـ <code class="phoenician">𐤕</code> (-t) أو <code class="phoenician">𐤀</code> (-a).</p>
+      <ul>
+        <li>مذكر: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, ملك) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, ملوك)</li>
+        <li>مؤنث: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكة) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكات)</li>
+        <li><strong>حالة الإضافة:</strong> عندما يمتلك اسم اسمًا آخر، يدخل في حالة الإضافة، مما يؤدي غالبًا إلى تقصير الكلمة. "ملك المدينة" هو <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt)، وليس <code class="phoenician">𐤌𐤋𐤊 𐤄𐤒𐤓𐤕</code>.</li>
+      </ul>
+      <h3>الأفعال</h3>
+      <p>تعتمد الأفعال على جذر ثلاثي. يتم تصريفها بناءً على الصيغة (التامة للأفعال المكتملة، وغير التامة للأفعال غير المكتملة) بدلاً من الزمن.</p>
+      <ul>
+        <li>الجذر: <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - كتب</li>
+        <li>التام (هو كتب): <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
+        <li>غير التام (هو سيكتب / يكتب): <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+      </ul>`,
+    grammarContentPunicHtml: `
+      <h3>بنية الجملة</h3>
+      <p>القواعد البونيقية هي سليلة مباشرة للفينيقية، وتحتفظ بترتيب الكلمات الأساسي <strong>فعل-فاعل-مفعول به (VSO)</strong> وحذف فعل "الكينونة" في زمن المضارع.</p>
+      <ul>
+        <li>مثال: <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
+      </ul>
+      <h3>الفروق الرئيسية عن الفينيقية القياسية</h3>
+      <p>تطورت البونيقية على مر القرون، مظهرة تغييرات واضحة، خاصة في أشكالها المتأخرة (البونيقية الجديدة).</p>
+      <ul>
+        <li><strong>الإملاء (الكتابة):</strong> أصبح الخط البونيقي أكثر تعقيدًا وتبسيطًا. كان التغيير الرئيسي هو إضعاف الحروف الحلقية مثل <code class="punic">𐤇</code> (ḥ) و <code class="punic">𐤏</code> (ʿ). في بعض الأحيان كانت تُحذف تمامًا في الكتابة.</li>
+        <li><strong>الإشارة إلى الحركات:</strong> استخدمت البونيقية المتأخرة بشكل متزايد <em>أمهات القراءة</em>—استخدام حروف صامتة مثل <code class="punic">𐤀</code>، <code class="punic">𐤅</code>، و <code class="punic">𐤉</code> للإشارة إلى الحركات، وهو ما كان نادرًا في الفينيقية المبكرة.</li>
+        <li><strong>علم الأصوات (النطق):</strong> تغيرت الحركات. على سبيل المثال، غالبًا ما تحولت الحركة 'o' إلى 'u'. كما تغير نطق بعض الحروف الساكنة تحت تأثير اللغات المجاورة مثل البربرية.</li>
+        <li><strong>علم الصرف:</strong> كانت هناك تغييرات طفيفة في الضمائر المتصلة ونهايات الأفعال مع مرور الوقت. على سبيل المثال، يمكن أحيانًا كتابة ضمير الغائب المذكر المفرد <code class="phoenician">𐤄𐤅𐤀</code> (hw') بشكل مختلف أو حذفه.</li>
+      </ul>
+      <h3>الأسماء والأفعال</h3>
+      <p>تظل الأنظمة الأساسية لجنس/عدد الأسماء والجذر الفعلي الثلاثي كما هي في الفينيقية، لكن الإملاء والنطق يعكسان التغييرات المذكورة أعلاه.</p>`
   },
 };
