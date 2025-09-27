@@ -1,4 +1,3 @@
-
 export type UILang = 'en' | 'fr' | 'ar';
 
 export const translations: Record<UILang, Record<string, string>> = {
@@ -64,30 +63,31 @@ export const translations: Record<UILang, Record<string, string>> = {
     addNotesPlaceholder: 'Add your notes here...',
     manualHeader: 'How to Use DBR Translator',
     manualClose: 'Close usage manual',
-    manual1Title: '1. Main Translator',
-    manual1Sub: 'This is the default mode for translating between languages.',
-    manual1L1: 'Select your Source and Target languages from the dropdowns.',
-    manual1L2: 'Type or paste text into the left text box. You can also use the input tools on the top right of the text area:',
-    manual1L2_1: 'Voice Input (microphone icon): Speak to enter text (not available for Phoenician).',
-    manual1L2_2: "Text Scanner (camera icon): Open your camera to scan an inscription, or upload an image file from your device.",
-    manual1L2_3: 'Handwriting Canvas (pencil icon): Draw Phoenician characters with your mouse or finger.',
-    manual1L2_4: 'Virtual Keyboard (keyboard icon): A comprehensive on-screen keyboard for Phoenician, Arabic, and English scripts.',
-    manual1L3: 'Click the Translate button to see the result in the right box.',
-    manual2Title: '2. Phoenician-Specific Features',
-    manual2Sub: 'When Phoenician is the source or target language, special tools appear below the main language selectors.',
-    manual2L1: 'Dialect Selector: Choose between Standard Phoenician and Punic for more accurate translations.',
-    manual2L2: 'Grammar Helper: Toggle this on to see a color-coded grammatical breakdown of the Phoenician translation. Click on any colored word to get a detailed description of its grammatical function.',
-    manual2L3: 'Transliteration Selector: Cycle between different script views for your Phoenician results. You can view the text in Phoenician script, Latin script, Arabic script, or all three combined.',
-    manual3Title: '3. Dialect Comparison',
-    manual3L1: "Use the toggle at the top of the screen to switch from Translator to Dialect Comparison mode.",
-    manual3L2: 'Enter a text in the selected Phoenician dialect.',
-    manual3L3: 'Click Compare Dialects to see how that text is rendered in the other variant, complete with transliterations and grammar info.',
-    manual4Title: '4. General Features',
-    manual4L1: 'Copy Translation (copy icon): Click the copy icon on the result box to copy the current translation to your clipboard.',
-    manual4L2: 'Save Translation (bookmark icon): After a translation appears, click the bookmark icon on the result box to save it.',
-    manual4L3: 'Saved Translations (history book icon in header): Click to open a list of all your saved translations. You can export, delete, or clear the entire history.',
-    manual4L4: 'Theme Toggle (cotton flower icon in header): Switch between the light and dark themes.',
-    manual4L5: 'AI Tutor (chat icon): Open a chat with an AI tutor to practice your Phoenician conversation skills.',
+    manual1Title: '1. Core Features & Translation',
+    manual1Sub: 'The main screen is your primary workspace.',
+    manual1L1: '<strong>Language Selection:</strong> Choose your source and target languages using the dropdowns at the top.',
+    manual1L2: '<strong>Text Input:</strong> Enter text in the left panel. You have several input methods available via the icons on the right:',
+    manual1L2_1: '<strong>Camera (AR & OCR):</strong> Launch the camera to analyze objects in real-time with AR labels or to extract Phoenician text from an image.',
+    manual1L2_2: '<strong>Handwriting:</strong> Draw Phoenician characters on a canvas for them to be recognized and inserted.',
+    manual1L2_3: '<strong>Virtual Keyboard:</strong> Use on-screen keyboards for Phoenician, Punic, and other languages.',
+    manual1L2_4: '<strong>Voice Input:</strong> Dictate text using your microphone (for supported languages).',
+    manual1L3: '<strong>Translate:</strong> Click the main "Translate" button to process your text. The result will appear in the right panel.',
+    manual2Title: '2. Understanding the Results',
+    manual2Sub: 'The right panel offers tools to explore the translation.',
+    manual2L1: '<strong>Result Header:</strong> Quickly access actions like AI Assistant (to refine the translation), text-to-speech, layout editing (for creative exports), copying, and saving.',
+    manual2L2: '<strong>Grammar Helper:</strong> When translating to Phoenician/Punic, toggle the "Grammar Helper" on. The result will be color-coded by grammatical type. Click any word to see a detailed explanation.',
+    manual2L3: '<strong>Cognate Comparison:</strong> Toggle this option to see related words in Hebrew, Arabic, and Aramaic alongside your Phoenician translation, revealing shared Semitic roots.',
+    manual2L4: '<strong>Dialect Comparison:</strong> Use the main toggle at the top to switch to "Dialect Variants" mode. Here, you can enter text in one Phoenician dialect and see its equivalent in the other.',
+    manual3Title: '3. Learning Hub',
+    manual3Sub: 'Access powerful learning tools from the main header.',
+    manual3L1: '<strong>Dictionary (𐤀 Icon):</strong> Open a comprehensive glossary to search for Phoenician words by script, transliteration, or meaning in English, French, or Arabic.',
+    manual3L2: '<strong>Lessons (Newspaper Icon):</strong> Dive into structured lessons on the Phoenician/Punic alphabet and grammar. The content dynamically adapts to the dialect you select.',
+    manual3L3: '<strong>AI Tutor (Chat FAB):</strong> Launch a conversational AI tutor to practice your Phoenician skills in a guided, interactive chat.',
+    manual4Title: '4. Saving & Managing',
+    manual4Sub: 'Keep track of your work and customize your experience.',
+    manual4L1: '<strong>Save & View:</strong> Save any translation using the bookmark icon. Access all saved items by clicking the "Saved Translations" icon (documents) in the header.',
+    manual4L2: '<strong>Exporting:</strong> From the Saved Translations modal, you can select entries and export them as a styled PDF or a high-resolution PNG/JPG image for sharing or printing.',
+    manual4L3: '<strong>Customization:</strong> Use the controls in the top-left header to switch the UI language (EN/FR/AR), toggle between Light/Dark/Papyrus themes, and adjust the global font size.',
     handwritingHeader: 'Phoenician Handwriting Input',
     handwritingClose: 'Close handwriting canvas',
     handwritingClear: 'Clear',
@@ -228,42 +228,58 @@ export const translations: Record<UILang, Record<string, string>> = {
     shin: 'Shin', tooth: 'Tooth',
     taw: 'Taw', mark: 'Mark',
     grammarContentPhoenicianHtml: `
-      <h3>Sentence Structure</h3>
-      <p>Phoenician primarily uses a <strong>Verb-Subject-Object (VSO)</strong> word order. This is different from English's SVO order.</p>
+      <h3>1. Sentence Structure</h3>
+      <p>Phoenician primarily uses a <strong>Verb-Subject-Object (VSO)</strong> word order, unlike English (SVO). It also frequently omits the verb "to be" in the present tense.</p>
       <ul>
-        <li>Example: <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work" (Lit: "Did the man the work").</li>
-        <li>A key feature is the common omission of the verb "to be" in the present tense. A sentence like "The king is great" would be <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Lit: "The king great."</li>
+        <li><strong>VSO Example:</strong> <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work" (Lit: "Did the man the work").</li>
+        <li><strong>"To Be" Omission:</strong> "The king is great" is written <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Lit: "The king great."</li>
+        <li><strong>Negation:</strong> The particle <code class="phoenician">𐤁𐤋</code> (bal) typically negates verbs.</li>
       </ul>
-      <h3>Nouns</h3>
-      <p>Nouns have gender (masculine/feminine) and number (singular/plural). Feminine nouns often end in <code class="phoenician">𐤕</code> (-t) or <code class="phoenician">𐤀</code> (-a).</p>
+      <h3>2. Nouns and Pronouns</h3>
+      <p>Nouns have gender (masculine/feminine) and number (singular/plural). Possession is shown through the "construct state," where the first noun is grammatically bound to the second.</p>
       <ul>
-        <li>Masculine: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, king) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, kings)</li>
-        <li>Feminine: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queen) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queens)</li>
-        <li><strong>Construct State:</strong> When a noun possesses another, it enters the construct state, often shortening the word. "King of the city" is <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt), not <code class="phoenician">𐤌𐤋𐤊 𐤄𐤒𐤓𐤕</code>.</li>
+        <li><strong>Gender/Number:</strong> 
+          <ul>
+            <li>Masculine: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, king) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, kings)</li>
+            <li>Feminine: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queen) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queens)</li>
+          </ul>
+        </li>
+        <li><strong>Construct State:</strong> "King of the city" is <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt). The definite article 'the' (<code class="phoenician">𐤄</code>) is only used on the final noun in the chain.</li>
+        <li><strong>Pronouns:</strong> Independent pronouns stand alone (e.g., <code class="phoenician">𐤀𐤍𐤊</code>, 'nk, "I"), while possessive pronouns are suffixes added to nouns (e.g., <code class="phoenician">𐤀𐤁𐤉</code>, 'by, "my father").</li>
       </ul>
-      <h3>Verbs</h3>
-      <p>Verbs are based on a three-consonant root. They are conjugated based on aspect (perfect for completed actions, imperfect for incomplete actions) rather than tense.</p>
+      <h3>3. Verbs</h3>
+      <p>Verbs are built on three-consonant roots and are conjugated for person, number, gender, and aspect (not tense).</p>
       <ul>
-        <li>Root: <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - to write</li>
-        <li>Perfect (he wrote): <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
-        <li>Imperfect (he will write / is writing): <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+        <li><strong>Perfect Aspect (Qatal):</strong> Describes a completed action (often translated as past tense).
+          <ul>
+            <li>Root <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - to write</li>
+            <li>He wrote: <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
+            <li>I wrote: <code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code> (ktbty)</li>
+          </ul>
+        </li>
+        <li><strong>Imperfect Aspect (Yiqtol):</strong> Describes an incomplete, ongoing, or future action.
+          <ul>
+            <li>He will write: <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+            <li>I will write: <code class="phoenician">𐤀𐤊𐤕𐤁</code> ('ktb)</li>
+          </ul>
+        </li>
       </ul>`,
     grammarContentPunicHtml: `
-      <h3>Sentence Structure</h3>
-      <p>Punic grammar is a direct descendant of Phoenician, retaining the core <strong>Verb-Subject-Object (VSO)</strong> word order and the omission of the present-tense "to be."</p>
+      <h3>1. Core Grammar (from Phoenician)</h3>
+      <p>Punic grammar is a direct descendant of Phoenician. It retains the core <strong>Verb-Subject-Object (VSO)</strong> word order and the common omission of the present-tense "to be." The fundamental systems of noun gender/number and the triliteral verb root remain the same.</p>
       <ul>
         <li>Example: <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work."</li>
       </ul>
-      <h3>Key Differences from Standard Phoenician</h3>
-      <p>Punic evolved over centuries, showing distinct changes, particularly in its later forms (Neo-Punic).</p>
+      <h3>2. Key Punic Developments</h3>
+      <p>Punic evolved over centuries, showing distinct changes, particularly in its later forms (Neo-Punic), due to time and contact with other languages like Berber and Latin.</p>
       <ul>
-        <li><strong>Orthography (Spelling):</strong> Punic script became more cursive and simplified. A key change was the weakening of guttural consonants like <code class="punic">𐤇</code> (ḥ) and <code class="punic">𐤏</code> (ʿ). Sometimes they were dropped entirely in spelling.</li>
-        <li><strong>Vowel Indication:</strong> Later Punic increasingly used <em>matres lectionis</em>—using consonant letters like <code class="punic">𐤀</code>, <code class="punic">𐤅</code>, and <code class="punic">𐤉</code> to indicate vowels, which was rare in early Phoenician.</li>
-        <li><strong>Phonology (Sound):</strong> Vowels shifted. For example, the vowel 'o' often shifted to 'u'. The pronunciation of certain consonants also changed under the influence of neighboring languages like Berber.</li>
-        <li><strong>Morphology:</strong> There were subtle changes in pronoun suffixes and verb endings over time. For example, the 3rd person masculine singular pronoun <code class="phoenician">𐤄𐤅𐤀</code> (hw') could sometimes be written differently or dropped.</li>
+        <li><strong>Script & Spelling:</strong> The Punic script became more cursive and simplified. A key change was the weakening and eventual dropping of guttural consonants like <code class="punic">𐤇</code> (ḥ) and <code class="punic">𐤏</code> (ʿ) in spelling and pronunciation.</li>
+        <li><strong>Vowel Indication (Matres Lectionis):</strong> Late Punic increasingly used consonant letters to indicate vowels, a practice rare in early Phoenician. <code class="punic">𐤀</code> ('aleph) could mark any vowel, while <code class="punic">𐤅</code> (waw) and <code class="punic">𐤉</code> (yod) were used for 'u' and 'i' respectively. This makes Punic inscriptions a valuable source for understanding the language's vowels.</li>
+        <li><strong>Phonology (Sound):</strong> Vowels shifted over time. For example, the original long 'a' and 'o' vowels often merged into an 'o' sound, which in turn often shifted to 'u' in Late Punic. The pronunciation of 'b' between vowels softened to a 'v' sound.</li>
+        <li><strong>Pronouns:</strong> The 3rd person masculine singular pronoun <code class="phoenician">𐤄𐤅𐤀</code> (hw', "he") became <code class="punic">𐤄𐤀</code> (h') in later Punic.</li>
       </ul>
-      <h3>Nouns & Verbs</h3>
-      <p>The fundamental systems of noun gender/number and the triliteral verb root remain the same as in Phoenician, but spelling and pronunciation reflect the changes mentioned above.</p>`
+      <h3>3. Example in Punic Context</h3>
+      <p>Consider the word for "voice," <code class="phoenician">𐤒𐤅𐤋</code> (qwl) in Phoenician. In a Latin transcription of a Punic text, we might find it written as <code class="punic">YTH</code>, suggesting a pronunciation closer to /yuth/ or /iuth/, reflecting the vowel shifts.</p>`
   },
   fr: {
     mainTitle: 'Traducteur DBR',
@@ -327,30 +343,31 @@ export const translations: Record<UILang, Record<string, string>> = {
     addNotesPlaceholder: 'Ajoutez vos notes ici...',
     manualHeader: 'Comment utiliser le Traducteur DBR',
     manualClose: 'Fermer le manuel',
-    manual1Title: '1. Traducteur Principal',
-    manual1Sub: 'C\'est le mode par défaut pour traduire entre les langues.',
-    manual1L1: 'Sélectionnez vos langues Source et Cible dans les menus déroulants.',
-    manual1L2: 'Tapez ou collez du texte dans la zone de texte de gauche. Vous pouvez également utiliser les outils de saisie en haut à droite de la zone de texte :',
-    manual1L2_1: 'Saisie Vocale (icône micro) : Parlez pour saisir du texte (non disponible pour le phénicien).',
-    manual1L2_2: "Scanner de Texte (icône caméra) : Ouvrez votre caméra pour scanner une inscription, ou téléchargez un fichier image depuis votre appareil.",
-    manual1L2_3: 'Canevas d\'Écriture Manuscrite (icône crayon) : Dessinez des caractères phéniciens avec votre souris ou votre doigt.',
-    manual1L2_4: 'Clavier Virtuel (icône clavier) : Un clavier complet à l\'écran pour les scripts phénicien, arabe et anglais.',
-    manual1L3: 'Cliquez sur le bouton Traduire pour voir le résultat dans la case de droite.',
-    manual2Title: '2. Fonctionnalités Spécifiques au Phénicien',
-    manual2Sub: 'Lorsque le phénicien est la langue source ou cible, des outils spéciaux apparaissent sous les sélecteurs de langue principaux.',
-    manual2L1: 'Sélecteur de Dialecte : Choisissez entre le Phénicien Standard et le Punique pour des traductions plus précises.',
-    manual2L2: 'Assistant Grammatical : Activez cette option pour voir une analyse grammaticale colorée de la traduction phénicienne. Cliquez sur n\'importe quel mot coloré pour obtenir une description détaillée de sa fonction grammaticale.',
-    manual2L3: 'Sélecteur de Translittération : Naviguez entre différentes vues de script pour vos résultats en phénicien. Vous pouvez afficher le texte en script phénicien, latin, arabe ou les trois combinés.',
-    manual3Title: '3. Comparaison de Dialectes',
-    manual3L1: 'Utilisez le bouton en haut de l\'écran pour passer du mode Traducteur au mode Comparaison de Dialectes.',
-    manual3L2: 'Entrez un texte dans le dialecte phénicien sélectionné.',
-    manual3L3: 'Cliquez sur Comparer les Dialectes pour voir comment ce texte est rendu dans l\'autre variante, avec translittérations et informations grammaticales.',
-    manual4Title: '4. Fonctionnalités Générales',
-    manual4L1: 'Copier la Traduction (icône de copie) : Cliquez sur l\'icône de copie sur la boîte de résultat pour copier la traduction actuelle dans votre presse-papiers.',
-    manual4L2: 'Enregistrer la Traduction (icône de signet) : Après qu\'une traduction apparaisse, cliquez sur l\'icône de signet sur la boîte de résultat pour l\'enregistrer.',
-    manual4L3: 'Traductions Enregistrées (icône de livre d\'histoire dans l\'en-tête) : Cliquez pour ouvrir une liste de toutes vos traductions enregistrées. Vous pouvez exporter, supprimer ou effacer tout l\'historique.',
-    manual4L4: 'Sélecteur de Thème (icône fleur de coton dans l\'en-tête) : Basculez entre les thèmes clair et sombre.',
-    manual4L5: 'Tuteur IA (icône de chat) : Ouvrez une discussion avec un tuteur IA pour pratiquer vos compétences de conversation en phénicien.',
+    manual1Title: '1. Fonctionnalités de Base & Traduction',
+    manual1Sub: 'L\'écran principal est votre espace de travail principal.',
+    manual1L1: '<strong>Sélection de la Langue :</strong> Choisissez vos langues source et cible à l\'aide des menus déroulants en haut.',
+    manual1L2: '<strong>Saisie de Texte :</strong> Entrez du texte dans le panneau de gauche. Plusieurs méthodes de saisie sont disponibles via les icônes à droite :',
+    manual1L2_1: '<strong>Caméra (RA & ROC) :</strong> Lancez la caméra pour analyser des objets en temps réel avec des étiquettes RA ou pour extraire du texte phénicien d\'une image.',
+    manual1L2_2: '<strong>Écriture Manuscrite :</strong> Dessinez des caractères phéniciens sur une toile pour qu\'ils soient reconnus et insérés.',
+    manual1L2_3: '<strong>Clavier Virtuel :</strong> Utilisez les claviers à l\'écran pour le phénicien, le punique et d\'autres langues.',
+    manual1L2_4: '<strong>Saisie Vocale :</strong> Dictez du texte à l\'aide de votre microphone (pour les langues prises en charge).',
+    manual1L3: '<strong>Traduire :</strong> Cliquez sur le bouton principal "Traduire" pour traiter votre texte. Le résultat apparaîtra dans le panneau de droite.',
+    manual2Title: '2. Comprendre les Résultats',
+    manual2Sub: 'Le panneau de droite offre des outils pour explorer la traduction.',
+    manual2L1: '<strong>En-tête des Résultats :</strong> Accédez rapidement à des actions comme l\'Assistant IA (pour affiner la traduction), la synthèse vocale, l\'édition de la mise en page (pour des exports créatifs), la copie et l\'enregistrement.',
+    manual2L2: '<strong>Assistant Grammatical :</strong> Lors de la traduction vers le phénicien/punique, activez l\'"Assistant Grammatical". Le résultat sera codé par couleur selon le type grammatical. Cliquez sur n\'importe quel mot pour voir une explication détaillée.',
+    manual2L3: '<strong>Comparaison de Cognats :</strong> Activez cette option pour voir les mots apparentés en hébreu, arabe et araméen à côté de votre traduction phénicienne, révélant des racines sémitiques communes.',
+    manual2L4: '<strong>Comparaison de Dialectes :</strong> Utilisez le bouton supérieur pour passer en mode "Variantes Dialectales". Ici, vous pouvez entrer du texte dans un dialecte phénicien et voir son équivalent dans l\'autre.',
+    manual3Title: '3. Centre d\'Apprentissage',
+    manual3Sub: 'Accédez à des outils d\'apprentissage puissants depuis l\'en-tête principal.',
+    manual3L1: '<strong>Dictionnaire (Icône 𐤀) :</strong> Ouvrez un glossaire complet pour rechercher des mots phéniciens par script, translittération ou signification en anglais, français ou arabe.',
+    manual3L2: '<strong>Leçons (Icône Journal) :</strong> Plongez dans des leçons structurées sur l\'alphabet et la grammaire phénicienne/punique. Le contenu s\'adapte dynamiquement au dialecte que vous sélectionnez.',
+    manual3L3: '<strong>Tuteur IA (Bouton flottant de chat) :</strong> Lancez un tuteur IA conversationnel pour pratiquer vos compétences en phénicien dans un chat guidé et interactif.',
+    manual4Title: '4. Enregistrement & Gestion',
+    manual4Sub: 'Gardez une trace de votre travail et personnalisez votre expérience.',
+    manual4L1: '<strong>Enregistrer & Afficher :</strong> Enregistrez n\'importe quelle traduction à l\'aide de l\'icône de signet. Accédez à tous les éléments enregistrés en cliquant sur l\'icône "Traductions Enregistrées" (documents) dans l\'en-tête.',
+    manual4L2: '<strong>Exportation :</strong> Depuis la fenêtre des Traductions Enregistrées, vous pouvez sélectionner des entrées et les exporter en PDF stylisé ou en image PNG/JPG haute résolution pour le partage ou l\'impression.',
+    manual4L3: '<strong>Personnalisation :</strong> Utilisez les commandes en haut à gauche pour changer la langue de l\'interface (EN/FR/AR), basculer entre les thèmes Clair/Sombre/Papyrus, et ajuster la taille de la police globale.',
     handwritingHeader: 'Saisie Manuscrite Phénicienne',
     handwritingClose: 'Fermer la saisie manuscrite',
     handwritingClear: 'Effacer',
@@ -491,42 +508,58 @@ export const translations: Record<UILang, Record<string, string>> = {
     shin: 'Shin', tooth: 'Dent',
     taw: 'Taw', mark: 'Marque',
     grammarContentPhoenicianHtml: `
-      <h3>Structure de la Phrase</h3>
-      <p>Le phénicien utilise principalement un ordre des mots <strong>Verbe-Sujet-Objet (VSO)</strong>. C'est différent de l'ordre SVO du français.</p>
+      <h3>1. Structure de la Phrase</h3>
+      <p>Le phénicien utilise principalement un ordre des mots <strong>Verbe-Sujet-Objet (VSO)</strong>, contrairement au français (SVO). Il omet aussi fréquemment le verbe "être" au présent.</p>
       <ul>
-        <li>Exemple : <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail" (Litt : "A fait l'homme le travail").</li>
-        <li>Une caractéristique clé est l'omission fréquente du verbe "être" au présent. Une phrase comme "Le roi est grand" serait <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Litt : "Le roi grand."</li>
+        <li><strong>Exemple VSO :</strong> <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail" (Litt : "A fait l'homme le travail").</li>
+        <li><strong>Omission de "Être" :</strong> "Le roi est grand" s'écrit <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Litt : "Le roi grand."</li>
+        <li><strong>Négation :</strong> La particule <code class="phoenician">𐤁𐤋</code> (bal) nie typiquement les verbes.</li>
       </ul>
-      <h3>Noms</h3>
-      <p>Les noms ont un genre (masculin/féminin) et un nombre (singulier/pluriel). Les noms féminins se terminent souvent par <code class="phoenician">𐤕</code> (-t) ou <code class="phoenician">𐤀</code> (-a).</p>
+      <h3>2. Noms et Pronoms</h3>
+      <p>Les noms ont un genre (masculin/féminin) et un nombre (singulier/pluriel). La possession est indiquée par l'« état construit », où le premier nom est grammaticalement lié au second.</p>
       <ul>
-        <li>Masculin : <code class="phoenician">𐤌𐤋𐤊</code> (mlk, roi) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, rois)</li>
-        <li>Féminin : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reine) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reines)</li>
-        <li><strong>État Construit :</strong> Quand un nom en possède un autre, il entre dans l'état construit, ce qui raccourcit souvent le mot. "Roi de la cité" est <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt), et non <code class="phoenician">𐤌𐤋𐤊 𐤄𐤒𐤓𐤕</code>.</li>
+        <li><strong>Genre/Nombre :</strong> 
+          <ul>
+            <li>Masculin : <code class="phoenician">𐤌𐤋𐤊</code> (mlk, roi) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, rois)</li>
+            <li>Féminin : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reine) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reines)</li>
+          </ul>
+        </li>
+        <li><strong>État Construit :</strong> "Roi de la cité" est <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt). L'article défini 'le' (<code class="phoenician">𐤄</code>) n'est utilisé que sur le dernier nom de la chaîne.</li>
+        <li><strong>Pronoms :</strong> Les pronoms indépendants sont autonomes (ex: <code class="phoenician">𐤀𐤍𐤊</code>, 'nk, "je"), tandis que les pronoms possessifs sont des suffixes ajoutés aux noms (ex: <code class="phoenician">𐤀𐤁𐤉</code>, 'by, "mon père").</li>
       </ul>
-      <h3>Verbes</h3>
-      <p>Les verbes sont basés sur une racine de trois consonnes. Ils sont conjugués selon l'aspect (parfait pour les actions achevées, imparfait pour les actions inachevées) plutôt que le temps.</p>
+      <h3>3. Verbes</h3>
+      <p>Les verbes sont construits sur des racines de trois consonnes et sont conjugués pour la personne, le nombre, le genre et l'aspect (pas le temps).</p>
       <ul>
-        <li>Racine : <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - écrire</li>
-        <li>Parfait (il a écrit) : <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
-        <li>Imparfait (il écrira / écrit) : <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+        <li><strong>Aspect Parfait (Qatal) :</strong> Décrit une action achevée (souvent traduite par le passé).
+          <ul>
+            <li>Racine <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - écrire</li>
+            <li>Il a écrit : <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
+            <li>J'ai écrit : <code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code> (ktbty)</li>
+          </ul>
+        </li>
+        <li><strong>Aspect Imparfait (Yiqtol) :</strong> Décrit une action inachevée, en cours ou future.
+          <ul>
+            <li>Il écrira : <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+            <li>J'écrirai : <code class="phoenician">𐤀𐤊𐤕𐤁</code> ('ktb)</li>
+          </ul>
+        </li>
       </ul>`,
     grammarContentPunicHtml: `
-      <h3>Structure de la Phrase</h3>
-      <p>La grammaire punique est une descendante directe du phénicien, conservant l'ordre des mots de base <strong>Verbe-Sujet-Objet (VSO)</strong> et l'omission du verbe "être" au présent.</p>
+      <h3>1. Grammaire de Base (du phénicien)</h3>
+      <p>La grammaire punique est une descendante directe du phénicien. Elle conserve l'ordre des mots de base <strong>Verbe-Sujet-Objet (VSO)</strong> et l'omission courante du verbe "être" au présent. Les systèmes fondamentaux de genre/nombre des noms et de la racine verbale trilitère restent les mêmes.</p>
       <ul>
         <li>Exemple : <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail."</li>
       </ul>
-      <h3>Différences Clés avec le Phénicien Standard</h3>
-      <p>Le punique a évolué au fil des siècles, montrant des changements distincts, en particulier dans ses formes tardives (néo-punique).</p>
+      <h3>2. Développements Clés du Punique</h3>
+      <p>Le punique a évolué au fil des siècles, montrant des changements distincts, en particulier dans ses formes tardives (néo-punique), en raison du temps et du contact avec d'autres langues comme le berbère et le latin.</p>
       <ul>
-        <li><strong>Orthographe :</strong> L'écriture punique est devenue plus cursive et simplifiée. Un changement clé a été l'affaiblissement des consonnes gutturales comme <code class="punic">𐤇</code> (ḥ) et <code class="punic">𐤏</code> (ʿ). Parfois, elles étaient entièrement omises à l'écrit.</li>
-        <li><strong>Indication des Voyelles :</strong> Le punique tardif utilisait de plus en plus les <em>matres lectionis</em>—l'utilisation de lettres consonnes comme <code class="punic">𐤀</code>, <code class="punic">𐤅</code>, et <code class="punic">𐤉</code> pour indiquer les voyelles, ce qui était rare en phénicien ancien.</li>
-        <li><strong>Phonologie (Son) :</strong> Les voyelles ont changé. Par exemple, la voyelle 'o' a souvent évolué en 'u'. La prononciation de certaines consonnes a également changé sous l'influence des langues voisines comme le berbère.</li>
-        <li><strong>Morphologie :</strong> Il y a eu des changements subtils dans les suffixes pronominaux et les terminaisons verbales au fil du temps. Par exemple, le pronom de la 3ème personne du singulier masculin <code class="phoenician">𐤄𐤅𐤀</code> (hw') pouvait parfois être écrit différemment ou omis.</li>
+        <li><strong>Écriture & Orthographe :</strong> L'écriture punique est devenue plus cursive et simplifiée. Un changement clé a été l'affaiblissement et la disparition éventuelle des consonnes gutturales comme <code class="punic">𐤇</code> (ḥ) et <code class="punic">𐤏</code> (ʿ) dans l'orthographe et la prononciation.</li>
+        <li><strong>Indication des Voyelles (Matres Lectionis) :</strong> Le punique tardif utilisait de plus en plus des lettres-consonnes pour indiquer les voyelles, une pratique rare en phénicien ancien. <code class="punic">𐤀</code> ('aleph) pouvait marquer n'importe quelle voyelle, tandis que <code class="punic">𐤅</code> (waw) et <code class="punic">𐤉</code> (yod) étaient utilisées pour 'u' et 'i' respectivement. Cela fait des inscriptions puniques une source précieuse pour comprendre les voyelles de la langue.</li>
+        <li><strong>Phonologie (Son) :</strong> Les voyelles ont changé avec le temps. Par exemple, les voyelles longues originales 'a' et 'o' ont souvent fusionné en un son 'o', qui à son tour a souvent évolué en 'u' en punique tardif. La prononciation de 'b' entre les voyelles s'est adoucie en un son 'v'.</li>
+        <li><strong>Pronoms :</strong> Le pronom de la 3ème personne du singulier masculin <code class="phoenician">𐤄𐤅𐤀</code> (hw', "il") est devenu <code class="punic">𐤄𐤀</code> (h') en punique tardif.</li>
       </ul>
-      <h3>Noms & Verbes</h3>
-      <p>Les systèmes fondamentaux de genre/nombre des noms et de la racine verbale trilitère restent les mêmes qu'en phénicien, mais l'orthographe et la prononciation reflètent les changements mentionnés ci-dessus.</p>`
+      <h3>3. Exemple en Contexte Punique</h3>
+      <p>Considérez le mot pour "voix", <code class="phoenician">𐤒𐤅𐤋</code> (qwl) en phénicien. Dans une transcription latine d'un texte punique, on pourrait le trouver écrit comme <code class="punic">YTH</code>, suggérant une prononciation plus proche de /yuth/ ou /iuth/, reflétant les changements de voyelles.</p>`
   },
   ar: {
     mainTitle: 'مترجم DBR',
@@ -559,8 +592,8 @@ export const translations: Record<UILang, Record<string, string>> = {
     keySymbols: '؟123',
     keyLetters: 'أبت',
     manualTitle: 'دليل الاستخدام',
-    dictionaryTitle: 'قاموس',
-    savedTranslationsTitle: 'عرض الترجمات المحفوظة',
+    dictionaryTitle: 'قاموس فينيقي',
+    savedTranslationsTitle: 'الترجمات المحفوظة',
     lessonsTitle: 'دروس',
     translatorMode: 'مترجم',
     dialectMode: 'لهجات مختلفة',
@@ -590,30 +623,31 @@ export const translations: Record<UILang, Record<string, string>> = {
     addNotesPlaceholder: 'أضف ملاحظاتك هنا...',
     manualHeader: 'كيفية استخدام مترجم DBR',
     manualClose: 'إغلاق دليل الاستخدام',
-    manual1Title: '١. المترجم الرئيسي',
-    manual1Sub: 'هذا هو الوضع الافتراضي للترجمة بين اللغات.',
-    manual1L1: 'حدد لغات المصدر والهدف من القوائم المنسدلة.',
-    manual1L2: 'اكتب أو الصق النص في مربع النص الأيسر. يمكنك أيضًا استخدام أدوات الإدخال في أعلى يمين منطقة النص:',
-    manual1L2_1: 'الإدخال الصوتي (أيقونة الميكروفون): تحدث لإدخال النص (غير متاح للفينيقية).',
-    manual1L2_2: 'ماسح النص (أيقونة الكاميرا): افتح الكاميرا لمسح نقش، أو قم بتحميل ملف صورة من جهازك.',
-    manual1L2_3: 'لوحة الكتابة اليدوية (أيقونة القلم): ارسم الأحرف الفينيقية بالماوس أو الإصبع.',
-    manual1L2_4: 'لوحة المفاتيح الافتراضية (أيقونة لوحة المفاتيح): لوحة مفاتيح شاملة على الشاشة للكتابات الفينيقية والعربية والإنجليزية.',
-    manual1L3: 'انقر على زر "ترجم" لرؤية النتيجة في المربع الأيمن.',
-    manual2Title: '٢. الميزات الخاصة بالفينيقية',
-    manual2Sub: 'عندما تكون الفينيقية هي لغة المصدر أو الهدف ، تظهر أدوات خاصة أسفل محددات اللغة الرئيسية.',
-    manual2L1: 'محدد اللهجة: اختر بين الفينيقية القياسية والبونيقية للحصول على ترجمات أكثر دقة.',
-    manual2L2: 'مساعد القواعد: قم بتشغيل هذا الخيار لرؤية تحليل نحوي مرمّز بالألوان للترجمة الفينيقية. انقر على أي كلمة ملونة للحصول على وصف تفصيلي لوظيفتها النحوية.',
-    manual2L3: 'محدد النقل الحرفي: تنقل بين طرق عرض النصوص المختلفة لنتائجك الفينيقية. يمكنك عرض النص بالكتابة الفينيقية أو اللاتينية أو العربية أو الثلاثة معًا.',
-    manual3Title: '٣. مقارنة اللهجات',
-    manual3L1: 'استخدم المفتاح في الجزء العلوي من الشاشة للتبديل من وضع المترجم إلى وضع مقارنة اللهجات.',
-    manual3L2: 'أدخل نصًا باللهجة الفينيقية المحددة.',
-    manual3L3: 'انقر على "قارن اللهجات" لترى كيف يتم عرض هذا النص في المتغير الآخر ، مع استكماله بالنقل الحرفي والمعلومات النحوية.',
-    manual4Title: '٤. الميزات العامة',
-    manual4L1: 'نسخ الترجمة (أيقونة النسخ): انقر على أيقونة النسخ في مربع النتائج لنسخ الترجمة الحالية إلى الحافظة.',
-    manual4L2: 'حفظ الترجمة (أيقونة الإشارة المرجعية): بعد ظهور الترجمة ، انقر على أيقونة الإشارة المرجعية في مربع النتائج لحفظها.',
-    manual4L3: 'الترجمات المحفوظة (أيقونة كتاب التاريخ في الرأس): انقر لفتح قائمة بجميع ترجماتك المحفوظة. يمكنك تصديرها أو حذفها أو مسح السجل بالكامل.',
-    manual4L4: 'تبديل السمة (أيقونة زهرة القطن في الرأس): قم بالتبديل بين السمات الفاتحة والداكنة.',
-    manual4L5: 'مدرس الذكاء الاصطناعي (أيقونة الدردشة): افتح دردشة مع مدرس ذكاء اصطناعي لممارسة مهارات المحادثة باللغة الفينيقية.',
+    manual1Title: '١. الميزات الأساسية والترجمة',
+    manual1Sub: 'الشاشة الرئيسية هي مساحة عملك الأساسية.',
+    manual1L1: '<strong>اختيار اللغة:</strong> اختر لغات المصدر والهدف باستخدام القوائم المنسدلة في الأعلى.',
+    manual1L2: '<strong>إدخال النص:</strong> أدخل النص في اللوحة اليسرى. لديك عدة طرق إدخال متاحة عبر الأيقونات الموجودة على اليمين:',
+    manual1L2_1: '<strong>الكاميرا (الواقع المعزز والتعرف الضوئي):</strong> قم بتشغيل الكاميرا لتحليل الأشياء في الوقت الفعلي باستخدام تسميات الواقع المعزز أو لاستخراج نص فينيقي من صورة.',
+    manual1L2_2: '<strong>الكتابة اليدوية:</strong> ارسم الأحرف الفينيقية على لوحة ليتم التعرف عليها وإدراجها.',
+    manual1L2_3: '<strong>لوحة المفاتيح الافتراضية:</strong> استخدم لوحات المفاتيح على الشاشة للفينيقية والبونيقية ولغات أخرى.',
+    manual1L2_4: '<strong>الإدخال الصوتي:</strong> أملِ النص باستخدام الميكروفون (للغات المدعومة).',
+    manual1L3: '<strong>الترجمة:</strong> انقر على زر "ترجم" الرئيسي لمعالجة النص. ستظهر النتيجة في اللوحة اليمنى.',
+    manual2Title: '٢. فهم النتائج',
+    manual2Sub: 'تقدم اللوحة اليمنى أدوات لاستكشاف الترجمة.',
+    manual2L1: '<strong>رأس النتيجة:</strong> يمكنك الوصول بسرعة إلى إجراءات مثل مساعد الذكاء الاصطناعي (لتحسين الترجمة)، وتحويل النص إلى كلام، وتحرير التخطيط (للتصدير الإبداعي)، والنسخ، والحفظ.',
+    manual2L2: '<strong>مساعد القواعد:</strong> عند الترجمة إلى الفينيقية/البونيقية، قم بتشغيل "مساعد القواعد". سيتم ترميز النتيجة بالألوان حسب النوع النحوي. انقر على أي كلمة لرؤية شرح مفصل.',
+    manual2L3: '<strong>مقارنة الجذور:</strong> قم بتبديل هذا الخيار لرؤية الكلمات ذات الصلة بالعبرية والعربية والآرامية إلى جانب ترجمتك الفينيقية، مما يكشف عن الجذور السامية المشتركة.',
+    manual2L4: '<strong>مقارنة اللهجات:</strong> استخدم المفتاح العلوي للتبديل إلى وضع "اللهجات المختلفة". هنا، يمكنك إدخال نص بإحدى اللهجات الفينيقية ورؤية ما يعادله في اللهجة الأخرى.',
+    manual3Title: '٣. مركز التعلم',
+    manual3Sub: 'الوصول إلى أدوات تعليمية قوية من الرأس الرئيسي.',
+    manual3L1: '<strong>القاموس (أيقونة 𐤀):</strong> افتح مسردًا شاملاً للبحث عن الكلمات الفينيقية بالنص أو النقل الحرفي أو المعنى بالإنجليزية أو الفرنسية أو العربية.',
+    manual3L2: '<strong>الدروس (أيقونة الجريدة):</strong> تعمق في دروس منظمة حول الأبجدية والقواعد الفينيقية/البونيقية. يتكيف المحتوى ديناميكيًا مع اللهجة التي تختارها.',
+    manual3L3: '<strong>مدرس الذكاء الاصطناعي (أيقونة الدردشة):</strong> أطلق مدرسًا اصطناعيًا للمحادثة لممارسة مهاراتك في اللغة الفينيقية في محادثة تفاعلية موجهة.',
+    manual4Title: '٤. الحفظ والإدارة',
+    manual4Sub: 'تتبع عملك وخصص تجربتك.',
+    manual4L1: '<strong>الحفظ والعرض:</strong> احفظ أي ترجمة باستخدام أيقونة الإشارة المرجعية. يمكنك الوصول إلى جميع العناصر المحفوظة بالنقر فوق أيقونة "الترجمات المحفوظة" (المستندات) في الرأس.',
+    manual4L2: '<strong>التصدير:</strong> من نافذة الترجمات المحفوظة، يمكنك تحديد الإدخالات وتصديرها كملف PDF منسق أو صورة PNG/JPG عالية الدقة للمشاركة أو الطباعة.',
+    manual4L3: '<strong>التخصيص:</strong> استخدم عناصر التحكم في الرأس الأيسر العلوي لتبديل لغة واجهة المستخدم (EN/FR/AR)، والتبديل بين السمات الفاتحة/الداكنة/البردية، وضبط حجم الخط العام.',
     handwritingHeader: 'إدخال خط اليد الفينيقي',
     handwritingClose: 'إغلاق لوحة الكتابة اليدوية',
     handwritingClear: 'مسح',
@@ -754,41 +788,57 @@ export const translations: Record<UILang, Record<string, string>> = {
     shin: 'شين', tooth: 'سن',
     taw: 'تاو', mark: 'علامة',
     grammarContentPhoenicianHtml: `
-      <h3>بنية الجملة</h3>
-      <p>تستخدم الفينيقية بشكل أساسي ترتيب الكلمات <strong>فعل-فاعل-مفعول به (VSO)</strong>. هذا يختلف عن ترتيب SVO في الإنجليزية.</p>
+      <h3>١. بنية الجملة</h3>
+      <p>تستخدم الفينيقية بشكل أساسي ترتيب الكلمات <strong>فعل-فاعل-مفعول به (VSO)</strong>، على عكس الإنجليزية (SVO). كما أنها تحذف بشكل متكرر فعل "الكينونة" في زمن المضارع.</p>
       <ul>
-        <li>مثال: <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
-        <li>ميزة رئيسية هي الحذف الشائع لفعل "الكينونة" في زمن المضارع. جملة مثل "الملك عظيم" ستكون <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - حرفياً: "الملك عظيم".</li>
+        <li><strong>مثال VSO:</strong> <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
+        <li><strong>حذف "الكينونة":</strong> تُكتب جملة "الملك عظيم" هكذا <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - حرفياً: "الملك عظيم".</li>
+        <li><strong>النفي:</strong> تُستخدم الأداة <code class="phoenician">𐤁𐤋</code> (bal) عادةً لنفي الأفعال.</li>
       </ul>
-      <h3>الأسماء</h3>
-      <p>للأسماء جنس (مذكر/مؤنث) وعدد (مفرد/جمع). غالبًا ما تنتهي الأسماء المؤنثة بـ <code class="phoenician">𐤕</code> (-t) أو <code class="phoenician">𐤀</code> (-a).</p>
+      <h3>٢. الأسماء والضمائر</h3>
+      <p>للأسماء جنس (مذكر/مؤنث) وعدد (مفرد/جمع). تُظهر الملكية من خلال "حالة الإضافة"، حيث يرتبط الاسم الأول بالثاني قواعدياً.</p>
       <ul>
-        <li>مذكر: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, ملك) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, ملوك)</li>
-        <li>مؤنث: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكة) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكات)</li>
-        <li><strong>حالة الإضافة:</strong> عندما يمتلك اسم اسمًا آخر، يدخل في حالة الإضافة، مما يؤدي غالبًا إلى تقصير الكلمة. "ملك المدينة" هو <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt)، وليس <code class="phoenician">𐤌𐤋𐤊 𐤄𐤒𐤓𐤕</code>.</li>
+        <li><strong>الجنس/العدد:</strong>
+          <ul>
+            <li>مذكر: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, ملك) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, ملوك)</li>
+            <li>مؤنث: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكة) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكات)</li>
+          </ul>
+        </li>
+        <li><strong>حالة الإضافة:</strong> "ملك المدينة" هو <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt). أداة التعريف 'الـ' (<code class="phoenician">𐤄</code>) تُستخدم فقط مع الاسم الأخير في السلسلة.</li>
+        <li><strong>الضمائر:</strong> الضمائر المنفصلة تأتي بمفردها (مثل <code class="phoenician">𐤀𐤍𐤊</code>, 'nk, "أنا")، بينما الضمائر الملكية هي لاحقات تُضاف إلى الأسماء (مثل <code class="phoenician">𐤀𐤁𐤉</code>, 'by, "أبي").</li>
       </ul>
-      <h3>الأفعال</h3>
-      <p>تعتمد الأفعال على جذر ثلاثي. يتم تصريفها بناءً على الصيغة (التامة للأفعال المكتملة، وغير التامة للأفعال غير المكتملة) بدلاً من الزمن.</p>
+      <h3>٣. الأفعال</h3>
+      <p>تُبنى الأفعال على جذور ثلاثية وتُصرف حسب الشخص، العدد، الجنس، والصيغة (وليس الزمن).</p>
       <ul>
-        <li>الجذر: <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - كتب</li>
-        <li>التام (هو كتب): <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
-        <li>غير التام (هو سيكتب / يكتب): <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+        <li><strong>الصيغة التامة (قتَل):</strong> تصف فعلاً مكتملاً (غالباً ما تُترجم كفعل ماضٍ).
+          <ul>
+            <li>الجذر <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - كتب</li>
+            <li>هو كتب: <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
+            <li>أنا كتبت: <code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code> (ktbty)</li>
+          </ul>
+        </li>
+        <li><strong>الصيغة غير التامة (يقتُل):</strong> تصف فعلاً غير مكتمل، أو مستمر، أو مستقبلي.
+          <ul>
+            <li>هو سيكتب: <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
+            <li>أنا سأكتب: <code class="phoenician">𐤀𐤊𐤕𐤁</code> ('ktb)</li>
+          </ul>
+        </li>
       </ul>`,
     grammarContentPunicHtml: `
-      <h3>بنية الجملة</h3>
-      <p>القواعد البونيقية هي سليلة مباشرة للفينيقية، وتحتفظ بترتيب الكلمات الأساسي <strong>فعل-فاعل-مفعول به (VSO)</strong> وحذف فعل "الكينونة" في زمن المضارع.</p>
+      <h3>١. القواعد الأساسية (من الفينيقية)</h3>
+      <p>القواعد البونيقية هي سليلة مباشرة للفينيقية. تحتفظ بترتيب الكلمات الأساسي <strong>فعل-فاعل-مفعول به (VSO)</strong> والحذف الشائع لفعل "الكينونة" في زمن المضارع. تظل الأنظمة الأساسية لجنس/عدد الأسماء والجذر الفعلي الثلاثي كما هي.</p>
       <ul>
         <li>مثال: <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
       </ul>
-      <h3>الفروق الرئيسية عن الفينيقية القياسية</h3>
-      <p>تطورت البونيقية على مر القرون، مظهرة تغييرات واضحة، خاصة في أشكالها المتأخرة (البونيقية الجديدة).</p>
+      <h3>٢. التطورات البونيقية الرئيسية</h3>
+      <p>تطورت البونيقية على مر القرون، مظهرة تغييرات واضحة، خاصة في أشكالها المتأخرة (البونيقية الجديدة)، بسبب الزمن والتواصل مع لغات أخرى مثل البربرية واللاتينية.</p>
       <ul>
-        <li><strong>الإملاء (الكتابة):</strong> أصبح الخط البونيقي أكثر تعقيدًا وتبسيطًا. كان التغيير الرئيسي هو إضعاف الحروف الحلقية مثل <code class="punic">𐤇</code> (ḥ) و <code class="punic">𐤏</code> (ʿ). في بعض الأحيان كانت تُحذف تمامًا في الكتابة.</li>
-        <li><strong>الإشارة إلى الحركات:</strong> استخدمت البونيقية المتأخرة بشكل متزايد <em>أمهات القراءة</em>—استخدام حروف صامتة مثل <code class="punic">𐤀</code>، <code class="punic">𐤅</code>، و <code class="punic">𐤉</code> للإشارة إلى الحركات، وهو ما كان نادرًا في الفينيقية المبكرة.</li>
-        <li><strong>علم الأصوات (النطق):</strong> تغيرت الحركات. على سبيل المثال، غالبًا ما تحولت الحركة 'o' إلى 'u'. كما تغير نطق بعض الحروف الساكنة تحت تأثير اللغات المجاورة مثل البربرية.</li>
-        <li><strong>علم الصرف:</strong> كانت هناك تغييرات طفيفة في الضمائر المتصلة ونهايات الأفعال مع مرور الوقت. على سبيل المثال، يمكن أحيانًا كتابة ضمير الغائب المذكر المفرد <code class="phoenician">𐤄𐤅𐤀</code> (hw') بشكل مختلف أو حذفه.</li>
+        <li><strong>الخط والإملاء:</strong> أصبح الخط البونيقي أكثر تعقيدًا وتبسيطًا. كان التغيير الرئيسي هو إضعاف وإسقاط الحروف الحلقية في النهاية مثل <code class="punic">𐤇</code> (ḥ) و <code class="punic">𐤏</code> (ʿ) في الإملاء والنطق.</li>
+        <li><strong>الإشارة إلى الحركات (أمهات القراءة):</strong> استخدمت البونيقية المتأخرة بشكل متزايد الحروف الساكنة للإشارة إلى الحركات، وهي ممارسة نادرة في الفينيقية المبكرة. <code class="punic">𐤀</code> (ألف) يمكن أن تشير إلى أي حركة، بينما <code class="punic">𐤅</code> (واو) و <code class="punic">𐤉</code> (يود) استُخدمت لـ 'u' و 'i' على التوالي. هذا يجعل النقوش البونيقية مصدرًا قيمًا لفهم حركات اللغة.</li>
+        <li><strong>علم الأصوات (النطق):</strong> تغيرت الحركات مع مرور الوقت. على سبيل المثال، غالبًا ما اندمجت الحركتان الطويلتان الأصليتان 'a' و 'o' في صوت 'o'، والذي بدوره تحول غالبًا إلى 'u' في البونيقية المتأخرة. كما خفف نطق 'b' بين الحركات ليصبح صوت 'v'.</li>
+        <li><strong>الضمائر:</strong> أصبح ضمير الغائب المذكر المفرد <code class="phoenician">𐤄𐤅𐤀</code> (hw', "هو") <code class="punic">𐤄𐤀</code> (h') في البونيقية المتأخرة.</li>
       </ul>
-      <h3>الأسماء والأفعال</h3>
-      <p>تظل الأنظمة الأساسية لجنس/عدد الأسماء والجذر الفعلي الثلاثي كما هي في الفينيقية، لكن الإملاء والنطق يعكسان التغييرات المذكورة أعلاه.</p>`
+      <h3>٣. مثال في السياق البونيقي</h3>
+      <p>لنأخذ كلمة "صوت"، <code class="phoenician">𐤒𐤅𐤋</code> (qwl) في الفينيقية. في نقل حرفي لاتيني لنص بونيقي، قد نجدها مكتوبة كـ <code class="punic">YTH</code>، مما يشير إلى نطق أقرب إلى /yuth/ أو /iuth/، مما يعكس تحولات الحركات.</p>`
   },
 };

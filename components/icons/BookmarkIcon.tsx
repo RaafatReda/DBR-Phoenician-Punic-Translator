@@ -6,8 +6,8 @@ interface IconProps {
 }
 
 const BookmarkIcon: React.FC<IconProps> = ({ className = "w-6 h-6", isFilled = false }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFilled ? "currentColor" : "none"} className={className}>
-      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16.5 3.75V16.5L12 14.25L7.5 16.5V3.75m9 0H7.5A2.25 2.25 0 005.25 6v13.5A2.25 2.25 0 007.5 21.75h9a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0016.5 3.75z"></path>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFilled ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5} className={className}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 3H6.75A2.25 2.25 0 004.5 5.25v15.07a.75.75 0 001.238.62L12 18.233l6.262 3.697A.75.75 0 0019.5 20.32V5.25A2.25 2.25 0 0017.25 3z" />
     </svg>
 );
 

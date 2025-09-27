@@ -9,7 +9,6 @@ import Loader from './components/Loader';
 import SavedTranslationsModal from './components/SavedTranslationsModal';
 import BookmarkIcon from './components/icons/BookmarkIcon';
 import MicrophoneIcon from './components/icons/MicrophoneIcon';
-import ScriptDisplay from './components/CopticScriptDisplay';
 import ComparisonModeToggle from './components/ComparisonModeToggle';
 import ComparisonResultCard from './components/ComparisonResultCard';
 import TransliterationSelector from './components/TransliterationSelector';
@@ -702,9 +701,6 @@ const App: React.FC = () => {
     ? '[font-family:var(--font-punic)] text-2xl' 
     : '[font-family:var(--font-phoenician)] text-xl';
   
-  const iconContainerClasses = `absolute top-3 z-10 flex space-x-1 ${targetLangIsPhoenicianFamily ? 'left-3' : 'right-3'}`;
-  const resultPaddingClass = targetLangIsPhoenicianFamily ? 'pl-44' : 'pr-44';
-
   const actionButton = (
     <div className="w-full max-w-5xl mt-8 flex justify-center">
       <button
@@ -867,178 +863,140 @@ const App: React.FC = () => {
 
 
               <div className="w-full max-w-5xl flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                {/* SOURCE PANEL */}
                 <div ref={sourceTextAreaRef} className="relative">
-                  <TextArea
-                    id="source-text"
-                    value={sourceText}
-                    onChange={handleSourceTextChange}
-                    onKeyDown={handleSourceKeyDown}
-                    placeholder={`${t('enterTextPlaceholder')} ${t(sourceLang.toLowerCase())}... ${getFlagForLanguage(sourceLang)}`}
-                    className={`${isPhoenicianSource ? 'pl-24' : 'pr-24'} ${sourceInputFontClass}`}
-                    onBlur={() => setTimeout(() => setSuggestions([]), 200)}
-                    iconPosition={isPhoenicianSource ? 'left' : 'right'}
-                  >
-                     <div className="grid grid-cols-2 gap-2">
-                         {isProcessingImage ? (
-                            <div className="col-span-2 row-span-2 flex items-center justify-center p-2">
-                                <Loader className="w-5 h-5 text-[color:var(--color-primary)] animate-spin" />
-                            </div>
-                         ) : (
-                             <>
-                                <button
-                                  onClick={() => setIsCameraExperienceOpen(true)}
-                                  disabled={isLoading}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50"
-                                  aria-label={t('textScannerTitle')}
-                                  title={t('textScannerTitle')}
-                                >
-                                  <CameraIcon className="w-5 h-5" />
-                                </button>
-                                <button
-                                  onClick={() => setIsHandwritingCanvasOpen(true)}
-                                  disabled={isLoading}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50"
-                                  aria-label={t('handwritingTitle')}
-                                  title={t('handwritingTitle')}
-                                >
-                                  <PencilIcon className="w-5 h-5" />
-                                </button>
-                                <button
-                                    onClick={() => setIsKeyboardOpen(!isKeyboardOpen)}
-                                    disabled={isLoading}
-                                    className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50"
-                                    aria-label={isKeyboardOpen ? t('keyboardClose') : t('keyboardOpen')}
-                                    title={isKeyboardOpen ? t('keyboardClose') : t('keyboardOpen')}
-                                >
-                                    <KeyboardIcon className="w-5 h-5" />
-                                </button>
-                                <button 
-                                  onClick={handleToggleListen}
-                                  disabled={isLoading || isMicDisabled}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
-                                  aria-label={micButtonTitle}
-                                  title={micButtonTitle}
-                                >
-                                  <MicrophoneIcon className="w-5 h-5" isListening={isListening} />
-                                </button>
-                             </>
-                         )}
-                    </div>
-                  </TextArea>
+                  <div className="w-full min-h-[15rem] glass-panel rounded-[var(--border-radius)] flex items-stretch">
+                      <div className="flex-grow relative">
+                          <TextArea
+                              id="source-text"
+                              value={sourceText}
+                              onChange={handleSourceTextChange}
+                              onKeyDown={handleSourceKeyDown}
+                              placeholder={`${t('enterTextPlaceholder')} ${t(sourceLang.toLowerCase())}...`}
+                              className={sourceInputFontClass}
+                              onBlur={() => setTimeout(() => setSuggestions([]), 200)}
+                              dir={isPhoenicianSource || sourceLang === Language.ARABIC ? 'rtl' : 'ltr'}
+                          />
+                          <div className="absolute top-2 left-3 text-sm text-[color:var(--color-text-muted)] select-none">
+                            <span>{getFlagForLanguage(sourceLang)} {t(sourceLang.toLowerCase())}</span>
+                          </div>
+                      </div>
+                      <div className="flex flex-col justify-center items-center p-2 border-l border-[color:var(--color-border)]">
+                          <div className="grid grid-cols-2 gap-2">
+                              {isProcessingImage ? (
+                                  <div className="col-span-2 row-span-2 flex items-center justify-center p-2">
+                                      <Loader className="w-5 h-5 text-[color:var(--color-primary)] animate-spin" />
+                                  </div>
+                              ) : (
+                                  <>
+                                      <button onClick={() => setIsCameraExperienceOpen(true)} disabled={isLoading} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50" aria-label={t('textScannerTitle')} title={t('textScannerTitle')}>
+                                          <CameraIcon className="w-5 h-5" />
+                                      </button>
+                                      <button onClick={() => setIsHandwritingCanvasOpen(true)} disabled={isLoading} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50" aria-label={t('handwritingTitle')} title={t('handwritingTitle')}>
+                                          <PencilIcon className="w-5 h-5" />
+                                      </button>
+                                      <button onClick={() => setIsKeyboardOpen(!isKeyboardOpen)} disabled={isLoading} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:opacity-50" aria-label={isKeyboardOpen ? t('keyboardClose') : t('keyboardOpen')} title={isKeyboardOpen ? t('keyboardClose') : t('keyboardOpen')}>
+                                          <KeyboardIcon className="w-5 h-5" />
+                                      </button>
+                                      <button onClick={handleToggleListen} disabled={isLoading || isMicDisabled} className="p-2 rounded-full text-[color:var(--color-primary)] disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={micButtonTitle} title={micButtonTitle}>
+                                          <MicrophoneIcon className="w-5 h-5" isListening={isListening} />
+                                      </button>
+                                  </>
+                              )}
+                          </div>
+                      </div>
+                  </div>
                   {suggestions.length > 0 && (
-                    <Autocomplete
-                      suggestions={suggestions}
-                      onSelect={handleSuggestionSelect}
-                      lang={sourceLang}
-                    />
+                      <Autocomplete suggestions={suggestions} onSelect={handleSuggestionSelect} lang={sourceLang} />
                   )}
                 </div>
+
+                {/* RESULT PANEL */}
                 <div className="flex flex-col gap-2">
-                  <div className="relative">
-                      <div className={iconContainerClasses}>
-                        {currentTranslatedTextString && !isGroupEditMode && (
-                          <>
-                              {hasPhoenicianResult && (
-                                <button
-                                  onClick={() => setIsAssistantModalOpen(true)}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
-                                  aria-label={t('aiAssistantTitle')}
-                                  title={t('aiAssistantTitle')}
-                                >
-                                  <SparklesIcon className="w-5 h-5" />
-                                </button>
-                              )}
-                              <button
-                                  onClick={handleSpeak}
-                                  disabled={!isTtsSupported}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:text-gray-600 disabled:cursor-not-allowed"
-                                  aria-label={isSpeaking ? t('stopSpeaking') : t('speakTranslation')}
-                                  title={isTtsSupported ? (isSpeaking ? t('stopSpeaking') : t('speakTranslation')) : t('ttsNotSupported')}
-                              >
-                                  <SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking} />
-                              </button>
-                              {hasPhoenicianResult && (
-                                  <button
-                                      onClick={() => setIsGroupEditMode(true)}
-                                      className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
-                                      aria-label={t('layoutEditTitle')}
-                                      title={t('layoutEditTitle')}
-                                  >
-                                      <LayoutEditIcon className="w-5 h-5" />
+                  <div className="w-full min-h-[15rem] glass-panel rounded-[var(--border-radius)] flex flex-col items-stretch">
+                      {/* Result Header */}
+                      {currentTranslatedTextString && !isGroupEditMode && (
+                          <div className="flex-shrink-0 flex justify-between items-center p-2 border-b border-[color:var(--color-border)] h-[52px]">
+                              <div className="flex items-center space-x-1">
+                                  {hasPhoenicianResult && (
+                                      <button onClick={() => setIsAssistantModalOpen(true)} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={t('aiAssistantTitle')} title={t('aiAssistantTitle')}>
+                                          <SparklesIcon className="w-5 h-5" />
+                                      </button>
+                                  )}
+                                  <button onClick={handleSpeak} disabled={!isTtsSupported} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:text-gray-600 disabled:cursor-not-allowed" aria-label={isSpeaking ? t('stopSpeaking') : t('speakTranslation')} title={isTtsSupported ? (isSpeaking ? t('stopSpeaking') : t('speakTranslation')) : t('ttsNotSupported')}>
+                                      <SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking} />
                                   </button>
-                              )}
-                              <button
-                                  onClick={handleCopyText}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
-                                  aria-label={isCopied ? t('copySuccess') : t('copyTitle')}
-                                  title={isCopied ? t('copySuccess') : t('copyTitle')}
-                                >
-                                  {isCopied ? <CheckIcon className="w-5 h-5" /> : <CopyIcon className="w-5 h-5" />}
-                              </button>
-                              <button
-                                  onClick={handleSaveTranslation}
-                                  disabled={isCurrentTranslationSaved}
-                                  className="p-2 rounded-full text-[color:var(--color-primary)] disabled:text-gray-500 disabled:cursor-not-allowed bg-[color:var(--color-surface-solid)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110"
-                                  aria-label={isCurrentTranslationSaved ? t('saveSuccess') : t('saveTitle')}
-                                  title={isCurrentTranslationSaved ? t('saveSuccess') : t('saveTitle')}
-                              >
-                                  <BookmarkIcon className="w-5 h-5" isFilled={isCurrentTranslationSaved} />
-                              </button>
-                          </>
-                        )}
-                      </div>
+                                  {hasPhoenicianResult && (
+                                      <button onClick={() => setIsGroupEditMode(true)} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={t('layoutEditTitle')} title={t('layoutEditTitle')}>
+                                          <LayoutEditIcon className="w-5 h-5" />
+                                      </button>
+                                  )}
+                                  <button onClick={handleCopyText} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={isCopied ? t('copySuccess') : t('copyTitle')} title={isCopied ? t('copySuccess') : t('copyTitle')}>
+                                      {isCopied ? <CheckIcon className="w-5 h-5" /> : <CopyIcon className="w-5 h-5" />}
+                                  </button>
+                                  <button onClick={handleSaveTranslation} disabled={isCurrentTranslationSaved} className="p-2 rounded-full text-[color:var(--color-primary)] disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={isCurrentTranslationSaved ? t('saveSuccess') : t('saveTitle')} title={isCurrentTranslationSaved ? t('saveSuccess') : t('saveTitle')}>
+                                      <BookmarkIcon className="w-5 h-5" isFilled={isCurrentTranslationSaved} />
+                                  </button>
+                              </div>
+                              <span className={`text-2xl text-[color:var(--color-text-muted)] select-none ${resultFontClass}`} dir="rtl">
+                                  {typeof translationResult === 'object' && translationResult.phoenician ? translationResult.phoenician.split(' ')[0] : ''}
+                              </span>
+                          </div>
+                      )}
                       
-                      {isGroupEditMode && typeof translationResult === 'object' && translationResult.grammar ? (
-                          <GroupEditCanvas
-                              translationResult={translationResult}
-                              dialect={phoenicianDialect}
-                              onExit={() => setIsGroupEditMode(false)}
-                              t={t}
-                          />
-                      ) : showGrammarUI ? (
-                          <div className="w-full min-h-[10rem] glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] transition-shadow duration-200 flex flex-col shadow-lg">
-                              <div className={`p-4 ${resultPaddingClass}`} dir="rtl">
-                                  <GrammarHighlightedText
-                                      grammar={(translationResult as TransliterationOutput).grammar!}
-                                      className={`${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}`}
-                                      selectedToken={selectedGrammarToken}
-                                      onTokenClick={setSelectedGrammarToken}
+                      {/* Result Body */}
+                      <div className="flex-grow p-4 relative">
+                          {isLoading && !currentTranslatedTextString && (
+                              <div className="absolute inset-0 flex items-center justify-center text-[color:var(--color-primary)]">
+                                  <Loader className="w-8 h-8 mr-3" />
+                                  <span>{t('translating')}...</span>
+                              </div>
+                          )}
+                          {isGroupEditMode && typeof translationResult === 'object' && translationResult.grammar ? (
+                              <div className="h-full absolute inset-2">
+                                  <GroupEditCanvas
+                                      translationResult={translationResult}
+                                      dialect={phoenicianDialect}
+                                      onExit={() => setIsGroupEditMode(false)}
+                                      t={t}
                                   />
                               </div>
-                              <div className="flex-shrink-0 border-t border-[color:var(--color-border)]">
-                                  <GrammarInfoPanel token={selectedGrammarToken} t={t} uiLang={uiLang} />
+                          ) : showGrammarUI ? (
+                              <div className="w-full h-full flex flex-col">
+                                  <div className="flex-grow flex items-center justify-center" dir="rtl">
+                                      <GrammarHighlightedText
+                                          grammar={(translationResult as TransliterationOutput).grammar!}
+                                          className={`${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}`}
+                                          selectedToken={selectedGrammarToken}
+                                          onTokenClick={setSelectedGrammarToken}
+                                      />
+                                  </div>
+                                  <div className="flex-shrink-0 border-t border-[color:var(--color-border)] mt-2 pt-2">
+                                      <GrammarInfoPanel token={selectedGrammarToken} t={t} uiLang={uiLang} />
+                                  </div>
                               </div>
-                          </div>
-                      ) : (hasPhoenicianResult && transliterationMode === TransliterationMode.BOTH && typeof translationResult === 'object') ? (
-                          <div className={`w-full min-h-[10rem] p-4 ${resultPaddingClass} glass-panel rounded-[var(--border-radius)] text-[color:var(--color-text)] flex flex-col justify-center items-center text-center`}>
-                              <p className={`${resultFontClass} ${isPunicTranslation ? 'text-4xl' : 'text-3xl'} mb-2`} dir="rtl">
-                                  {translationResult.phoenician}
-                              </p>
-                              <p className="text-md text-[color:var(--color-text-muted)]">
-                                  {translationResult.latin}
-                              </p>
-                              <p className="text-xl text-[color:var(--color-text-muted)] mt-1" dir="rtl">
-                                  {translationResult.arabic}
-                              </p>
-                          </div>
-                      ) : (
-                          <TextArea
-                              id="translated-text"
-                              value={currentTranslatedTextString}
-                              placeholder={t('translationPlaceholder')}
-                              isReadOnly={true}
-                              // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-                              className={`${resultPaddingClass} ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : ''}`}
-                          />
-                      )}
-                      
-                      {isLoading && !currentTranslatedTextString && (
-                          <div className="absolute inset-0 flex items-center justify-center glass-panel rounded-[var(--border-radius)] text-[color:var(--color-primary)]">
-                              <Loader className="w-8 h-8 mr-3" />
-                              <span>{t('translating')}...</span>
-                          </div>
-                      )}
+                          ) : (hasPhoenicianResult && transliterationMode === TransliterationMode.BOTH && typeof translationResult === 'object') ? (
+                              <div className="w-full h-full flex flex-col justify-center items-center text-center">
+                                  <p className={`${resultFontClass} ${isPunicTranslation ? 'text-4xl' : 'text-3xl'} mb-2`} dir="rtl">
+                                      {translationResult.phoenician}
+                                  </p>
+                                  <p className="text-md text-[color:var(--color-text-muted)]">
+                                      {translationResult.latin}
+                                  </p>
+                                  <p className="text-xl text-[color:var(--color-text-muted)] mt-1" dir="rtl">
+                                      {translationResult.arabic}
+                                  </p>
+                              </div>
+                          ) : currentTranslatedTextString ? (
+                              <div className={`w-full h-full text-[color:var(--color-text)] overflow-y-auto flex justify-center items-center text-center ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : 'text-xl'}`} dir={targetLangIsPhoenicianFamily || targetLang === Language.ARABIC ? 'rtl' : 'ltr'}>
+                                  <p className="whitespace-pre-wrap">{currentTranslatedTextString}</p>
+                              </div>
+                          ) : (
+                              !isLoading && <div className="w-full h-full flex items-center justify-center text-[color:var(--color-text-muted)]">{t('translationPlaceholder')}</div>
+                          )}
+                      </div>
                   </div>
+
                   {hasPhoenicianResult && typeof translationResult === 'object' && !isGroupEditMode && !showGrammarUI && (
                     <div className="text-center text-[color:var(--color-text-muted)] papyrus-display p-2 rounded-lg text-base">
                       {(uiLang === 'en' || uiLang === 'fr') && <p>{translationResult.latin}</p>}
@@ -1055,15 +1013,6 @@ const App: React.FC = () => {
               
               {actionButton}
 
-              {hasPhoenicianResult && !isLoading && (
-                <ScriptDisplay 
-                  result={translationResult as TransliterationOutput} 
-                  mode={transliterationMode}
-                  dialect={isPunicTranslation ? PhoenicianDialect.PUNIC : PhoenicianDialect.STANDARD_PHOENICIAN}
-                  t={t}
-                />
-              )}
-              
               {hasPhoenicianResult && !isLoading && isCognateComparisonOn && typeof translationResult === 'object' && (translationResult.hebrewCognate || translationResult.arabicCognate || translationResult.aramaicCognate) && (
                 <CognateDisplay
                     result={translationResult}
@@ -1085,13 +1034,16 @@ const App: React.FC = () => {
                   />
                 </div>
                 <div ref={comparisonTextAreaRef} className="w-full relative">
-                  <TextArea
-                    id="comparison-source-text"
-                    value={sourceText}
-                    onChange={handleSourceTextChange}
-                    placeholder={`${t('enterTextPlaceholder')} ${t(phoenicianDialect === PhoenicianDialect.PUNIC ? 'punic' : 'standardPhoenician')}... ${getFlagForLanguage(Language.PHOENICIAN)}`}
-                    className={comparisonInputFontClass}
-                  />
+                  <div className="w-full min-h-[15rem] glass-panel rounded-[var(--border-radius)] flex items-stretch">
+                    <TextArea
+                      id="comparison-source-text"
+                      value={sourceText}
+                      onChange={handleSourceTextChange}
+                      placeholder={`${t('enterTextPlaceholder')} ${t(phoenicianDialect === PhoenicianDialect.PUNIC ? 'punic' : 'standardPhoenician')}... ${getFlagForLanguage(Language.PHOENICIAN)}`}
+                      className={comparisonInputFontClass}
+                      dir="rtl"
+                    />
+                  </div>
                 </div>
               </div>
 
