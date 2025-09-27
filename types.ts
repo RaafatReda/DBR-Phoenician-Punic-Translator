@@ -92,7 +92,8 @@ export interface RecognizedObject {
     phoenician: string;
     latin: string;
     arabicTransliteration: string;
-    description: string;
+    translation: string;
+    pos: string;
     box: { x: number; y: number; width: number; height: number; };
 }
 

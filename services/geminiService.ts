@@ -500,13 +500,14 @@ export const recognizeObjectsInImage = async (
 
     const textPart = {
         text: `You are an expert AI assistant for analyzing images and translating to ancient languages. Your task is to identify up to 5 prominent objects in the provided image.
-For each object you identify, provide a JSON object containing six fields:
+For each object you identify, provide a JSON object containing seven fields:
 1. 'name': A simple, one-word English name for the object (e.g., 'tree', 'person', 'dog', 'car').
 2. 'phoenician': The translation of this English name into the ${dialectName} dialect of Phoenician. The translation must use Unicode characters from the Phoenician script block (U+10900–U+1091F). If a direct translation is not available, provide the closest conceptual equivalent.
 3. 'latin': A clear, phonetic Latin-based transliteration of the Phoenician word (e.g., /kom'pi.uter maħ'mu.ul/).
 4. 'arabicTransliteration': An Arabic-based phonetic transliteration of the Phoenician word.
-5. 'description': A brief, one-sentence description of the object in ${languageName}, explaining what it is or its purpose.
-6. 'box': A bounding box object with four numerical fields (x, y, width, height), representing the object's location and size as percentages (from 0.0 to 1.0) of the image's total dimensions.
+5. 'translation': The translation of the English object 'name' into ${languageName}.
+6. 'pos': The grammatical part of speech for the Phoenician word, such as 'Noun'.
+7. 'box': A bounding box object with four numerical fields (x, y, width, height), representing the object's location and size as percentages (from 0.0 to 1.0) of the image's total dimensions.
 
 If you cannot identify any objects, return an empty array []. Respond ONLY with the JSON array, without any markdown formatting.`,
     };
@@ -520,7 +521,8 @@ If you cannot identify any objects, return an empty array []. Respond ONLY with 
                 phoenician: { type: Type.STRING, description: `The ${dialectName} word for the object.` },
                 latin: { type: Type.STRING, description: "A Latin-based phonetic transliteration of the Phoenician word." },
                 arabicTransliteration: { type: Type.STRING, description: "An Arabic-based phonetic transliteration of the Phoenician word." },
-                description: { type: Type.STRING, description: `A brief description of the object in ${languageName}.` },
+                translation: { type: Type.STRING, description: `The translation of the object's name into ${languageName}.` },
+                pos: { type: Type.STRING, description: "The part of speech of the Phoenician word." },
                 box: {
                     type: Type.OBJECT,
                     properties: {
@@ -532,7 +534,7 @@ If you cannot identify any objects, return an empty array []. Respond ONLY with 
                     required: ["x", "y", "width", "height"],
                 },
             },
-            required: ["name", "phoenician", "latin", "arabicTransliteration", "description", "box"],
+            required: ["name", "phoenician", "latin", "arabicTransliteration", "translation", "pos", "box"],
         },
     };
 

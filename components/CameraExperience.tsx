@@ -5,16 +5,14 @@ import { UILang } from '../lib/i18n';
 import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import SettingsIcon from './icons/SettingsIcon';
-import EyeIcon from './icons/EyeIcon';
 import FocusIcon from './icons/FocusIcon';
 import ExposureIcon from './icons/ExposureIcon';
 import WhiteBalanceIcon from './icons/WhiteBalanceIcon';
-import ZoomInIcon from './icons/ZoomInIcon';
-import ZoomOutIcon from './icons/ZoomOutIcon';
 import SunIcon from './icons/SunIcon';
 import ContrastIcon from './icons/ContrastIcon';
 import UploadIcon from './icons/UploadIcon';
 import RefreshIcon from './icons/RefreshIcon';
+import ScriptModeToggle from './ScriptModeToggle';
 
 
 // Add type definitions for experimental MediaTrackCapabilities properties.
@@ -35,7 +33,8 @@ interface ArObject {
     phoenician: string;
     latin: string;
     arabicTransliteration: string;
-    description: string;
+    translation: string;
+    pos: string;
     // Animation properties
     currentX: number;
     currentY: number;
@@ -55,7 +54,7 @@ interface CameraExperienceProps {
 }
 
 const LERP_FACTOR = 0.1; // For smooth animation of AR tags
-const ANALYSIS_INTERVAL = 2000; // ms between AR recognition calls
+const ANALYSIS_INTERVAL = 2500; // ms between AR recognition calls
 
 const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, dialect, t, uiLang }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -84,6 +83,8 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const [isRecognizing, setIsRecognizing] = useState(false);
     const [arObjects, setArObjects] = useState<ArObject[]>([]);
     const [arError, setArError] = useState<string | null>(null);
+    const [arDialect, setArDialect] = useState<PhoenicianDialect>(dialect);
+    const [expandedBubbleId, setExpandedBubbleId] = useState<string | null>(null);
 
     const stopAr = useCallback(() => {
         if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
@@ -185,7 +186,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         const base64Data = tempCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
 
         try {
-            const results: RecognizedObject[] = await recognizeObjectsInImage(base64Data, dialect, uiLang);
+            const results: RecognizedObject[] = await recognizeObjectsInImage(base64Data, arDialect, uiLang);
             const overlay = arOverlayRef.current;
             if (!overlay) return;
 
@@ -216,7 +217,8 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     return {
                         id, name: res.name, phoenician: res.phoenician, latin: res.latin, 
                         arabicTransliteration: res.arabicTransliteration,
-                        description: res.description,
+                        translation: res.translation,
+                        pos: res.pos,
                         currentX: targetX, currentY: targetY, targetX, targetY,
                         opacity: 0, targetOpacity: 1, isDead: false,
                     };
@@ -235,7 +237,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         } finally {
             setIsRecognizing(false);
         }
-    }, [isRecognizing, dialect, uiLang, t]);
+    }, [isRecognizing, arDialect, uiLang, t]);
     
     const runArAnimation = useCallback(() => {
         if (!isArEnabled) { stopAr(); return; }
@@ -289,23 +291,49 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     return (
         <div className="camera-experience-modal" ref={containerRef}>
             <video id="camera-feed" ref={videoRef} autoPlay playsInline muted />
-            <div ref={arOverlayRef} className="ar-canvas">
+            <div ref={arOverlayRef} className="ar-canvas" onClick={() => setExpandedBubbleId(null)}>
                 {arObjects.map(obj => {
-                    const fontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)]' : '[font-family:var(--font-phoenician)]';
+                    const isExpanded = expandedBubbleId === obj.id;
+                    const fontClass = arDialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)]' : '[font-family:var(--font-phoenician)]';
+                    const transliteration = uiLang === 'ar' ? obj.arabicTransliteration : obj.latin;
                     return (
                         <div 
                             key={obj.id} 
-                            className="ar-bubble"
+                            className={`ar-bubble ${isExpanded ? 'ar-bubble-expanded' : ''}`}
                             style={{
-                            opacity: obj.opacity,
-                            transform: `translate(-50%, -50%) translate(${obj.currentX}px, ${obj.currentY}px)`
+                                opacity: obj.opacity,
+                                transform: `translate(-50%, -50%) translate(${obj.currentX}px, ${obj.currentY}px) scale(${isExpanded ? 1.1 : 1})`,
+                                pointerEvents: obj.opacity > 0.5 ? 'auto' : 'none',
+                                zIndex: isExpanded ? 100 : 50,
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedBubbleId(isExpanded ? null : obj.id);
                             }}
                         >
-                            <div className={`ar-bubble-phoenician ${fontClass}`}>{obj.phoenician}</div>
-                            <div className="ar-bubble-pronunciation">{obj.latin}</div>
-                            <div className="ar-bubble-description" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
-                                {obj.description}
-                            </div>
+                            {!isExpanded ? (
+                                <>
+                                    <div className={`ar-bubble-phoenician ${fontClass}`}>{obj.phoenician}</div>
+                                    <div className="ar-bubble-translation" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{obj.translation}</div>
+                                    <div className="ar-bubble-pronunciation" dir="ltr">{transliteration}</div>
+                                </>
+                            ) : (
+                                <div className="ar-expanded-content">
+                                    <div className={`ar-expanded-phoenician ${fontClass}`}>{obj.phoenician}</div>
+                                    <div className="ar-expanded-pos">{t(obj.pos.toLowerCase())}</div>
+                                    <hr className="ar-expanded-divider" />
+                                    <div className="ar-expanded-transliterations">
+                                        <div className="text-center">
+                                            <div className="ar-expanded-label">Latin</div>
+                                            <div dir="ltr">{obj.latin}</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="ar-expanded-label">Arabic</div>
+                                            <div dir="rtl">{obj.arabicTransliteration}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     );
                 })}
@@ -362,15 +390,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                         <label className="camera-slider-label"><WhiteBalanceIcon className="w-5 h-5"/>{t('whiteBalance')}</label>
                         <input type="range" min={capabilities.colorTemperature.min} max={capabilities.colorTemperature.max} step={capabilities.colorTemperature.step} value={whiteBalance} onChange={e => setWhiteBalance(parseFloat(e.target.value))} className="range-slider" />
                     </div>}
-
-                    <div className="camera-slider-container">
-                        <label className="camera-slider-label"><SunIcon className="w-5 h-5"/>{t('brightness')}</label>
-                        <input type="range" min="50" max="200" value={brightness} onChange={e => setBrightness(parseFloat(e.target.value))} className="range-slider" />
-                    </div>
-                    <div className="camera-slider-container">
-                        <label className="camera-slider-label"><ContrastIcon className="w-5 h-5"/>{t('contrast')}</label>
-                        <input type="range" min="50" max="200" value={contrast} onChange={e => setContrast(parseFloat(e.target.value))} className="range-slider" />
-                    </div>
                 </div>
 
                 {capabilities?.zoom && <div className="camera-zoom-control">
@@ -378,17 +397,18 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     <input type="range" min={capabilities.zoom.min} max={capabilities.zoom.max} step={capabilities.zoom.step} value={zoom} onChange={e => setZoom(parseFloat(e.target.value))} />
                 </div>}
 
-                <footer className="camera-bottom-bar px-4 justify-center">
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-40 h-16 glass-panel rounded-full flex items-center justify-center text-sm font-semibold">
-                         {isRecognizing ? (
-                            <>
-                                <Loader className="w-5 h-5 mr-2" />
-                                <span>{t('analyzeObjects')}...</span>
-                            </>
-                         ) : (
-                            <span>{t('arView')}</span>
-                         )}
+                <footer className="camera-bottom-bar px-4">
+                     <div className="camera-controls-panel">
+                        <div className="flex items-center space-x-2">
+                            <SunIcon className="w-5 h-5 text-gray-300"/>
+                            <input type="range" min="50" max="200" value={brightness} onChange={e => setBrightness(parseFloat(e.target.value))} className="range-slider" />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <ContrastIcon className="w-5 h-5 text-gray-300"/>
+                            <input type="range" min="50" max="200" value={contrast} onChange={e => setContrast(parseFloat(e.target.value))} className="range-slider" />
+                        </div>
                     </div>
+                    <ScriptModeToggle scriptMode={arDialect} setScriptMode={setArDialect} t={t} />
                 </footer>
             </div>
         </div>
