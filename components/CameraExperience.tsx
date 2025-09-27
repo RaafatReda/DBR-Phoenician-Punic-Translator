@@ -32,6 +32,7 @@ interface ArObject {
     name: string;
     phoenician: string;
     latin: string;
+    arabicTransliteration: string;
     translation: string;
     // Animation properties
     currentX: number;
@@ -211,7 +212,9 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                         return { ...existing, targetX, targetY, targetOpacity: 1, isDead: false };
                     }
                     return {
-                        id, name: res.name, phoenician: res.phoenician, latin: res.latin, translation: res.translation,
+                        id, name: res.name, phoenician: res.phoenician, latin: res.latin, 
+                        arabicTransliteration: res.arabicTransliteration,
+                        translation: res.translation,
                         currentX: targetX, currentY: targetY, targetX, targetY,
                         opacity: 0, targetOpacity: 1, isDead: false,
                     };
@@ -280,7 +283,10 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                             }}
                         >
                             <div className={`ar-bubble-phoenician ${fontClass}`}>{obj.phoenician}</div>
-                            <div className="ar-bubble-latin">{obj.latin}</div>
+                            <div className="ar-bubble-translation">{obj.translation}</div>
+                            <div className="ar-bubble-transliteration" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
+                                {uiLang === 'ar' ? obj.arabicTransliteration : obj.latin}
+                            </div>
                         </div>
                     );
                 })}
