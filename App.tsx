@@ -57,6 +57,8 @@ import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
 import SpeakerIcon from './components/icons/SpeakerIcon';
 import AIAssistantModal from './components/AIAssistantModal';
 import SparklesIcon from './components/icons/SparklesIcon';
+import BookOpenIcon from './components/icons/BookOpenIcon';
+import LessonsPage from './components/LessonsPage';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -186,6 +188,7 @@ const App: React.FC = () => {
   const [isFontSizeManagerOpen, setIsFontSizeManagerOpen] = useState(false);
   const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
   const [isAssistantModalOpen, setIsAssistantModalOpen] = useState<boolean>(false);
+  const [isLessonsPageOpen, setIsLessonsPageOpen] = useState<boolean>(false);
 
   const t = useCallback((key: keyof typeof translations.en) => {
     return translations[uiLang]?.[key] || translations.en[key];
@@ -772,6 +775,14 @@ const App: React.FC = () => {
               <span className="[font-family:var(--font-phoenician)] text-2xl font-bold w-6 h-6 flex items-center justify-center">𐤀</span>
             </button>
             <button
+                onClick={() => setIsLessonsPageOpen(true)}
+                className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
+                aria-label={t('lessonsTitle')}
+                title={t('lessonsTitle')}
+            >
+                <BookOpenIcon className="w-6 h-6" />
+            </button>
+            <button
                 onClick={() => setIsDictionaryOpen(true)}
                 className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
                 aria-label={t('dictionaryTitle')}
@@ -1164,6 +1175,13 @@ const App: React.FC = () => {
             isOpen={isCameraExperienceOpen}
             onClose={() => setIsCameraExperienceOpen(false)}
             dialect={phoenicianDialect}
+            t={t}
+            uiLang={uiLang}
+        />
+      )}
+       {isLessonsPageOpen && (
+        <LessonsPage
+            onClose={() => setIsLessonsPageOpen(false)}
             t={t}
             uiLang={uiLang}
         />
