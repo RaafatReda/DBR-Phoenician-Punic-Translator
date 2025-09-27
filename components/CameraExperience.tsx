@@ -5,7 +5,6 @@ import { UILang } from '../lib/i18n';
 import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import SettingsIcon from './icons/SettingsIcon';
-import SwitchCameraIcon from './icons/SwitchCameraIcon';
 import EyeIcon from './icons/EyeIcon';
 import FocusIcon from './icons/FocusIcon';
 import ExposureIcon from './icons/ExposureIcon';
@@ -14,6 +13,9 @@ import ZoomInIcon from './icons/ZoomInIcon';
 import ZoomOutIcon from './icons/ZoomOutIcon';
 import SunIcon from './icons/SunIcon';
 import ContrastIcon from './icons/ContrastIcon';
+import UploadIcon from './icons/UploadIcon';
+import RefreshIcon from './icons/RefreshIcon';
+
 
 // Add type definitions for experimental MediaTrackCapabilities properties.
 interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
@@ -33,7 +35,7 @@ interface ArObject {
     phoenician: string;
     latin: string;
     arabicTransliteration: string;
-    translation: string;
+    description: string;
     // Animation properties
     currentX: number;
     currentY: number;
@@ -78,7 +80,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const [contrast, setContrast] = useState(100);
 
     // AR State
-    const [isArEnabled, setIsArEnabled] = useState(false);
+    const [isArEnabled, setIsArEnabled] = useState(true);
     const [isRecognizing, setIsRecognizing] = useState(false);
     const [arObjects, setArObjects] = useState<ArObject[]>([]);
     const [arError, setArError] = useState<string | null>(null);
@@ -214,7 +216,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     return {
                         id, name: res.name, phoenician: res.phoenician, latin: res.latin, 
                         arabicTransliteration: res.arabicTransliteration,
-                        translation: res.translation,
+                        description: res.description,
                         currentX: targetX, currentY: targetY, targetX, targetY,
                         opacity: 0, targetOpacity: 1, isDead: false,
                     };
@@ -264,6 +266,23 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         }
         return () => stopAr();
     }, [isArEnabled, analyzeFrame, runArAnimation, stopAr]);
+
+    const handleShare = async () => {
+        const container = containerRef.current;
+        if (!container) return;
+        try {
+            const canvas = await window.html2canvas(container, {
+                 useCORS: true,
+                 backgroundColor: '#000',
+            });
+            const link = document.createElement('a');
+            link.download = `dbr-ar-capture-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        } catch (e) {
+            console.error("Failed to capture screen:", e);
+        }
+    };
     
     if (!isOpen) return null;
     
@@ -283,9 +302,9 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                             }}
                         >
                             <div className={`ar-bubble-phoenician ${fontClass}`}>{obj.phoenician}</div>
-                            <div className="ar-bubble-translation">{obj.translation}</div>
-                            <div className="ar-bubble-transliteration" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
-                                {uiLang === 'ar' ? obj.arabicTransliteration : obj.latin}
+                            <div className="ar-bubble-pronunciation">{obj.latin}</div>
+                            <div className="ar-bubble-description" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
+                                {obj.description}
                             </div>
                         </div>
                     );
@@ -300,23 +319,31 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
 
             <div className="camera-ui-overlay">
                 <header className="flex justify-between items-center px-4">
-                    <button onClick={() => setIsSettingsOpen(o => !o)} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('advancedSettings')}>
-                        <SettingsIcon className="w-6 h-6" />
-                    </button>
-                    <div className="text-center font-bold text-lg" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{t('arView')}</div>
                     <div className="flex items-center gap-2">
-                         <button onClick={() => setFacingMode(p => p === 'user' ? 'environment' : 'user')} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('switchCamera')}>
-                           <SwitchCameraIcon className="h-6 w-6" />
-                        </button>
                         <button onClick={onClose} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" aria-label={t('close')}>
                             <CloseIcon className="w-6 h-6" />
                         </button>
+                        <button onClick={handleShare} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('downloadPhoto')}>
+                            <UploadIcon className="h-6 w-6" />
+                        </button>
+                    </div>
+
+                    <div className="text-center font-bold text-lg" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
+                        <h2 className="[font-family:var(--font-serif)] text-sm tracking-wider">{t('mainTitle')}</h2>
+                        <p className="text-xs font-medium text-gray-300">{t('arView')}</p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                         <button onClick={() => analyzeFrame()} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('analyzeObjects')}>
+                           <RefreshIcon className="h-6 w-6" />
+                        </button>
+                        <button onClick={() => setIsSettingsOpen(o => !o)} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('advancedSettings')}>
+                            <SettingsIcon className="w-6 h-6" />
+                        </button>
                     </div>
                 </header>
-
-                {!isArEnabled && <div className="ar-crosshair" />}
                 
-                {isArEnabled && isRecognizing && <div className="ar-recognizing-indicator"></div>}
+                {isRecognizing && <div className="ar-recognizing-indicator"></div>}
 
                 <div className={`camera-settings-panel ${isSettingsOpen ? 'open' : ''}`}>
                     <h3 className="text-lg font-bold text-center mt-8 mb-4">{t('advancedSettings')}</h3>
@@ -347,25 +374,21 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 </div>
 
                 {capabilities?.zoom && <div className="camera-zoom-control">
-                    <ZoomInIcon className="w-6 h-6 opacity-80"/>
+                    <span className="text-xs font-bold tracking-widest mb-2">ZOOM</span>
                     <input type="range" min={capabilities.zoom.min} max={capabilities.zoom.max} step={capabilities.zoom.step} value={zoom} onChange={e => setZoom(parseFloat(e.target.value))} />
-                    <ZoomOutIcon className="w-6 h-6 opacity-80"/>
                 </div>}
 
-                <footer className="camera-bottom-bar px-4">
-                     <div className="w-24 flex justify-start">
-                        <button onClick={() => setIsArEnabled(e => !e)} className={`camera-action-button ${isArEnabled ? 'active' : ''}`} title={t('arToggle')}>
-                            <EyeIcon className="w-6 h-6" isSlashed={!isArEnabled} />
+                <footer className="camera-bottom-bar px-4 justify-center">
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-40 h-16 glass-panel rounded-full flex items-center justify-center text-sm font-semibold">
+                         {isRecognizing ? (
+                            <>
+                                <Loader className="w-5 h-5 mr-2" />
+                                <span>{t('analyzeObjects')}...</span>
+                            </>
+                         ) : (
                             <span>{t('arView')}</span>
-                        </button>
-                     </div>
-                     <button className="shutter-button"><div className="shutter-button-inner"></div></button>
-                     <div className="w-24 flex justify-end">
-                        <button onClick={analyzeFrame} disabled={isRecognizing || !isArEnabled} className="camera-action-button" title={t('analyzeObjects')}>
-                            {isRecognizing ? <Loader className="w-6 h-6" /> : <span className="[font-family:var(--font-phoenician)] text-2xl">𐤀?</span>}
-                            <span>{t('analyzeObjects')}</span>
-                        </button>
-                     </div>
+                         )}
+                    </div>
                 </footer>
             </div>
         </div>
