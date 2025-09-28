@@ -1,0 +1,30 @@
+import type { GlossaryEntry } from '../../types';
+
+export const zayin: GlossaryEntry[] = [
+  // Zayin - 𐤆
+  { phoenician: '𐤆', latin: 'z', meaning: { en: 'This; Zayin (seventh letter)', fr: 'Ceci; Zayin (septième lettre)', ar: 'هذا؛ زاي (الحرف السابع)' }, grammar: { pos: 'Pronoun', notes: 'Also a noun (letter name).' } },
+  { phoenician: '𐤆𐤀𐤕', latin: "z't", meaning: { en: 'This (f.)', fr: 'Celle-ci', ar: 'هذه' }, grammar: { pos: 'Pronoun', gender: 'f', number: 's' } },
+  { phoenician: '𐤆𐤁𐤃', latin: 'zbd', meaning: { en: 'To bestow, endow', fr: 'Accorder, doter', ar: 'يهب، يمنح' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤁𐤇', latin: 'zbḥ', meaning: { en: 'Sacrifice', fr: 'Sacrifice', ar: 'ذبيحة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤆𐤁𐤋', latin: 'zbl', meaning: { en: 'Dung, to fertilize', fr: 'Fumier, fertiliser', ar: 'روث، يسمد' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
+  { phoenician: '𐤆𐤁𐤅𐤁', latin: 'zwb', meaning: { en: 'Fly (insect)', fr: 'Mouche (insecte)', ar: 'ذبابة (حشرة)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤆𐤄', latin: 'zh', meaning: { en: 'This', fr: 'Ceci', ar: 'هذا' }, grammar: { pos: 'Pronoun', gender: 'm', number: 's' } },
+  { phoenician: '𐤆𐤄𐤁', latin: 'zhb', meaning: { en: 'Gold', fr: 'Or', ar: 'ذهب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤆𐤅𐤃', latin: 'zwd', meaning: { en: 'To act proudly', fr: 'Agir avec orgueil', ar: 'يتكبر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤋𐤋', latin: 'zll', meaning: { en: 'To be worthless, squander', fr: 'Être sans valeur, gaspiller', ar: 'يكون تافهاً، يبذر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤌', latin: 'zm', meaning: { en: 'To consider, plot', fr: 'Considérer, comploter', ar: 'يفكر، يتآمر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤌𐤌', latin: 'zmm', meaning: { en: 'To plot evil', fr: 'Comploter le mal', ar: 'يدبر الشر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤌𐤓', latin: 'zmr', meaning: { en: 'To sing, praise', fr: 'Chanter, louer', ar: 'يغني، يسبح' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
+  { phoenician: '𐤆𐤍', latin: 'zn', meaning: { en: 'Kind, sort', fr: 'Sorte, genre', ar: 'نوع، صنف' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤆𐤍𐤄', latin: 'znh', meaning: { en: 'To commit fornication', fr: 'Commettre la fornication', ar: 'يزني' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤏𐤌', latin: "zʿm", meaning: { en: 'To be angry', fr: 'Être en colère', ar: 'يغضب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤏𐤒', latin: "zʿq", meaning: { en: 'To cry out', fr: 'Crier', ar: 'يصرخ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤒𐤍', latin: 'zqn', meaning: { en: 'Old, elder, beard', fr: 'Vieux, ancien, barbe', ar: 'عجوز، شيخ، لحية' }, grammar: { pos: 'Adjective', notes: 'Also a noun.' } },
+  { phoenician: '𐤆𐤒𐤒', latin: 'zqq', meaning: { en: 'To refine', fr: 'Raffiner', ar: 'يصفي' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
+  { phoenician: '𐤆𐤓', latin: 'zr', meaning: { en: 'Stranger, foreigner', fr: 'Étranger', ar: 'غريب، أجنبي' }, grammar: { pos: 'Adjective', notes: 'Also a noun.' } },
+  { phoenician: '𐤆𐤓𐤁', latin: 'zrb', meaning: { en: 'To flow', fr: 'Couler', ar: 'يتدفق' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: '[verify]' } },
+  { phoenician: '𐤆𐤓𐤅𐤏', latin: "zrwʿ", meaning: { en: 'Arm, strength', fr: 'Bras, force', ar: 'ذراع، قوة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤆𐤓𐤇', latin: 'zrḥ', meaning: { en: 'To shine, rise', fr: 'Briller, se lever', ar: 'يشرق، ينهض' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤆𐤓𐤏', latin: "zrʿ", meaning: { en: 'Seed, offspring; to sow', fr: 'Graine, descendance; semer', ar: 'بذرة، نسل؛ يزرع' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
+  { phoenician: '𐤆𐤓𐤒', latin: 'zrq', meaning: { en: 'To sprinkle', fr: 'Asperger', ar: 'يرش' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+];

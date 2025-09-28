@@ -97,6 +97,23 @@ export interface RecognizedObject {
     box: { x: number; y: number; width: number; height: number; };
 }
 
+export interface GlossaryEntry {
+  phoenician: string;
+  latin: string;
+  meaning: {
+    en: string;
+    fr: string;
+    ar: string;
+  };
+  grammar: {
+    pos: 'Noun' | 'Verb' | 'Adjective' | 'Adverb' | 'Preposition' | 'Conjunction' | 'Pronoun' | 'Numeral' | 'Particle' | 'Interjection';
+    gender?: 'm' | 'f' | 'c';
+    number?: 's' | 'p' | 'd';
+    stem?: 'G-stem' | 'D-stem' | 'N-stem' | 'C-stem'; // G=Qal, D=Pi'el, N=Niphal, C=Hiphil (Causative)
+    notes?: string;
+  };
+}
+
 export interface AIAssistantResponse {
   improvedTranslation: TransliterationOutput;
   explanation: string;

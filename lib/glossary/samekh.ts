@@ -1,0 +1,26 @@
+import type { GlossaryEntry } from '../../types';
+
+export const samekh: GlossaryEntry[] = [
+  // Samekh - 𐤎
+  { phoenician: '𐤎', latin: 's', meaning: { en: 'Samekh (fifteenth letter)', fr: 'Samekh (quinzième lettre)', ar: 'سامخ (الحرف الخامس عشر)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤀𐤍', latin: "s'n", meaning: { en: 'Sandal', fr: 'Sandale', ar: 'صندل' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤎𐤁𐤁', latin: 'sbb', meaning: { en: 'To surround, turn', fr: 'Entourer, tourner', ar: 'يحيط، يدور' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤃𐤓', latin: 'sdr', meaning: { en: 'Order, arrangement', fr: 'Ordre, arrangement', ar: 'ترتيب، نظام' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤂𐤓', latin: 'sgr', meaning: { en: 'To shut, close', fr: 'Fermer', ar: 'يغلق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤅𐤃', latin: 'swd', meaning: { en: 'Council, secret', fr: 'Conseil, secret', ar: 'مجلس، سر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤅𐤂', latin: 'swg', meaning: { en: 'To turn back', fr: 'Retourner', ar: 'يرجع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤅𐤎', latin: 'sws', meaning: { en: 'Horse', fr: 'Cheval', ar: 'حصان' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤇𐤁', latin: 'sḥb', meaning: { en: 'To drag', fr: 'Traîner', ar: 'يسحب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤇𐤓', latin: 'sḥr', meaning: { en: 'Trade, to go around', fr: 'Commerce, faire le tour', ar: 'تجارة، يدور حول' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
+  { phoenician: '𐤎𐤋𐤄', latin: 'slh', meaning: { en: 'To cast away', fr: 'Jeter', ar: 'يرمي' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
+  { phoenician: '𐤎𐤋𐤇', latin: 'slḥ', meaning: { en: 'To forgive', fr: 'Pardonner', ar: 'يغفر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤋𐤌', latin: 'slm', meaning: { en: 'Ladder', fr: 'Échelle', ar: 'سلم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤌𐤊', latin: 'smk', meaning: { en: 'To support, lean', fr: 'Soutenir, s\'appuyer', ar: 'يدعم، يتكئ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤏𐤃', latin: "sʿd", meaning: { en: 'To support, sustain', fr: 'Soutenir, maintenir', ar: 'يساند، يعيل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤏𐤓', latin: "sʿr", meaning: { en: 'Storm, tempest', fr: 'Orage, tempête', ar: 'عاصفة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤐', latin: 'sp', meaning: { en: 'Threshold, bowl', fr: 'Seuil, bol', ar: 'عتبة، وعاء' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤐𐤃', latin: 'spd', meaning: { en: 'To lament, wail', fr: 'Se lamenter, gémir', ar: 'ينوح، يولول' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤐𐤓', latin: 'spr', meaning: { en: 'Book, to count', fr: 'Livre, compter', ar: 'كتاب، يحسب' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
+  { phoenician: '𐤎𐤓', latin: 'sr', meaning: { en: 'Prince, official', fr: 'Prince, officiel', ar: 'أمير، مسؤول' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤎𐤓𐤉𐤎', latin: 'srys', meaning: { en: 'Eunuch, official', fr: 'Eunuque, officiel', ar: 'خصي، موظف' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+];
