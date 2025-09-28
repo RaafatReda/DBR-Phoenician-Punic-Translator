@@ -38,4 +38,6 @@ export const pe: GlossaryEntry[] = [
   { phoenician: '𐤐𐤕𐤇', latin: 'ptḥ', meaning: { en: 'To open, opening', fr: 'Ouvrir, ouverture', ar: 'يفتح، فتحة' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤐𐤕𐤇', latin: 'ptḥ', meaning: { en: "Ptah — Egyptian lord of industry and crafts, protector of artisans", fr: "Ptah — Seigneur égyptien de l'industrie et de l'artisanat, protecteur des artisans", ar: "پتاح — رب الصناعة والحرف وحامي الحرفيين عند المصريين" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
   { phoenician: '𐤐𐤕𐤉', latin: 'pty', meaning: { en: 'Simpleton', fr: 'Simple d\'esprit', ar: 'ساذج' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤐𐤓', latin: 'prʿ', meaning: { en: 'Pharaoh', fr: 'Pharaon', ar: 'فرعون' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Refers to Egyptian king.' } },
+  { phoenician: '𐤐𐤉𐤓', latin: 'pyr', meaning: { en: 'Headwrap', fr: 'Coiffe', ar: 'غطاء رأس' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Clothing borrowed from Egypt.' } },
 ];

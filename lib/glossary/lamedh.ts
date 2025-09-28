@@ -33,4 +33,5 @@ export const lamedh: GlossaryEntry[] = [
   { phoenician: '𐤋𐤒𐤈', latin: 'lqṭ', meaning: { en: 'To gather, glean', fr: 'Ramasser, glaner', ar: 'يجمع، يلتقط' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤋𐤒𐤔', latin: 'lqš', meaning: { en: 'Late rain', fr: 'Pluie tardive', ar: 'مطر متأخر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤋𐤔𐤍', latin: 'lšn', meaning: { en: 'Tongue, language', fr: 'Langue', ar: 'لسان، لغة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤋𐤔𐤌', latin: 'lšm', meaning: { en: 'Feldspar or amazonite', fr: 'Feldspath ou amazonite', ar: 'فلدسبار أو أمازونيت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Imported gemstone.' } },
 ];

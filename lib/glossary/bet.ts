@@ -99,4 +99,7 @@ export const bet: GlossaryEntry[] = [
   { phoenician: '𐤁𐤕𐤅𐤋𐤄', latin: 'btwlh', meaning: { en: 'Virgin', fr: 'Vierge', ar: 'عذراء' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤁𐤕𐤊', latin: 'btk', meaning: { en: 'In the midst of', fr: 'Au milieu de', ar: 'في وسط' }, grammar: { pos: 'Preposition' } },
   { phoenician: '𐤁𐤕𐤓', latin: 'btr', meaning: { en: 'To cut in two', fr: 'Couper en deux', ar: 'يشطر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤁𐤃', latin: 'bdʾ', meaning: { en: 'Linen', fr: 'Lin', ar: 'كتان' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Term for fine Egyptian linen.' } },
+  { phoenician: '𐤁𐤇𐤕', latin: 'bht', meaning: { en: 'Nubian stone', fr: 'Pierre nubienne', ar: 'حجر نوبي' }, grammar: { pos: 'Noun', number: 's', notes: 'Context: Indicates trade in this material.' } },
+  { phoenician: '𐤁𐤇𐤍', latin: 'bḥn', meaning: { en: 'Greywacke', fr: 'Grauwacke', ar: 'حجر الغرايواك' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Likely imported from Egypt.' } },
 ];

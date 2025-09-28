@@ -56,4 +56,5 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤔𐤀', latin: "dšʾ", meaning: { en: 'Grass, to sprout', fr: 'Herbe, germer', ar: 'عشب، ينبت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤃𐤔𐤍', latin: 'dšn', meaning: { en: 'Fat, prosperous', fr: 'Gras, prospère', ar: 'سمين، مزدهر' }, grammar: { pos: 'Verb', stem: 'D-stem', notes: 'Also an adjective.' } },
   { phoenician: '𐤃𐤕', latin: 'dat', meaning: { en: 'Date palm / date fruit', fr: 'Palmier dattier / datte', ar: 'نخلة / تمر' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤃𐤇𐤓', latin: 'dḥr', meaning: { en: 'Leather vest', fr: 'Gilet en cuir', ar: 'سترة جلدية' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Egyptian-style armor or clothing.' } },
 ];

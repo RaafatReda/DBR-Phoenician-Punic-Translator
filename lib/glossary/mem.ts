@@ -62,4 +62,5 @@ export const mem: GlossaryEntry[] = [
   { phoenician: '𐤌𐤔𐤋', latin: 'mšl', meaning: { en: 'To rule, proverb', fr: 'Gouverner, proverbe', ar: 'يحكم، مثل' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤌𐤔𐤐𐤇𐤄', latin: 'mšpḥh', meaning: { en: 'Family, clan', fr: 'Famille, clan', ar: 'عائلة، عشيرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤌𐤔𐤐𐤈', latin: 'mšpṭ', meaning: { en: 'Judgment', fr: 'Jugement', ar: 'حكم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤌𐤐𐤊', latin: 'mfk', meaning: { en: 'Turquoise', fr: 'Turquoise', ar: 'فيروز' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Trade item.' } },
 ];
