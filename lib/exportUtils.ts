@@ -1,5 +1,5 @@
 
-import { SavedTranslation, TransliterationOutput } from '../types';
+import { SavedTranslation, TransliterationOutput, GlossaryEntry, PhoenicianDialect, Language } from '../types';
 import { getFlagForLanguage } from './languageUtils';
 import { UILang } from './i18n';
 
@@ -8,11 +8,16 @@ const escapeHtml = (unsafe: string | undefined): string => {
     return unsafe.replace(/[&<"']/g, m => ({ '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": '&#039;' }[m]!));
 };
 
+const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQ-- LDR`;
+
 export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang): string => {
     const translationsHtml = translations.map(item => {
+        const isPunic = item.dialect === PhoenicianDialect.PUNIC || item.targetLang === Language.PUNIC || item.sourceLang === Language.PUNIC;
+        const fontClass = isPunic ? 'punic' : 'phoenician';
+        
         const translatedTextDisplay = typeof item.translatedText === 'string'
             ? escapeHtml(item.translatedText)
-            : escapeHtml((item.translatedText as TransliterationOutput).phoenician);
+            : `<span class="${fontClass}">${escapeHtml((item.translatedText as TransliterationOutput).phoenician)}</span>`;
 
         let transliterationHtml = '';
         if (typeof item.translatedText === 'object' && item.translatedText.latin) {
@@ -52,6 +57,12 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
             <style>
+                @font-face {
+                  font-family: 'Punic LDR';
+                  src: url(data:font/truetype;charset=utf-8;base64,${PUNIC_FONT_BASE64}) format('truetype');
+                  font-weight: normal;
+                  font-style: normal;
+                }
                 body { 
                     font-family: 'Poppins', sans-serif; 
                     margin: 20px; 
@@ -65,7 +76,7 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
                 }
                 h1 { 
                     text-align: center; 
-                    color: #6B46C1; 
+                    color: #800080; 
                     border-bottom: 2px solid #e8e6da; 
                     padding-bottom: 10px; 
                     font-family: 'Cinzel', serif;
@@ -97,12 +108,18 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
                     border-left: 3px solid #ccc; 
                 }
                 .translated-text { 
-                    font-family: 'Noto Sans Phoenician', serif; 
                     font-size: 1.5em; 
-                    color: #6B46C1; 
+                    color: #800080; 
                     margin-bottom: 5px;
                     direction: rtl; 
                     text-align: right;
+                }
+                .translated-text .phoenician {
+                    font-family: 'Noto Sans Phoenician', serif;
+                }
+                .translated-text .punic {
+                    font-family: 'Punic LDR', serif;
+                    font-size: 1.2em; /* relative to 1.5em */
                 }
                 .transliteration {
                     text-align: right;
@@ -152,6 +169,116 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
         </html>
     `;
 };
+
+export const generateGlossaryHtmlForPdf = (
+  entries: GlossaryEntry[],
+  uiLang: UILang,
+  dialect: PhoenicianDialect,
+  t: (key: string) => string
+): string => {
+  const isPunic = dialect === PhoenicianDialect.PUNIC;
+  const fontClass = isPunic ? 'punic' : 'phoenician';
+  const titleKey = isPunic ? 'punicGlossaryTitle' : 'phoenicianGlossaryTitle';
+  const pdfTitle = t(titleKey);
+
+  const entriesHtml = entries.map(entry => {
+    const meaning = (entry.meaning as any)[uiLang] || entry.meaning.en;
+    return `
+      <div class="entry">
+        <div class="term">
+          <span class="phoenician-script ${fontClass}">${escapeHtml(entry.phoenician)}</span>
+          <span class="latin">(${escapeHtml(entry.latin)})</span>
+        </div>
+        <div class="meaning" lang="${uiLang}" dir="${uiLang === 'ar' ? 'rtl' : 'ltr'}">
+            ${escapeHtml(meaning)}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <!DOCTYPE html>
+    <html lang="${uiLang}" dir="${uiLang === 'ar' ? 'rtl' : 'ltr'}">
+    <head>
+        <meta charset="UTF-8">
+        <title>${escapeHtml(pdfTitle)}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Poppins:wght@400;600&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+          @font-face {
+            font-family: 'Punic LDR';
+            src: url(data:font/truetype;charset=utf-8;base64,${PUNIC_FONT_BASE64}) format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+          body {
+            font-family: 'Poppins', sans-serif;
+            margin: 20px;
+            color: #333;
+          }
+          @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          }
+          h1 {
+            text-align: center;
+            color: #800080;
+            border-bottom: 2px solid #EADCBF;
+            padding-bottom: 10px;
+            font-family: 'Cinzel', serif;
+          }
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+          }
+          .entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #eee;
+            padding: 10px 5px;
+            page-break-inside: avoid;
+          }
+          .term {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            flex-basis: 45%;
+            flex-shrink: 0;
+            direction: rtl;
+          }
+          .phoenician-script {
+            color: #800080;
+          }
+          .phoenician-script.phoenician {
+            font-family: 'Noto Sans Phoenician', serif;
+            font-size: 1.6em;
+          }
+          .phoenician-script.punic {
+             font-family: 'Punic LDR', serif;
+             font-size: 1.9em;
+          }
+          .latin {
+            font-size: 0.9em;
+            color: #777;
+            font-style: italic;
+            direction: ltr;
+          }
+          .meaning {
+            flex-basis: 55%;
+            text-align: ${uiLang === 'ar' ? 'right' : 'left'};
+          }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>${escapeHtml(pdfTitle)}</h1>
+            ${entriesHtml}
+        </div>
+    </body>
+    </html>
+  `;
+}
 
 
 const FONT_SANS = `'Poppins', sans-serif`;

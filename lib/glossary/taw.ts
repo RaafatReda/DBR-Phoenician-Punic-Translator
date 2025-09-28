@@ -32,7 +32,7 @@ export const taw: GlossaryEntry[] = [
   { phoenician: '𐤕𐤍', latin: 'tn', meaning: { en: 'Jackal', fr: 'Chacal', ar: 'ابن آوى' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤕𐤍𐤍', latin: 'tnn', meaning: { en: 'Thenae (likely Thyna, near Sfax, Tunisia)', fr: 'Thenae (probablement Thyna, près de Sfax, Tunisie)', ar: 'ثيناي (على الأرجح طينة، بالقرب من صفاقس، تونس)' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤕𐤍𐤉𐤍', latin: 'tnyn', meaning: { en: 'Serpent, dragon, sea monster', fr: 'Serpent, dragon, monstre marin', ar: 'ثعبان، تنين، وحش بحري' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
-  { phoenician: '𐤕𐤁𐤕', latin: 'tbt', meaning: { en: 'Box', fr: 'Boîte', ar: 'صندوق' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'From Egyptian db.t.' } },
-  { phoenician: '𐤕𐤇𐤎', latin: 'tḥs', meaning: { en: 'Egyptian leather', fr: 'Cuir égyptien', ar: 'جلد مصري' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Imported material.' } },
-  { phoenician: '𐤕𐤕', latin: 'tt', meaning: { en: 'Jar', fr: 'Jarre', ar: 'جرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'From Egyptian db.t or tb.t.' } },
+  { phoenician: '𐤕𐤁𐤕', latin: 'tbt', meaning: { en: 'Box', fr: 'Boîte', ar: 'صندوق' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: '(From Egyptian db.t).' } },
+  { phoenician: '𐤕𐤇𐤎', latin: 'tḥs', meaning: { en: 'Egyptian leather', fr: 'Cuir égyptien', ar: 'جلد مصري' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(An imported Egyptian material).' } },
+  { phoenician: '𐤕𐤕', latin: 'tt', meaning: { en: 'Jar', fr: 'Jarre', ar: 'جرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: '(From Egyptian db.t or tb.t).' } },
 ];

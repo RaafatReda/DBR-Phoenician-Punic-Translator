@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useRef } from 'react';
 import { phoenicianGlossary } from '../lib/phoenicianGlossary';
 import CloseIcon from './icons/CloseIcon';
@@ -5,6 +6,8 @@ import SearchIcon from './icons/SearchIcon';
 import { UILang } from '../lib/i18n';
 import { PhoenicianDialect, GlossaryEntry } from '../types';
 import ScriptModeToggle from './ScriptModeToggle';
+import { generateGlossaryHtmlForPdf } from '../lib/exportUtils';
+import PdfIcon from './icons/PdfIcon';
 
 interface PhoenicianDictionaryModalProps {
   onClose: () => void;
@@ -71,6 +74,19 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
     onClose();
   };
   
+  const handleExportPdf = () => {
+    const htmlContent = generateGlossaryHtmlForPdf(filteredDictionary, currentUiLang, scriptMode, t);
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+    }
+  };
+
   const langButtonClass = (lang: GlossaryLang) => 
     `px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${glossaryLang === lang ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`;
 
@@ -98,8 +114,17 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
       >
         <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0">
           <h2 id="dictionary-title" className="text-xl font-semibold text-[color:var(--color-primary)]">{t('dictionaryHeader')}</h2>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <ScriptModeToggle scriptMode={scriptMode} setScriptMode={setScriptMode} t={t} />
+             <button
+              onClick={handleExportPdf}
+              disabled={filteredDictionary.length === 0}
+              className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors disabled:opacity-50"
+              aria-label={t('exportPdf')}
+              title={t('exportPdf')}
+            >
+              <PdfIcon className="w-5 h-5" />
+            </button>
             <button onClick={onClose} className="text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] transition-colors" aria-label={t('dictionaryClose')}>
               <CloseIcon className="w-6 h-6" />
             </button>

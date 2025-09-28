@@ -41,6 +41,6 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤔', latin: 'šš', meaning: { en: 'Six', fr: 'Six', ar: 'ستة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤔𐤔𐤌', latin: 'ššm', meaning: { en: 'Sesame', fr: 'Sésame', ar: 'سمسم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤕𐤄', latin: 'šth', meaning: { en: 'To drink', fr: 'Boire', ar: 'يشرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤔𐤊𐤉𐤕', latin: 'škyt', meaning: { en: 'Ship', fr: 'Navire', ar: 'سفينة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Egyptian origin: sktʸ. Context: Denotes a specific vessel.' } },
-  { phoenician: '𐤔𐤔', latin: 'šeš', meaning: { en: 'Linen', fr: 'Lin', ar: 'كتان' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Egyptian origin: šs. Context: High-quality Egyptian textile.' } },
+  { phoenician: '𐤔𐤊𐤉𐤕', latin: 'škyt', meaning: { en: 'Ship', fr: 'Navire', ar: 'سفينة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Denotes a specific vessel (Egyptian origin: sktʸ).' } },
+  { phoenician: '𐤔𐤔', latin: 'šeš', meaning: { en: 'Linen', fr: 'Lin', ar: 'كتان' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'High-quality Egyptian textile (Egyptian origin: šs).' } },
 ];
