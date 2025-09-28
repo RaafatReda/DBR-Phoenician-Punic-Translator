@@ -1,3 +1,4 @@
+
 import type { GlossaryEntry } from '../../types';
 
 export const kaph: GlossaryEntry[] = [
@@ -30,6 +31,11 @@ export const kaph: GlossaryEntry[] = [
   { phoenician: '𐤊𐤍𐤏𐤍', latin: "knʿn", meaning: { en: 'Canaan', fr: 'Canaan', ar: 'كنعان' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤊𐤍𐤏', latin: "knʿ", meaning: { en: 'To be humble', fr: 'Être humble', ar: 'يتواضع' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
   { phoenician: '𐤊𐤍𐤐', latin: 'knp', meaning: { en: 'Wing', fr: 'Aile', ar: 'جناح' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  // FIX: Completed the entry for 'Throne' which was missing French and Arabic meanings, a grammar definition, and was syntactically incomplete.
   { phoenician: '𐤊𐤎𐤀', latin: "ksʾ", meaning: { en: 'Throne', fr: 'Trône', ar: 'عرش' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤊𐤎𐤐', latin: 'ksp', meaning: { en: 'Silver, money', fr: 'Argent, monnaie', ar: 'فضة، مال' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤊𐤓', latin: 'kar', meaning: { en: 'Lamb', fr: 'Agneau', ar: 'حمل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤊𐤓𐤌', latin: 'krm', meaning: { en: 'Vineyard', fr: 'Vignoble', ar: 'كرم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤊𐤕𐤁', latin: 'ktb', meaning: { en: 'To write', fr: 'Écrire', ar: 'يكتب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤊𐤕𐤍', latin: 'ktn', meaning: { en: 'Tunic, coat', fr: 'Tunique, manteau', ar: 'قميص، معطف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤊𐤕𐤐', latin: 'ktp', meaning: { en: 'Shoulder', fr: 'Épaule', ar: 'كتف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
 ];
