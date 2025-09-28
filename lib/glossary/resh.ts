@@ -24,7 +24,8 @@ export const resh: GlossaryEntry[] = [
   { phoenician: '𐤓𐤏', latin: "rʿ", meaning: { en: 'Evil, bad', fr: 'Mal, mauvais', ar: 'شر، سيء' }, grammar: { pos: 'Adjective' } },
   { phoenician: '𐤓𐤏𐤄', latin: "rʿh", meaning: { en: 'To pasture, shepherd', fr: 'Paître, berger', ar: 'يرعى، راعٍ' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤓𐤐𐤀', latin: "rp'", meaning: { en: 'To heal', fr: 'Guérir', ar: 'يشفي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤓𐤔𐤐', latin: "ršp", meaning: { en: "Resheph, god of war and plague", fr: "Reshep, dieu de la guerre et de la peste", ar: "رشپ، إله الحرب والطاعون" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤓𐤔𐤐𐤍', latin: 'ršpn', meaning: { en: 'Ruspina (Monastir, Tunisia)', fr: 'Ruspina (Monastir, Tunisie)', ar: 'روسبينا (المنستير، تونس)' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤓𐤑𐤄', latin: 'rṣh', meaning: { en: 'To be pleased with', fr: 'Être satisfait de', ar: 'يرضى بـ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤓𐤒', latin: 'rq', meaning: { en: 'Empty', fr: 'Vide', ar: 'فارغ' }, grammar: { pos: 'Adjective' } },
-  { phoenician: '𐤓𐤔𐤐', latin: "ršp", meaning: { en: "Resheph, god of war and plague", fr: "Reshep, dieu de la guerre et de la peste", ar: "رشپ، إله الحرب والطاعون" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];

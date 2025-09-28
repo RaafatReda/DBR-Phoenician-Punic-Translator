@@ -21,6 +21,7 @@ import { qoph } from './glossary/qoph';
 import { resh } from './glossary/resh';
 import { shin } from './glossary/shin';
 import { taw } from './glossary/taw';
+import { personalNames } from './glossary/personal_names';
 
 // A comprehensive, alphabetized list of Phoenician words with multilingual definitions.
 export const phoenicianGlossary: GlossaryEntry[] = [
@@ -46,4 +47,5 @@ export const phoenicianGlossary: GlossaryEntry[] = [
   ...resh,
   ...shin,
   ...taw,
-];
+  ...personalNames,
+].sort((a, b) => a.phoenician.localeCompare(b.phoenician));

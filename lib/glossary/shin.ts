@@ -10,6 +10,7 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤁𐤓', latin: 'šbr', meaning: { en: 'To break', fr: 'Casser', ar: 'يكسر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤁𐤕', latin: 'šbt', meaning: { en: 'To cease, rest', fr: 'Cesser, se reposer', ar: 'يتوقف، يستريح' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤃𐤄', latin: 'šdh', meaning: { en: 'Field', fr: 'Champ', ar: 'حقل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤔𐤃𐤓𐤐', latin: 'šdrp', meaning: { en: "Shadrapa — a healing god associated with serpents", fr: "Shadrapa — un dieu de la guérison associé aux serpents", ar: "شدرپ — إله شفاء مرتبط بالأفاعي" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
   { phoenician: '𐤔𐤅𐤁', latin: 'šwb', meaning: { en: 'To return, turn back', fr: 'Retourner', ar: 'يعود، يرجع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤅𐤓', latin: 'šwr', meaning: { en: 'Ox, bull; wall', fr: 'Bœuf, taureau; mur', ar: 'ثور؛ سور' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤇𐤕', latin: 'šḥt', meaning: { en: 'Pit, to destroy', fr: 'Fosse, détruire', ar: 'حفرة، يدمر' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Also a verb (D-stem).' } },
@@ -33,8 +34,8 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤐𐤈', latin: 'špṭ', meaning: { en: 'To judge, ruler', fr: 'Juger, dirigeant', ar: 'يحكم، حاكم' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤔𐤒𐤋', latin: 'šql', meaning: { en: 'Shekel, to weigh', fr: 'Sicle, peser', ar: 'شيكل، يزن' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤔𐤓', latin: 'šr', meaning: { en: 'Prince, official', fr: 'Prince, officiel', ar: 'أمير، مسؤول' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤔𐤓𐤃𐤍', latin: 'šrdn', meaning: { en: 'Sardinia - An important island for trade and resources.', fr: 'Sardaigne - Île importante pour le commerce et les ressources.', ar: 'سردينيا - جزيرة مهمة للتجارة والموارد.' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤔𐤓𐤔', latin: 'šrš', meaning: { en: 'Root', fr: 'Racine', ar: 'جذر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤔', latin: 'šš', meaning: { en: 'Six', fr: 'Six', ar: 'ستة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤔𐤕𐤄', latin: 'šth', meaning: { en: 'To drink', fr: 'Boire', ar: 'يشرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤔𐤃𐤓𐤐', latin: 'šdrp', meaning: { en: "Shadrapa — a healing god associated with serpents", fr: "Shadrapa — un dieu de la guérison associé aux serpents", ar: "شدرپ — إله شفاء مرتبط بالأفاعي" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];

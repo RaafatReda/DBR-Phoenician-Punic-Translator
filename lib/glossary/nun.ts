@@ -18,6 +18,7 @@ export const nun: GlossaryEntry[] = [
   { phoenician: '𐤍𐤄𐤓', latin: 'nhr', meaning: { en: 'River', fr: 'Rivière', ar: 'نهر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤍𐤅𐤃', latin: 'nwd', meaning: { en: 'To wander', fr: 'Errer', ar: 'يهيم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤍𐤅𐤄', latin: 'nwh', meaning: { en: 'To rest', fr: 'Se reposer', ar: 'يرتاح' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤍𐤅𐤓𐤄', latin: 'nwrh', meaning: { en: 'Nora, Sardinia', fr: 'Nora, Sardaigne', ar: 'نورا، سردينيا' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤍𐤅𐤎', latin: 'nws', meaning: { en: 'To flee', fr: 'Fuir', ar: 'يهرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤍𐤇𐤌', latin: 'nḥm', meaning: { en: 'To comfort', fr: 'Consoler', ar: 'يعزي' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
   { phoenician: '𐤍𐤇𐤔', latin: 'nḥš', meaning: { en: 'Snake, serpent', fr: 'Serpent', ar: 'ثعبان، حية' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },

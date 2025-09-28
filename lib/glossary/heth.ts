@@ -10,6 +10,7 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤁𐤓', latin: 'ḥbr', meaning: { en: 'Friend, companion', fr: 'Ami, compagnon', ar: 'صديق، رفيق' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤇𐤂', latin: 'ḥg', meaning: { en: 'Festival, feast', fr: 'Festival, fête', ar: 'مهرجان، عيد' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤇𐤂𐤓', latin: 'ḥgr', meaning: { en: 'To gird', fr: 'Ceindre', ar: 'يتمنطق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤇𐤃𐤓𐤌', latin: 'ḥdrm', meaning: { en: 'Hadrumetum - An important Punic city on the Tunisian coast, modern Sousse.', fr: 'Hadrumetum - Importante cité punique sur la côte tunisienne, aujourd\'hui Sousse.', ar: 'هدرم - مدينة بونيقية مهمة على الساحل التونسي، حالياً سوسة.' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤇𐤃𐤋', latin: 'ḥdl', meaning: { en: 'To cease, stop', fr: 'Cesser, arrêter', ar: 'يتوقف' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤃𐤓', latin: 'ḥdr', meaning: { en: 'Chamber, room', fr: 'Chambre, pièce', ar: 'حجرة، غرفة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤇𐤃𐤔', latin: 'ḥdš', meaning: { en: 'New, new moon', fr: 'Nouveau, nouvelle lune', ar: 'جديد، هلال' }, grammar: { pos: 'Adjective', notes: 'Also a noun.' } },

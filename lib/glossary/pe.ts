@@ -18,6 +18,7 @@ export const pe: GlossaryEntry[] = [
   { phoenician: '𐤐𐤋𐤂', latin: 'plg', meaning: { en: 'To divide', fr: 'Diviser', ar: 'يقسم' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
   { phoenician: '𐤐𐤋𐤈', latin: 'plṭ', meaning: { en: 'To escape', fr: 'S\'échapper', ar: 'ينجو' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
   { phoenician: '𐤐𐤍', latin: 'pn', meaning: { en: 'Face', fr: 'Visage', ar: 'وجه' }, grammar: { pos: 'Noun', gender: 'm', number: 'p' } },
+  { phoenician: '𐤐𐤍𐤊', latin: 'pnk', meaning: { en: 'Phoenicia - The modern Lebanese coast', fr: 'Phénicie - La côte libanaise moderne', ar: 'فينيقيا - الساحل اللبناني الحالي' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤐𐤎𐤇', latin: 'psḥ', meaning: { en: 'Passover', fr: 'Pâque', ar: 'فصح' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤐𐤎𐤋', latin: 'psl', meaning: { en: 'Idol, to carve', fr: 'Idole, sculpter', ar: 'صنم، ينحت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤐𐤏𐤋', latin: "pʿl", meaning: { en: 'To do, make', fr: 'Faire', ar: 'يفعل، يعمل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
