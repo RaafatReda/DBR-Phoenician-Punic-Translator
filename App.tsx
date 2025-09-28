@@ -1100,6 +1100,7 @@ const App: React.FC = () => {
           onUpdateNote={handleUpdateNote}
           theme={theme}
           t={t}
+          uiLang={uiLang}
         />
       )}
       {isManualModalOpen && (

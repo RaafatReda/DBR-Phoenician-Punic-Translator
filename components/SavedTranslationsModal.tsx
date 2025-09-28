@@ -1,3 +1,4 @@
+
 import React, { useState, ChangeEvent } from 'react';
 import { SavedTranslation, PhoenicianDialect, Language } from '../types';
 import TrashIcon from './icons/TrashIcon';
@@ -7,6 +8,7 @@ import PdfIcon from './icons/PdfIcon';
 import ImageIcon from './icons/ImageIcon';
 import { getFlagForLanguage } from '../lib/languageUtils';
 import { generatePrintableHtml, generateSvgDataUrl } from '../lib/exportUtils';
+import { UILang } from '../lib/i18n';
 
 
 interface SavedTranslationsModalProps {
@@ -17,9 +19,10 @@ interface SavedTranslationsModalProps {
   onUpdateNote: (id: string, notes: string) => void;
   theme: 'light' | 'dark' | 'papyrus';
   t: (key: string) => string;
+  uiLang: UILang;
 }
 
-const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ translations, onClose, onClearAll, onDelete, onUpdateNote, theme, t }) => {
+const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ translations, onClose, onClearAll, onDelete, onUpdateNote, theme, t, uiLang }) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteContent, setNoteContent] = useState('');
@@ -69,7 +72,7 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
     const selected = getSelectedTranslations();
     if (selected.length === 0) return;
 
-    const htmlContent = generatePrintableHtml(selected);
+    const htmlContent = generatePrintableHtml(selected, uiLang);
     const printWindow = window.open('', '_blank');
     if (printWindow) {
       printWindow.document.write(htmlContent);
@@ -86,7 +89,7 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
     const selected = getSelectedTranslations();
     if (selected.length === 0) return;
 
-    const svgDataUrl = generateSvgDataUrl(selected, theme);
+    const svgDataUrl = generateSvgDataUrl(selected, theme, uiLang);
 
     const image = new Image();
     image.onload = () => {
@@ -192,6 +195,19 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
                             ? item.translatedText
                             : item.translatedText.phoenician}
                         </p>
+                        {typeof item.translatedText === 'object' && (
+                          <div className="text-right text-sm text-[color:var(--color-text-muted)] mt-1 pr-1">
+                            {(uiLang === 'en' || uiLang === 'fr') && (
+                              <p dir="ltr" className="italic break-words">{item.translatedText.latin}</p>
+                            )}
+                            {uiLang === 'ar' && (
+                              <>
+                                <p dir="ltr" className="italic break-words">{item.translatedText.latin}</p>
+                                <p dir="rtl" className="break-words">{item.translatedText.arabic}</p>
+                              </>
+                            )}
+                          </div>
+                        )}
                          {editingNoteId === item.id ? (
                           <div className="mt-4">
                             <textarea 

@@ -1,24 +1,46 @@
-import { SavedTranslation } from '../types';
+
+import { SavedTranslation, TransliterationOutput } from '../types';
 import { getFlagForLanguage } from './languageUtils';
+import { UILang } from './i18n';
 
 const escapeHtml = (unsafe: string | undefined): string => {
     if (!unsafe) return '';
     return unsafe.replace(/[&<"']/g, m => ({ '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": '&#039;' }[m]!));
 };
 
-export const generatePrintableHtml = (translations: SavedTranslation[]): string => {
-    const translationsHtml = translations.map(item => `
+export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang): string => {
+    const translationsHtml = translations.map(item => {
+        const translatedTextDisplay = typeof item.translatedText === 'string'
+            ? escapeHtml(item.translatedText)
+            : escapeHtml((item.translatedText as TransliterationOutput).phoenician);
+
+        let transliterationHtml = '';
+        if (typeof item.translatedText === 'object' && item.translatedText.latin) {
+            const latin = escapeHtml(item.translatedText.latin);
+            const arabic = escapeHtml(item.translatedText.arabic);
+            transliterationHtml += `<div class="transliteration">`;
+            if (uiLang === 'en' || uiLang === 'fr') {
+                transliterationHtml += `<p class="latin">${latin}</p>`;
+            } else { // Arabic UI
+                transliterationHtml += `<p class="latin">${latin}</p>`;
+                transliterationHtml += `<p class="arabic">${arabic}</p>`;
+            }
+            transliterationHtml += `</div>`;
+        }
+        
+        return `
         <div class="translation-item">
             <div class="header">
-                <span class="lang">${getFlagForLanguage(item.sourceLang)} ${item.sourceLang}</span>
+                <span class="lang">${getFlagForLanguage(item.sourceLang)} ${escapeHtml(item.sourceLang)}</span>
                 <span class="arrow">&rarr;</span>
-                <span class="lang">${getFlagForLanguage(item.targetLang)} ${item.targetLang} ${item.dialect ? `(${item.dialect})` : ''}</span>
+                <span class="lang">${getFlagForLanguage(item.targetLang)} ${escapeHtml(item.targetLang)} ${item.dialect ? `(${escapeHtml(item.dialect)})` : ''}</span>
             </div>
             <p class="source-text">${escapeHtml(item.sourceText)}</p>
-            <p class="translated-text">${escapeHtml(typeof item.translatedText === 'string' ? item.translatedText : item.translatedText.phoenician)}</p>
+            <p class="translated-text">${translatedTextDisplay}</p>
+            ${transliterationHtml}
             ${item.notes ? `<div class="notes"><strong>Notes:</strong><p>${escapeHtml(item.notes).replace(/\n/g, '<br>')}</p></div>` : ''}
         </div>
-    `).join('');
+    `}).join('');
 
     return `
         <!DOCTYPE html>
@@ -78,9 +100,25 @@ export const generatePrintableHtml = (translations: SavedTranslation[]): string 
                     font-family: 'Noto Sans Phoenician', serif; 
                     font-size: 1.5em; 
                     color: #6B46C1; 
-                    margin-bottom: 10px;
+                    margin-bottom: 5px;
                     direction: rtl; 
                     text-align: right;
+                }
+                .transliteration {
+                    text-align: right;
+                    padding-right: 2px;
+                    font-size: 0.9em;
+                    color: #4A5568;
+                    margin-bottom: 10px;
+                }
+                .transliteration .latin {
+                    margin: 0;
+                    font-style: italic;
+                    direction: ltr;
+                }
+                .transliteration .arabic {
+                    margin: 2px 0 0;
+                    direction: rtl;
                 }
                 .notes { 
                     margin-top: 15px; 
@@ -139,7 +177,7 @@ const wrapText = (text: string, maxCharsPerLine: number): string[] => {
     return lines.length > 0 ? lines : [''];
 };
 
-export const generateSvgDataUrl = (translations: SavedTranslation[], theme: 'light' | 'dark' | 'papyrus'): string => {
+export const generateSvgDataUrl = (translations: SavedTranslation[], theme: 'light' | 'dark' | 'papyrus', uiLang: UILang): string => {
     const PADDING = 25;
     const WIDTH = 600;
     const LINE_HEIGHT_NORMAL = 20;
@@ -205,6 +243,28 @@ export const generateSvgDataUrl = (translations: SavedTranslation[], theme: 'lig
             itemContent += `<text x="${WIDTH - PADDING}" y="${y + (LINE_HEIGHT_PHOENICIAN / 2)}" font-family="${FONT_PHOENICIAN}" font-size="22" fill="${primaryColor}" text-anchor="end">${escapeHtml(line)}</text>`;
             y += LINE_HEIGHT_PHOENICIAN;
         });
+
+        // Add transliterations
+        if (typeof item.translatedText === 'object' && item.translatedText.latin) {
+            y += 3;
+            const latin = item.translatedText.latin;
+            const arabic = item.translatedText.arabic;
+
+            const latinLines = wrapText(latin, 60);
+            latinLines.forEach(line => {
+                itemContent += `<text x="${WIDTH - PADDING}" y="${y}" text-anchor="end" font-family="${FONT_SANS}" font-size="13" fill="${textColor}" opacity="0.7" font-style="italic" direction="ltr">${escapeHtml(line)}</text>`;
+                y += LINE_HEIGHT_NORMAL - 6;
+            });
+
+            if (uiLang === 'ar' && arabic) {
+                y += 2;
+                const arabicLines = wrapText(arabic, 50);
+                arabicLines.forEach(line => {
+                    itemContent += `<text x="${WIDTH - PADDING}" y="${y}" text-anchor="end" font-family="${FONT_SANS}" font-size="14" fill="${textColor}" opacity="0.7" direction="rtl">${escapeHtml(line)}</text>`;
+                    y += LINE_HEIGHT_NORMAL - 5;
+                });
+            }
+        }
         y += 15;
         
         // Notes
