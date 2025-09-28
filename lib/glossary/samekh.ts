@@ -14,6 +14,8 @@ export const samekh: GlossaryEntry[] = [
   { phoenician: '𐤎𐤇𐤓', latin: 'sḥr', meaning: { en: 'Trade, to go around', fr: 'Commerce, faire le tour', ar: 'تجارة، يدور حول' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤎𐤋𐤄', latin: 'slh', meaning: { en: 'To cast away', fr: 'Jeter', ar: 'يرمي' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
   { phoenician: '𐤎𐤋𐤇', latin: 'slḥ', meaning: { en: 'To forgive', fr: 'Pardonner', ar: 'يغفر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤎𐤋𐤉𐤌', latin: 'slym', meaning: { en: 'Solunto (Soluntum, Sicily)', fr: 'Solonte (Soluntum, Sicile)', ar: 'سولوس (سولونتوم، صقلية)' }, grammar: { pos: 'Noun' }, category: 'location' },
+  { phoenician: '𐤎𐤋𐤊𐤉', latin: 'slky', meaning: { en: 'Solki (Sant\'Antioco, Sardinia)', fr: 'Solki (Sant\'Antioco, Sardaigne)', ar: 'سولكي (سانت أنطيوكو، سردينيا)' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤎𐤋𐤌', latin: 'slm', meaning: { en: 'Ladder', fr: 'Échelle', ar: 'سلم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤎𐤌𐤊', latin: 'smk', meaning: { en: 'To support, lean', fr: 'Soutenir, s\'appuyer', ar: 'يدعم، يتكئ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤎𐤏𐤃', latin: "sʿd", meaning: { en: 'To support, sustain', fr: 'Soutenir, maintenir', ar: 'يساند، يعيل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },

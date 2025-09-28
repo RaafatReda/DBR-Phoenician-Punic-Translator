@@ -24,7 +24,7 @@ export const lamedh: GlossaryEntry[] = [
   { phoenician: '𐤋𐤉𐤑', latin: 'lyṣ', meaning: { en: 'Scoffer, mocker', fr: 'Moqueur', ar: 'مستهزئ' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤋𐤊𐤔', latin: 'lkš', meaning: { en: 'Lixus, Morocco', fr: 'Lixus, Maroc', ar: 'ليكسوس، المغرب' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤋𐤌𐤃', latin: 'lmd', meaning: { en: 'To learn', fr: 'Apprendre', ar: 'يتعلم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤋𐤐𐤒𐤉', latin: 'lpqy', meaning: { en: 'Leptis Magna (Lamta, Tunisia)', fr: 'Leptis Magna (Lamta, Tunisie)', ar: 'لبدة الكبرى (لمطة، تونس)' }, grammar: { pos: 'Noun' }, category: 'location' },
+  { phoenician: '𐤋𐤐𐤒𐤉', latin: 'lpqy', meaning: { en: 'Leptis Magna (Libya) & Leptis Minor (Lamta, Tunisia)', fr: 'Leptis Magna (Libye) & Leptis Minor (Lamta, Tunisie)', ar: 'لبدة الكبرى (ليبيا) ولبدة الصغرى (لمطة، تونس)' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤋𐤏𐤂', latin: "lʿg", meaning: { en: 'To mock, stammer', fr: 'Se moquer, bégayer', ar: 'يسخر، يتلعثم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤋𐤏𐤈', latin: "lʿṭ", meaning: { en: 'To swallow', fr: 'Avaler', ar: 'يبتلع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤋𐤐𐤉𐤃', latin: 'lpyd', meaning: { en: 'Torch', fr: 'Torche', ar: 'شعلة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
