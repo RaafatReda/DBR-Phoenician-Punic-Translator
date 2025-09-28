@@ -241,58 +241,65 @@ export const translations: Record<UILang, Record<string, string>> = {
     shin: 'Shin', tooth: 'Tooth',
     taw: 'Taw', mark: 'Mark',
     grammarContentPhoenicianHtml: `
-      <h3>1. Sentence Structure</h3>
-      <p>Phoenician primarily uses a <strong>Verb-Subject-Object (VSO)</strong> word order, unlike English (SVO). It also frequently omits the verb "to be" in the present tense.</p>
+      <h3>1. Sentence Structure & Syntax</h3>
+      <p>Phoenician follows a structure common to many ancient Semitic languages.</p>
       <ul>
-        <li><strong>VSO Example:</strong> <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work" (Lit: "Did the man the work").</li>
-        <li><strong>"To Be" Omission:</strong> "The king is great" is written <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Lit: "The king great."</li>
-        <li><strong>Negation:</strong> The particle <code class="phoenician">𐤁𐤋</code> (bal) typically negates verbs.</li>
+        <li><strong>Word Order:</strong> The primary word order is <strong>Verb-Subject-Object (VSO)</strong>. Example: <code>pʿl h-ʾdm h-mlʾkt</code> (<code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code>) - "The man did the work" (lit. "Did the man the work"). SVO order can be used for emphasis.</li>
+        <li><strong>Negation:</strong> Verbs are typically negated with the particle <code>bal</code> (<code class="phoenician">𐤁𐤋</code>). Example: <code>bal ylk</code> (<code class="phoenician">𐤁𐤋 𐤉𐤋𐤊</code>) - "He will not go."</li>
+        <li><strong>Questions:</strong> Questions could be formed by intonation or by using interrogative words like <code>my</code> (<code class="phoenician">𐤌𐤉</code>) for "who?" and <code>mh</code> (<code class="phoenician">𐤌𐤄</code>) for "what?".</li>
+        <li><strong>Relative Clauses:</strong> Clauses are often introduced by the relative pronoun <code>ʾš</code> (<code class="phoenician">𐤀𐤔</code>), meaning "who, which, that". Example: <code>h-ʾš ʾš pʿl...</code> (<code class="phoenician">𐤄𐤀𐤔 𐤀𐤔 𐤐𐤏𐤋...</code>) - "The man who did...".</li>
       </ul>
-      <h3>2. Nouns and Pronouns</h3>
-      <p>Nouns have gender (masculine/feminine) and number (singular/plural). Possession is shown through the "construct state," where the first noun is grammatically bound to the second.</p>
+      <h3>2. Nouns, Pronouns & Determiners</h3>
+      <p>Nouns have gender (masculine/feminine) and number (singular/plural/dual).</p>
       <ul>
-        <li><strong>Gender/Number:</strong> 
-          <ul>
-            <li>Masculine: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, king) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, kings)</li>
-            <li>Feminine: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queen) &rarr; Plural: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, queens)</li>
-          </ul>
-        </li>
-        <li><strong>Construct State:</strong> "King of the city" is <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt). The definite article 'the' (<code class="phoenician">𐤄</code>) is only used on the final noun in the chain.</li>
-        <li><strong>Pronouns:</strong> Independent pronouns stand alone (e.g., <code class="phoenician">𐤀𐤍𐤊</code>, 'nk, "I"), while possessive pronouns are suffixes added to nouns (e.g., <code class="phoenician">𐤀𐤁𐤉</code>, 'by, "my father").</li>
+        <li><strong>Gender & Plurals:</strong> Masculine plurals usually end in <code>-m</code> (<code class="phoenician">𐤌</code>), while feminine singulars often end in <code>-t</code> (<code class="phoenician">𐤕</code>).</li>
+        <li><strong>Possession (Construct State):</strong> Possession is shown by placing nouns next to each other. The first noun is in the "construct" form (often shortened) and the last noun carries the definite article. Example: <code>mlk ṣr</code> (<code class="phoenician">𐤌𐤋𐤊 𐤑𐤓</code>) - "king of Tyre". To say "the king of Tyre", it is <code>mlk h-ṣr</code> (<code class="phoenician">𐤌𐤋𐤊 𐤄𐤑𐤓</code>).</li>
+        <li><strong>Possessive Suffixes:</strong> Pronouns can be attached to nouns as suffixes. Example: <code>ʾb</code> (<code class="phoenician">𐤀𐤁</code>) "father" becomes <code>ʾby</code> (<code class="phoenician">𐤀𐤁𐤉</code>) "my father".</li>
+        <li><strong>Demonstratives:</strong> "This" is typically <code>z</code> (<code class="phoenician">𐤆</code>).</li>
       </ul>
-      <h3>3. Verbs</h3>
-      <p>Verbs are built on three-consonant roots and are conjugated for person, number, gender, and aspect (not tense).</p>
+      <h3>3. Verbs & Conjugation</h3>
+      <p>Verbs are based on a three-consonant root and are conjugated based on aspect (completed vs. incomplete action) rather than tense.</p>
       <ul>
-        <li><strong>Perfect Aspect (Qatal):</strong> Describes a completed action (often translated as past tense).
-          <ul>
-            <li>Root <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - to write</li>
-            <li>He wrote: <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
-            <li>I wrote: <code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code> (ktbty)</li>
-          </ul>
-        </li>
-        <li><strong>Imperfect Aspect (Yiqtol):</strong> Describes an incomplete, ongoing, or future action.
-          <ul>
-            <li>He will write: <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
-            <li>I will write: <code class="phoenician">𐤀𐤊𐤕𐤁</code> ('ktb)</li>
-          </ul>
-        </li>
-      </ul>`,
+        <li><strong>Perfect Aspect (Qatal):</strong> Describes a completed action. Prefixes and suffixes indicate the person. Example (root K-T-B, to write): <code>ktb</code> (<code class="phoenician">𐤊𐤕𐤁</code>) - "he wrote"; <code>ktbt</code> (<code class="phoenician">𐤊𐤕𐤁𐤕</code>) - "she wrote"; <code>ktbty</code> (<code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code>) - "I wrote".</li>
+        <li><strong>Imperfect Aspect (Yiqtol):</strong> Describes an incomplete or future action. Example: <code>yktb</code> (<code class="phoenician">𐤉𐤊𐤕𐤁</code>) - "he will write"; <code>tktb</code> (<code class="phoenician">𐤕𐤊𐤕𐤁</code>) - "she will write"; <code>ʾktb</code> (<code class="phoenician">𐤀𐤊𐤕𐤁</code>) - "I will write".</li>
+        <li><strong>Imperative:</strong> Commands are formed from the verb stem. Example: <code>ktb!</code> (<code class="phoenician">𐤊𐤕𐤁</code>) - "Write!".</li>
+      </ul>
+      <h3>4. Prepositions & Particles</h3>
+      <p>Short particles are essential for connecting ideas.</p>
+      <ul>
+        <li><strong>Inseparable Prepositions:</strong> <code>b-</code> (<code class="phoenician">𐤁</code>) "in, with", <code>l-</code> (<code class="phoenician">𐤋</code>) "to, for", <code>k-</code> (<code class="phoenician">𐤊</code>) "as, like". These attach directly to the following word.</li>
+        <li><strong>Other Particles:</strong> <code>ʿl</code> (<code class="phoenician">𐤏𐤋</code>) "on, upon", <code>mn</code> (<code class="phoenician">𐤌𐤍</code>) "from", <code>ʿm</code> (<code class="phoenician">𐤏𐤌</code>) "with".</li>
+      </ul>
+      <h3>5. Numbers & Counting</h3>
+      <p>Numbers agree in gender with the noun they modify. Examples: <code>ʾḥd</code> (<code class="phoenician">𐤀𐤇𐤃</code>) - one, <code>šnm</code> (<code class="phoenician">𐤔𐤍𐤌</code>) - two, <code>šlš</code> (<code class="phoenician">𐤔𐤋𐤔</code>) - three, <code>ʿšr</code> (<code class="phoenician">𐤏𐤔𐤓</code>) - ten.</p>`,
     grammarContentPunicHtml: `
-      <h3>1. Core Grammar (from Phoenician)</h3>
-      <p>Punic grammar is a direct descendant of Phoenician. It retains the core <strong>Verb-Subject-Object (VSO)</strong> word order and the common omission of the present-tense "to be." The fundamental systems of noun gender/number and the triliteral verb root remain the same.</p>
+      <h3>1. From Phoenician to Punic</h3>
+      <p>Punic grammar is a direct descendant of Phoenician, retaining its core Semitic structure. The primary changes occurred in pronunciation and spelling conventions over centuries of use in North Africa and the Mediterranean.</p>
+      <h3>2. Phonology & Pronunciation (Key Changes)</h3>
+      <p>The most significant differences between Phoenician and Punic are in their sounds and how they were written.</p>
       <ul>
-        <li>Example: <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "The man did the work."</li>
+        <li><strong>Weakened Gutturals:</strong> The throaty sounds of consonants like <code>ʿayin</code> (<code class="punic">𐤏</code>) and <code>ḥet</code> (<code class="punic">𐤇</code>) weakened and were often dropped in pronunciation and writing, especially in Late Punic.</li>
+        <li><strong>Vowel Indication (Matres Lectionis):</strong> Punic made greater use of consonant letters to indicate vowels. This was rare in early Phoenician.
+          <ul>
+            <li><code>ʾaleph</code> (<code class="punic">𐤀</code>) became a placeholder for various vowel sounds.</li>
+            <li><code>waw</code> (<code class="punic">𐤅</code>) was used for 'u' and 'o' sounds.</li>
+            <li><code>yod</code> (<code class="punic">𐤉</code>) was used for 'i' and 'e' sounds.</li>
+          </ul>
+          This makes Punic inscriptions crucial for understanding how the language was spoken.
+        </li>
+        <li><strong>Vowel Shifts:</strong> The pronunciation of vowels changed over time. For example, the original long 'ā' often shifted to an 'ō' sound, which could then become 'ū' in Late Punic. Latin transcriptions of Punic names (e.g., Hannibal) help us reconstruct these sounds.</li>
       </ul>
-      <h3>2. Key Punic Developments</h3>
-      <p>Punic evolved over centuries, showing distinct changes, particularly in its later forms (Neo-Punic), due to time and contact with other languages like Berber and Latin.</p>
+      <h3>3. Verbs & Nouns</h3>
+      <p>The fundamental verb (triliteral root, perfect/imperfect aspects) and noun systems (gender, number, construct state) remain the same as in Phoenician.</p>
       <ul>
-        <li><strong>Script & Spelling:</strong> The Punic script became more cursive and simplified. A key change was the weakening and eventual dropping of guttural consonants like <code class="punic">𐤇</code> (ḥ) and <code class="punic">𐤏</code> (ʿ) in spelling and pronunciation.</li>
-        <li><strong>Vowel Indication (Matres Lectionis):</strong> Late Punic increasingly used consonant letters to indicate vowels, a practice rare in early Phoenician. <code class="punic">𐤀</code> ('aleph) could mark any vowel, while <code class="punic">𐤅</code> (waw) and <code class="punic">𐤉</code> (yod) were used for 'u' and 'i' respectively. This makes Punic inscriptions a valuable source for understanding the language's vowels.</li>
-        <li><strong>Phonology (Sound):</strong> Vowels shifted over time. For example, the original long 'a' and 'o' vowels often merged into an 'o' sound, which in turn often shifted to 'u' in Late Punic. The pronunciation of 'b' between vowels softened to a 'v' sound.</li>
-        <li><strong>Pronouns:</strong> The 3rd person masculine singular pronoun <code class="phoenician">𐤄𐤅𐤀</code> (hw', "he") became <code class="punic">𐤄𐤀</code> (h') in later Punic.</li>
+        <li><strong>Pronouns:</strong> Some pronouns evolved. For instance, the 3rd person masculine singular pronoun <code>hwʾ</code> (<code class="phoenician">𐤄𐤅𐤀</code>, "he") often became simplified to <code>hʾ</code> (<code class="punic">𐤄𐤀</code>) in later Punic.</li>
+        <li><strong>Loanwords:</strong> Punic incorporated words from surrounding languages, primarily Berber and Latin, especially for administrative and military terms.</li>
       </ul>
-      <h3>3. Example in Punic Context</h3>
-      <p>Consider the word for "voice," <code class="phoenician">𐤒𐤅𐤋</code> (qwl) in Phoenician. In a Latin transcription of a Punic text, we might find it written as <code class="punic">YTH</code>, suggesting a pronunciation closer to /yuth/ or /iuth/, reflecting the vowel shifts.</p>`
+      <h3>4. Idioms & Expressions</h3>
+      <p>Punic expressions continued Phoenician traditions but were also influenced by local North African cultures. Religious formulas, such as dedications to the gods <strong>Ba'al Hammon</strong> and <strong>Tanit</strong>, are very common in Punic inscriptions.</p>
+      <ul>
+        <li>A common votive formula is <code>l-ʾdn l-bʿl ḥmn... ndr ʾš ndr...</code> (<code class="punic">𐤋𐤀𐤃𐤍 𐤋𐤁𐤏𐤋 𐤇𐤌𐤍... 𐤍𐤃𐤓 𐤀𐤔 𐤍𐤃𐤓...</code>) which means "To the Lord, to Ba'al Hammon... the vow which [Name] vowed...".</li>
+      </ul>`
   },
   fr: {
     mainTitle: 'Traducteur DBR',
@@ -534,58 +541,65 @@ export const translations: Record<UILang, Record<string, string>> = {
     shin: 'Shin', tooth: 'Dent',
     taw: 'Taw', mark: 'Marque',
     grammarContentPhoenicianHtml: `
-      <h3>1. Structure de la Phrase</h3>
-      <p>Le phénicien utilise principalement un ordre des mots <strong>Verbe-Sujet-Objet (VSO)</strong>, contrairement au français (SVO). Il omet aussi fréquemment le verbe "être" au présent.</p>
+      <h3>1. Structure de la Phrase & Syntaxe</h3>
+      <p>Le phénicien suit une structure commune à de nombreuses langues sémitiques anciennes.</p>
       <ul>
-        <li><strong>Exemple VSO :</strong> <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail" (Litt : "A fait l'homme le travail").</li>
-        <li><strong>Omission de "Être" :</strong> "Le roi est grand" s'écrit <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - Litt : "Le roi grand."</li>
-        <li><strong>Négation :</strong> La particule <code class="phoenician">𐤁𐤋</code> (bal) nie typiquement les verbes.</li>
+        <li><strong>Ordre des mots :</strong> L'ordre principal est <strong>Verbe-Sujet-Objet (VSO)</strong>. Exemple : <code>pʿl h-ʾdm h-mlʾkt</code> (<code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code>) - "L'homme fit le travail" (litt. "Fit l'homme le travail"). L'ordre SVO peut être utilisé pour l'emphase.</li>
+        <li><strong>Négation :</strong> Les verbes sont généralement niés avec la particule <code>bal</code> (<code class="phoenician">𐤁𐤋</code>). Exemple : <code>bal ylk</code> (<code class="phoenician">𐤁𐤋 𐤉𐤋𐤊</code>) - "Il n'ira pas."</li>
+        <li><strong>Interrogations :</strong> Les questions pouvaient être formées par l'intonation ou en utilisant des mots interrogatifs comme <code>my</code> (<code class="phoenician">𐤌𐤉</code>) pour "qui ?" et <code>mh</code> (<code class="phoenician">𐤌𐤄</code>) pour "quoi ?".</li>
+        <li><strong>Propositions relatives :</strong> Les propositions sont souvent introduites par le pronom relatif <code>ʾš</code> (<code class="phoenician">𐤀𐤔</code>), signifiant "qui, que". Exemple : <code>h-ʾš ʾš pʿl...</code> (<code class="phoenician">𐤄𐤀𐤔 𐤀𐤔 𐤐𐤏𐤋...</code>) - "L'homme qui fit...".</li>
       </ul>
-      <h3>2. Noms et Pronoms</h3>
-      <p>Les noms ont un genre (masculin/féminin) et un nombre (singulier/pluriel). La possession est indiquée par l'« état construit », où le premier nom est grammaticalement lié au second.</p>
+      <h3>2. Noms, Pronoms & Déterminants</h3>
+      <p>Les noms ont un genre (masculin/féminin) et un nombre (singulier/pluriel/duel).</p>
       <ul>
-        <li><strong>Genre/Nombre :</strong> 
-          <ul>
-            <li>Masculin : <code class="phoenician">𐤌𐤋𐤊</code> (mlk, roi) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, rois)</li>
-            <li>Féminin : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reine) &rarr; Pluriel : <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, reines)</li>
-          </ul>
-        </li>
-        <li><strong>État Construit :</strong> "Roi de la cité" est <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt). L'article défini 'le' (<code class="phoenician">𐤄</code>) n'est utilisé que sur le dernier nom de la chaîne.</li>
-        <li><strong>Pronoms :</strong> Les pronoms indépendants sont autonomes (ex: <code class="phoenician">𐤀𐤍𐤊</code>, 'nk, "je"), tandis que les pronoms possessifs sont des suffixes ajoutés aux noms (ex: <code class="phoenician">𐤀𐤁𐤉</code>, 'by, "mon père").</li>
+        <li><strong>Genre & Pluriels :</strong> Les pluriels masculins se terminent généralement par <code>-m</code> (<code class="phoenician">𐤌</code>), tandis que les singuliers féminins se terminent souvent par <code>-t</code> (<code class="phoenician">𐤕</code>).</li>
+        <li><strong>Possession (État construit) :</strong> La possession est indiquée en plaçant les noms les uns à côté des autres. Le premier nom est à la forme "construite" (souvent raccourcie) et le dernier nom porte l'article défini. Exemple : <code>mlk ṣr</code> (<code class="phoenician">𐤌𐤋𐤊 𐤑𐤓</code>) - "roi de Tyr". Pour dire "le roi de Tyr", on dit <code>mlk h-ṣr</code> (<code class="phoenician">𐤌𐤋𐤊 𐤄𐤑𐤓</code>).</li>
+        <li><strong>Suffixes possessifs :</strong> Les pronoms peuvent être attachés aux noms comme suffixes. Exemple : <code>ʾb</code> (<code class="phoenician">𐤀𐤁</code>) "père" devient <code>ʾby</code> (<code class="phoenician">𐤀𐤁𐤉</code>) "mon père".</li>
+        <li><strong>Démonstratifs :</strong> "Ceci" est typiquement <code>z</code> (<code class="phoenician">𐤆</code>).</li>
       </ul>
-      <h3>3. Verbes</h3>
-      <p>Les verbes sont construits sur des racines de trois consonnes et sont conjugués pour la personne, le nombre, le genre et l'aspect (pas le temps).</p>
+      <h3>3. Verbes & Conjugaison</h3>
+      <p>Les verbes sont basés sur une racine de trois consonnes et sont conjugués selon l'aspect (action accomplie vs inaccomplie) plutôt que le temps.</p>
       <ul>
-        <li><strong>Aspect Parfait (Qatal) :</strong> Décrit une action achevée (souvent traduite par le passé).
-          <ul>
-            <li>Racine <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - écrire</li>
-            <li>Il a écrit : <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
-            <li>J'ai écrit : <code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code> (ktbty)</li>
-          </ul>
-        </li>
-        <li><strong>Aspect Imparfait (Yiqtol) :</strong> Décrit une action inachevée, en cours ou future.
-          <ul>
-            <li>Il écrira : <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
-            <li>J'écrirai : <code class="phoenician">𐤀𐤊𐤕𐤁</code> ('ktb)</li>
-          </ul>
-        </li>
-      </ul>`,
+        <li><strong>Aspect accompli (Qatal) :</strong> Décrit une action terminée. Les préfixes et suffixes indiquent la personne. Exemple (racine K-T-B, écrire) : <code>ktb</code> (<code class="phoenician">𐤊𐤕𐤁</code>) - "il a écrit" ; <code>ktbt</code> (<code class="phoenician">𐤊𐤕𐤁𐤕</code>) - "elle a écrit" ; <code>ktbty</code> (<code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code>) - "j'ai écrit".</li>
+        <li><strong>Aspect inaccompli (Yiqtol) :</strong> Décrit une action inachevée ou future. Exemple : <code>yktb</code> (<code class="phoenician">𐤉𐤊𐤕𐤁</code>) - "il écrira" ; <code>tktb</code> (<code class="phoenician">𐤕𐤊𐤕𐤁</code>) - "elle écrira" ; <code>ʾktb</code> (<code class="phoenician">𐤀𐤊𐤕𐤁</code>) - "j'écrirai".</li>
+        <li><strong>Impératif :</strong> Les ordres sont formés à partir du radical du verbe. Exemple : <code>ktb!</code> (<code class="phoenician">𐤊𐤕𐤁</code>) - "Écris !".</li>
+      </ul>
+      <h3>4. Prépositions & Particules</h3>
+      <p>Les particules courtes sont essentielles pour relier les idées.</p>
+      <ul>
+        <li><strong>Prépositions inséparables :</strong> <code>b-</code> (<code class="phoenician">𐤁</code>) "dans, avec", <code>l-</code> (<code class="phoenician">𐤋</code>) "à, pour", <code>k-</code> (<code class="phoenician">𐤊</code>) "comme". Elles s'attachent directement au mot suivant.</li>
+        <li><strong>Autres particules :</strong> <code>ʿl</code> (<code class="phoenician">𐤏𐤋</code>) "sur", <code>mn</code> (<code class="phoenician">𐤌𐤍</code>) "de", <code>ʿm</code> (<code class="phoenician">𐤏𐤌</code>) "avec".</li>
+      </ul>
+      <h3>5. Nombres & Comptage</h3>
+      <p>Les nombres s'accordent en genre avec le nom qu'ils modifient. Exemples : <code>ʾḥd</code> (<code class="phoenician">𐤀𐤇𐤃</code>) - un, <code>šnm</code> (<code class="phoenician">𐤔𐤍𐤌</code>) - deux, <code>šlš</code> (<code class="phoenician">𐤔𐤋𐤔</code>) - trois, <code>ʿšr</code> (<code class="phoenician">𐤏𐤔𐤓</code>) - dix.</p>`,
     grammarContentPunicHtml: `
-      <h3>1. Grammaire de Base (du phénicien)</h3>
-      <p>La grammaire punique est une descendante directe du phénicien. Elle conserve l'ordre des mots de base <strong>Verbe-Sujet-Objet (VSO)</strong> et l'omission courante du verbe "être" au présent. Les systèmes fondamentaux de genre/nombre des noms et de la racine verbale trilitère restent les mêmes.</p>
+      <h3>1. Du Phénicien au Punique</h3>
+      <p>La grammaire punique est une descendante directe du phénicien, conservant sa structure sémitique de base. Les principaux changements se sont produits dans la prononciation et les conventions orthographiques au fil des siècles d'utilisation en Afrique du Nord et en Méditerranée.</p>
+      <h3>2. Phonologie & Prononciation (Changements clés)</h3>
+      <p>Les différences les plus significatives entre le phénicien et le punique résident dans leurs sons et leur écriture.</p>
       <ul>
-        <li>Exemple : <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "L'homme a fait le travail."</li>
+        <li><strong>Affaiblissement des gutturales :</strong> Les sons gutturaux des consonnes comme <code>ʿayin</code> (<code class="punic">𐤏</code>) et <code>ḥet</code> (<code class="punic">𐤇</code>) se sont affaiblis et ont souvent été abandonnés dans la prononciation et l'écriture, surtout en punique tardif.</li>
+        <li><strong>Indication des voyelles (Matres Lectionis) :</strong> Le punique a fait un plus grand usage des lettres-consonnes pour indiquer les voyelles. C'était rare en phénicien ancien.
+          <ul>
+            <li><code>ʾaleph</code> (<code class="punic">𐤀</code>) est devenu un substitut pour divers sons de voyelles.</li>
+            <li><code>waw</code> (<code class="punic">𐤅</code>) était utilisé pour les sons 'u' et 'o'.</li>
+            <li><code>yod</code> (<code class="punic">𐤉</code>) était utilisé pour les sons 'i' et 'e'.</li>
+          </ul>
+          Cela rend les inscriptions puniques cruciales pour comprendre comment la langue était parlée.
+        </li>
+        <li><strong>Changements vocaliques :</strong> La prononciation des voyelles a changé avec le temps. Par exemple, le 'ā' long original a souvent évolué en un son 'ō', qui pouvait ensuite devenir 'ū' en punique tardif. Les transcriptions latines de noms puniques (par ex., Hannibal) nous aident à reconstituer ces sons.</li>
       </ul>
-      <h3>2. Développements Clés du Punique</h3>
-      <p>Le punique a évolué au fil des siècles, montrant des changements distincts, en particulier dans ses formes tardives (néo-punique), en raison du temps et du contact avec d'autres langues comme le berbère et le latin.</p>
+      <h3>3. Verbes & Noms</h3>
+      <p>Les systèmes fondamentaux du verbe (racine trilitère, aspects accompli/inaccompli) et du nom (genre, nombre, état construit) restent les mêmes qu'en phénicien.</p>
       <ul>
-        <li><strong>Écriture & Orthographe :</strong> L'écriture punique est devenue plus cursive et simplifiée. Un changement clé a été l'affaiblissement et la disparition éventuelle des consonnes gutturales comme <code class="punic">𐤇</code> (ḥ) et <code class="punic">𐤏</code> (ʿ) dans l'orthographe et la prononciation.</li>
-        <li><strong>Indication des Voyelles (Matres Lectionis) :</strong> Le punique tardif utilisait de plus en plus des lettres-consonnes pour indiquer les voyelles, une pratique rare en phénicien ancien. <code class="punic">𐤀</code> ('aleph) pouvait marquer n'importe quelle voyelle, tandis que <code class="punic">𐤅</code> (waw) et <code class="punic">𐤉</code> (yod) étaient utilisées pour 'u' et 'i' respectivement. Cela fait des inscriptions puniques une source précieuse pour comprendre les voyelles de la langue.</li>
-        <li><strong>Phonologie (Son) :</strong> Les voyelles ont changé avec le temps. Par exemple, les voyelles longues originales 'a' et 'o' ont souvent fusionné en un son 'o', qui à son tour a souvent évolué en 'u' en punique tardif. La prononciation de 'b' entre les voyelles s'est adoucie en un son 'v'.</li>
-        <li><strong>Pronoms :</strong> Le pronom de la 3ème personne du singulier masculin <code class="phoenician">𐤄𐤅𐤀</code> (hw', "il") est devenu <code class="punic">𐤄𐤀</code> (h') en punique tardif.</li>
+        <li><strong>Pronoms :</strong> Certains pronoms ont évolué. Par exemple, le pronom de la 3e personne du masculin singulier <code>hwʾ</code> (<code class="phoenician">𐤄𐤅𐤀</code>, "il") est souvent devenu simplifié en <code>hʾ</code> (<code class="punic">𐤄𐤀</code>) en punique tardif.</li>
+        <li><strong>Mots d'emprunt :</strong> Le punique a incorporé des mots des langues environnantes, principalement le berbère et le latin, en particulier pour les termes administratifs et militaires.</li>
       </ul>
-      <h3>3. Exemple en Contexte Punique</h3>
-      <p>Considérez le mot pour "voix", <code class="phoenician">𐤒𐤅𐤋</code> (qwl) en phénicien. Dans une transcription latine d'un texte punique, on pourrait le trouver écrit comme <code class="punic">YTH</code>, suggérant une prononciation plus proche de /yuth/ ou /iuth/, reflétant les changements de voyelles.</p>`
+      <h3>4. Idiomes & Expressions</h3>
+      <p>Les expressions puniques ont perpétué les traditions phéniciennes mais ont également été influencées par les cultures locales d'Afrique du Nord. Les formules religieuses, telles que les dédicaces aux dieux <strong>Ba'al Hammon</strong> et <strong>Tanit</strong>, sont très courantes dans les inscriptions puniques.</p>
+      <ul>
+        <li>Une formule votive courante est <code>l-ʾdn l-bʿl ḥmn... ndr ʾš ndr...</code> (<code class="punic">𐤋𐤀𐤃𐤍 𐤋𐤁𐤏𐤋 𐤇𐤌𐤍... 𐤍𐤃𐤓 𐤀𐤔 𐤍𐤃𐤓...</code>) qui signifie "Au Seigneur, à Ba'al Hammon... le vœu que [Nom] a fait...".</li>
+      </ul>`
   },
   ar: {
     mainTitle: 'مترجم DBR',
@@ -827,57 +841,64 @@ export const translations: Record<UILang, Record<string, string>> = {
     shin: 'شين', tooth: 'سن',
     taw: 'تاو', mark: 'علامة',
     grammarContentPhoenicianHtml: `
-      <h3>١. بنية الجملة</h3>
-      <p>تستخدم الفينيقية بشكل أساسي ترتيب الكلمات <strong>فعل-فاعل-مفعول به (VSO)</strong>، على عكس الإنجليزية (SVO). كما أنها تحذف بشكل متكرر فعل "الكينونة" في زمن المضارع.</p>
+      <h3>١. بنية الجملة والصياغة</h3>
+      <p>تتبع اللغة الفينيقية بنية شائعة في العديد من اللغات السامية القديمة.</p>
       <ul>
-        <li><strong>مثال VSO:</strong> <code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
-        <li><strong>حذف "الكينونة":</strong> تُكتب جملة "الملك عظيم" هكذا <code class="phoenician">𐤄𐤌𐤋𐤊 𐤂𐤃𐤋</code> (hmlk gdl) - حرفياً: "الملك عظيم".</li>
-        <li><strong>النفي:</strong> تُستخدم الأداة <code class="phoenician">𐤁𐤋</code> (bal) عادةً لنفي الأفعال.</li>
+        <li><strong>ترتيب الكلمات:</strong> الترتيب الأساسي للكلمات هو <strong>فعل-فاعل-مفعول به (VSO)</strong>. مثال: <code>pʿl h-ʾdm h-mlʾkt</code> (<code class="phoenician">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code>) - "فعل الرجل العمل". يمكن استخدام ترتيب فاعل-فعل-مفعول به للتأكيد.</li>
+        <li><strong>النفي:</strong> عادةً ما يتم نفي الأفعال باستخدام الأداة <code>bal</code> (<code class="phoenician">𐤁𐤋</code>). مثال: <code>bal ylk</code> (<code class="phoenician">𐤁𐤋 𐤉𐤋𐤊</code>) - "لن يذهب."</li>
+        <li><strong>الاستفهام:</strong> يمكن تكوين الأسئلة عن طريق النبرة الصوتية أو باستخدام كلمات استفهام مثل <code>my</code> (<code class="phoenician">𐤌𐤉</code>) لـ "من؟" و <code>mh</code> (<code class="phoenician">𐤌𐤄</code>) لـ "ماذا؟".</li>
+        <li><strong>الجمل الموصولة:</strong> غالبًا ما تُقدَّم الجمل بالضمير الموصول <code>ʾš</code> (<code class="phoenician">𐤀𐤔</code>)، والذي يعني "الذي، التي". مثال: <code>h-ʾš ʾš pʿl...</code> (<code class="phoenician">𐤄𐤀𐤔 𐤀𐤔 𐤐𐤏𐤋...</code>) - "الرجل الذي فعل...".</li>
       </ul>
-      <h3>٢. الأسماء والضمائر</h3>
-      <p>للأسماء جنس (مذكر/مؤنث) وعدد (مفرد/جمع). تُظهر الملكية من خلال "حالة الإضافة"، حيث يرتبط الاسم الأول بالثاني قواعدياً.</p>
+      <h3>٢. الأسماء والضمائر وأدوات التعريف</h3>
+      <p>للأسماء جنس (مذكر/مؤنث) وعدد (مفرد/جمع/مثنى).</p>
       <ul>
-        <li><strong>الجنس/العدد:</strong>
-          <ul>
-            <li>مذكر: <code class="phoenician">𐤌𐤋𐤊</code> (mlk, ملك) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤌</code> (mlkm, ملوك)</li>
-            <li>مؤنث: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكة) &rarr; الجمع: <code class="phoenician">𐤌𐤋𐤊𐤕</code> (mlkt, ملكات)</li>
-          </ul>
-        </li>
-        <li><strong>حالة الإضافة:</strong> "ملك المدينة" هو <code class="phoenician">𐤌𐤋𐤊 𐤒𐤓𐤕</code> (mlk qrt). أداة التعريف 'الـ' (<code class="phoenician">𐤄</code>) تُستخدم فقط مع الاسم الأخير في السلسلة.</li>
-        <li><strong>الضمائر:</strong> الضمائر المنفصلة تأتي بمفردها (مثل <code class="phoenician">𐤀𐤍𐤊</code>, 'nk, "أنا")، بينما الضمائر الملكية هي لاحقات تُضاف إلى الأسماء (مثل <code class="phoenician">𐤀𐤁𐤉</code>, 'by, "أبي").</li>
+        <li><strong>الجنس والجمع:</strong> عادةً ما ينتهي جمع المذكر بـ <code>-m</code> (<code class="phoenician">𐤌</code>)، بينما غالبًا ما ينتهي المفرد المؤنث بـ <code>-t</code> (<code class="phoenician">𐤕</code>).</li>
+        <li><strong>الملكية (حالة الإضافة):</strong> تُظهر الملكية بوضع الأسماء بجانب بعضها. يكون الاسم الأول في صيغة "الإضافة" (غالبًا ما يكون مختصرًا) ويحمل الاسم الأخير أداة التعريف. مثال: <code>mlk ṣr</code> (<code class="phoenician">𐤌𐤋𐤊 𐤑𐤓</code>) - "ملك صور". لقول "ملك صور"، تكون <code>mlk h-ṣr</code> (<code class="phoenician">𐤌𐤋𐤊 𐤄𐤑𐤓</code>).</li>
+        <li><strong>لواحق الملكية:</strong> يمكن إلحاق الضمائر بالأسماء كـ لواحق. مثال: <code>ʾb</code> (<code class="phoenician">𐤀𐤁</code>) "أب" تصبح <code>ʾby</code> (<code class="phoenician">𐤀𐤁𐤉</code>) "أبي".</li>
+        <li><strong>ضمائر الإشارة:</strong> "هذا" عادة ما تكون <code>z</code> (<code class="phoenician">𐤆</code>).</li>
       </ul>
-      <h3>٣. الأفعال</h3>
-      <p>تُبنى الأفعال على جذور ثلاثية وتُصرف حسب الشخص، العدد، الجنس، والصيغة (وليس الزمن).</p>
+      <h3>٣. الأفعال والتصريف</h3>
+      <p>تستند الأفعال إلى جذر ثلاثي وتُصرف بناءً على الصيغة (فعل مكتمل مقابل فعل غير مكتمل) بدلاً من الزمن.</p>
       <ul>
-        <li><strong>الصيغة التامة (قتَل):</strong> تصف فعلاً مكتملاً (غالباً ما تُترجم كفعل ماضٍ).
-          <ul>
-            <li>الجذر <code class="phoenician">𐤊𐤕𐤁</code> (k-t-b) - كتب</li>
-            <li>هو كتب: <code class="phoenician">𐤊𐤕𐤁</code> (ktb)</li>
-            <li>أنا كتبت: <code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code> (ktbty)</li>
-          </ul>
-        </li>
-        <li><strong>الصيغة غير التامة (يقتُل):</strong> تصف فعلاً غير مكتمل، أو مستمر، أو مستقبلي.
-          <ul>
-            <li>هو سيكتب: <code class="phoenician">𐤉𐤊𐤕𐤁</code> (yktb)</li>
-            <li>أنا سأكتب: <code class="phoenician">𐤀𐤊𐤕𐤁</code> ('ktb)</li>
-          </ul>
-        </li>
-      </ul>`,
+        <li><strong>الصيغة التامة (قتَل):</strong> تصف فعلاً مكتملاً. تشير السوابق واللواحق إلى الشخص. مثال (الجذر ك-ت-ب، يكتب): <code>ktb</code> (<code class="phoenician">𐤊𐤕𐤁</code>) - "هو كتب"؛ <code>ktbt</code> (<code class="phoenician">𐤊𐤕𐤁𐤕</code>) - "هي كتبت"؛ <code>ktbty</code> (<code class="phoenician">𐤊𐤕𐤁𐤕𐤉</code>) - "أنا كتبت".</li>
+        <li><strong>الصيغة غير التامة (يقتُل):</strong> تصف فعلاً غير مكتمل أو مستقبلي. مثال: <code>yktb</code> (<code class="phoenician">𐤉𐤊𐤕𐤁</code>) - "هو سيكتب"؛ <code>tktb</code> (<code class="phoenician">𐤕𐤊𐤕𐤁</code>) - "هي ستكتب"؛ <code>ʾktb</code> (<code class="phoenician">𐤀𐤊𐤕𐤁</code>) - "أنا سأكتب".</li>
+        <li><strong>صيغة الأمر:</strong> تُشتق الأوامر من جذر الفعل. مثال: <code>ktb!</code> (<code class="phoenician">𐤊𐤕𐤁</code>) - "اكتب!".</li>
+      </ul>
+      <h3>٤. حروف الجر والأدوات</h3>
+      <p>الأدوات القصيرة ضرورية لربط الأفكار.</p>
+      <ul>
+        <li><strong>حروف الجر المتصلة:</strong> <code>b-</code> (<code class="phoenician">𐤁</code>) "في، بـ"، <code>l-</code> (<code class="phoenician">𐤋</code>) "لـ، إلى"، <code>k-</code> (<code class="phoenician">𐤊</code>) "كـ، مثل". تتصل هذه مباشرة بالكلمة التالية.</li>
+        <li><strong>أدوات أخرى:</strong> <code>ʿl</code> (<code class="phoenician">𐤏𐤋</code>) "على، فوق"، <code>mn</code> (<code class="phoenician">𐤌𐤍</code>) "من"، <code>ʿm</code> (<code class="phoenician">𐤏𐤌</code>) "مع".</li>
+      </ul>
+      <h3>٥. الأرقام والعد</h3>
+      <p>تتوافق الأرقام في الجنس مع الاسم الذي تصفه. أمثلة: <code>ʾḥd</code> (<code class="phoenician">𐤀𐤇𐤃</code>) - واحد، <code>šnm</code> (<code class="phoenician">𐤔𐤍𐤌</code>) - اثنان، <code>šlš</code> (<code class="phoenician">𐤔𐤋𐤔</code>) - ثلاثة، <code>ʿšr</code> (<code class="phoenician">𐤏𐤔𐤓</code>) - عشرة.</p>`,
     grammarContentPunicHtml: `
-      <h3>١. القواعد الأساسية (من الفينيقية)</h3>
-      <p>القواعد البونيقية هي سليلة مباشرة للفينيقية. تحتفظ بترتيب الكلمات الأساسي <strong>فعل-فاعل-مفعول به (VSO)</strong> والحذف الشائع لفعل "الكينونة" في زمن المضارع. تظل الأنظمة الأساسية لجنس/عدد الأسماء والجذر الفعلي الثلاثي كما هي.</p>
+      <h3>١. من الفينيقية إلى البونيقية</h3>
+      <p>تعتبر القواعد البونيقية سليلة مباشرة للغة الفينيقية، حيث تحتفظ ببنيتها السامية الأساسية. حدثت التغييرات الرئيسية في النطق وقواعد الإملاء على مدى قرون من الاستخدام في شمال إفريقيا والبحر الأبيض المتوسط.</p>
+      <h3>٢. علم الأصوات والنطق (التغييرات الرئيسية)</h3>
+      <p>تكمن أهم الفروق بين الفينيقية والبونيقية في أصواتهما وكيفية كتابتها.</p>
       <ul>
-        <li>مثال: <code class="punic">𐤐𐤏𐤋 𐤄𐤀𐤃𐤌 𐤄𐤌𐤋𐤀𐤊𐤕</code> (pʿl h'dm hml'kt) - "فعل الرجل العمل".</li>
+        <li><strong>إضعاف الحروف الحلقية:</strong> ضعفت الأصوات الحلقية للحروف الساكنة مثل <code>ʿayin</code> (<code class="punic">𐤏</code>) و <code>ḥet</code> (<code class="punic">𐤇</code>) وغالباً ما أُسقطت في النطق والكتابة، خاصة في اللغة البونيقية المتأخرة.</li>
+        <li><strong>الإشارة إلى الحركات (أمهات القراءة):</strong> استخدمت اللغة البونيقية الحروف الساكنة بشكل أكبر للإشارة إلى الحركات. كان هذا نادرًا في الفينيقية المبكرة.
+          <ul>
+            <li>أصبحت <code>ʾaleph</code> (<code class="punic">𐤀</code>) رمزًا نائبًا لأصوات حركات مختلفة.</li>
+            <li>استُخدمت <code>waw</code> (<code class="punic">𐤅</code>) لأصوات 'u' و 'o'.</li>
+            <li>استُخدمت <code>yod</code> (<code class="punic">𐤉</code>) لأصوات 'i' و 'e'.</li>
+          </ul>
+          وهذا يجعل النقوش البونيقية حاسمة لفهم كيفية نطق اللغة.
+        </li>
+        <li><strong>تحولات الحركات:</strong> تغير نطق الحركات بمرور الوقت. على سبيل المثال، غالبًا ما تحولت الحركة الطويلة الأصلية 'ā' إلى صوت 'ō'، والذي بدوره يمكن أن يصبح 'ū' في البونيقية المتأخرة. تساعدنا عمليات النقل الحرفي اللاتينية للأسماء البونيقية (مثل Hannibal) على إعادة بناء هذه الأصوات.</li>
       </ul>
-      <h3>٢. التطورات البونيقية الرئيسية</h3>
-      <p>تطورت البونيقية على مر القرون، مظهرة تغييرات واضحة، خاصة في أشكالها المتأخرة (البونيقية الجديدة)، بسبب الزمن والتواصل مع لغات أخرى مثل البربرية واللاتينية.</p>
+      <h3>٣. الأفعال والأسماء</h3>
+      <p>تظل أنظمة الأفعال (الجذر الثلاثي، الصيغ التامة وغير التامة) والأسماء (الجنس، العدد، حالة الإضافة) الأساسية كما هي في الفينيقية.</p>
       <ul>
-        <li><strong>الخط والإملاء:</strong> أصبح الخط البونيقي أكثر تعقيدًا وتبسيطًا. كان التغيير الرئيسي هو إضعاف وإسقاط الحروف الحلقية في النهاية مثل <code class="punic">𐤇</code> (ḥ) و <code class="punic">𐤏</code> (ʿ) في الإملاء والنطق.</li>
-        <li><strong>الإشارة إلى الحركات (أمهات القراءة):</strong> استخدمت البونيقية المتأخرة بشكل متزايد الحروف الساكنة للإشارة إلى الحركات، وهي ممارسة نادرة في الفينيقية المبكرة. <code class="punic">𐤀</code> (ألف) يمكن أن تشير إلى أي حركة، بينما <code class="punic">𐤅</code> (واو) و <code class="punic">𐤉</code> (يود) استُخدمت لـ 'u' و 'i' على التوالي. هذا يجعل النقوش البونيقية مصدرًا قيمًا لفهم حركات اللغة.</li>
-        <li><strong>علم الأصوات (النطق):</strong> تغيرت الحركات مع مرور الوقت. على سبيل المثال، غالبًا ما اندمجت الحركتان الطويلتان الأصليتان 'a' و 'o' في صوت 'o'، والذي بدوره تحول غالبًا إلى 'u' في البونيقية المتأخرة. كما خفف نطق 'b' بين الحركات ليصبح صوت 'v'.</li>
-        <li><strong>الضمائر:</strong> أصبح ضمير الغائب المذكر المفرد <code class="phoenician">𐤄𐤅𐤀</code> (hw', "هو") <code class="punic">𐤄𐤀</code> (h') في البونيقية المتأخرة.</li>
+        <li><strong>الضمائر:</strong> تطورت بعض الضمائر. على سبيل المثال، غالبًا ما تم تبسيط ضمير الغائب المذكر المفرد <code>hwʾ</code> (<code class="phoenician">𐤄𐤅𐤀</code>, "هو") إلى <code>hʾ</code> (<code class="punic">𐤄𐤀</code>) في البونيقية المتأخرة.</li>
+        <li><strong>الكلمات الدخيلة:</strong> استعارت اللغة البونيقية كلمات من اللغات المحيطة بها، وفي مقدمتها البربرية واللاتينية، خاصة للمصطلحات الإدارية والعسكرية.</li>
       </ul>
-      <h3>٣. مثال في السياق البونيقي</h3>
-      <p>لنأخذ كلمة "صوت"، <code class="phoenician">𐤒𐤅𐤋</code> (qwl) في الفينيقية. في نقل حرفي لاتيني لنص بونيقي، قد نجدها مكتوبة كـ <code class="punic">YTH</code>، مما يشير إلى نطق أقرب إلى /yuth/ أو /iuth/، مما يعكس تحولات الحركات.</p>`
+      <h3>٤. الاصطلاحات والعبارات</h3>
+      <p>استمرت التعبيرات البونيقية في التقاليد الفينيقية ولكنها تأثرت أيضًا بالثقافات المحلية في شمال إفريقيا. الصيغ الدينية، مثل الإهداءات للآلهة <strong>بعل حمون</strong> و <strong>تانيت</strong>، شائعة جدًا في النقوش البونيقية.</p>
+      <ul>
+        <li>إحدى الصيغ النذرية الشائعة هي <code>l-ʾdn l-bʿl ḥmn... ndr ʾš ndr...</code> (<code class="punic">𐤋𐤀𐤃𐤍 𐤋𐤁𐤏𐤋 𐤇𐤌𐤍... 𐤍𐤃𐤓 𐤀𐤔 𐤍𐤃𐤓...</code>) والتي تعني "للسيد، لبعل حمون... النذر الذي نذره [الاسم]...".</li>
+      </ul>`
   },
 };
