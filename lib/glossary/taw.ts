@@ -32,4 +32,12 @@ export const taw: GlossaryEntry[] = [
   { phoenician: '𐤕𐤓𐤅𐤌𐤄', latin: 'trwmh', meaning: { en: 'Contribution, offering', fr: 'Contribution, offrande', ar: 'مساهمة، تقدمة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤕𐤔𐤏', latin: "tšʿ", meaning: { en: 'Nine', fr: 'Neuf', ar: 'تسعة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤕𐤔𐤅𐤁𐤄', latin: 'tšwbh', meaning: { en: 'Return, repentance', fr: 'Retour, repentance', ar: 'عودة، توبة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤕𐤀𐤍𐤄', latin: "t'nh", meaning: { en: 'Fig, fig tree', fr: 'Figue, figuier', ar: 'تين، شجرة تين' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤕𐤐𐤇', latin: 'tpḥ', meaning: { en: 'Apple, apple tree', fr: 'Pomme, pommier', ar: 'تفاح، شجرة تفاح' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤕𐤓𐤍', latin: 'trn', meaning: { en: 'Mast (of a ship)', fr: 'Mât (d\'un navire)', ar: 'صاري (سفينة)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤕𐤍𐤉𐤍', latin: 'tnyn', meaning: { en: 'Serpent, dragon, sea monster', fr: 'Serpent, dragon, monstre marin', ar: 'ثعبان، تنين، وحش بحري' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤕𐤒𐤏', latin: "tqʿ", meaning: { en: 'To blow (a horn), thrust, strike', fr: 'Sonner (de la corne), pousser, frapper', ar: 'ينفخ (في البوق)، يدفع، يضرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤕𐤌𐤉𐤌', latin: 'tmym', meaning: { en: 'Perfect, blameless, complete', fr: 'Parfait, sans défaut, complet', ar: 'كامل، بلا عيب' }, grammar: { pos: 'Adjective' } },
+  { phoenician: '𐤕𐤌𐤊', latin: 'tmk', meaning: { en: 'To grasp, support, hold', fr: 'Saisir, soutenir, tenir', ar: 'يمسك، يدعم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤕𐤄𐤋𐤄', latin: 'thlh', meaning: { en: 'Praise, song of praise', fr: 'Louange, chant de louange', ar: 'تسبيح، ترنيمة حمد' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
 ];
