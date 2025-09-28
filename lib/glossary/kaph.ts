@@ -38,4 +38,5 @@ export const kaph: GlossaryEntry[] = [
   { phoenician: '𐤊𐤔𐤋', latin: 'kšl', meaning: { en: 'To stumble', fr: 'Trébucher', ar: 'يتعثر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤊𐤕𐤁', latin: 'ktb', meaning: { en: 'To write', fr: 'Écrire', ar: 'يكتب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤊𐤕𐤍𐤕', latin: 'ktnt', meaning: { en: 'Tunic', fr: 'Tunique', ar: 'قميص' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤊𐤓𐤎', latin: 'krs', meaning: { en: "Kres — a chthonic / underworld deity", fr: "Kres — une divinité chthonienne / souterraine", ar: "كريوس — إله قاعي / تحت الأرض، مشابه للطابع الكثوني" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];

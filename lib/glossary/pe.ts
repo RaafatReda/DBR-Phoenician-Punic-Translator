@@ -33,5 +33,6 @@ export const pe: GlossaryEntry[] = [
   { phoenician: '𐤐𐤔𐤏', latin: "pšʿ", meaning: { en: 'Transgression, rebellion', fr: 'Transgression, rébellion', ar: 'تعدي، تمرد' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤐𐤕𐤀', latin: "pt'", meaning: { en: 'Simple, foolish', fr: 'Simple, insensé', ar: 'بسيط، أحمق' }, grammar: { pos: 'Adjective' } },
   { phoenician: '𐤐𐤕𐤇', latin: 'ptḥ', meaning: { en: 'To open, opening', fr: 'Ouvrir, ouverture', ar: 'يفتح، فتحة' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
+  { phoenician: '𐤐𐤕𐤇', latin: 'ptḥ', meaning: { en: "Ptah — Egyptian lord of industry and crafts, protector of artisans", fr: "Ptah — Seigneur égyptien de l'industrie et de l'artisanat, protecteur des artisans", ar: "پتاح — رب الصناعة والحرف وحامي الحرفيين عند المصريين" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
   { phoenician: '𐤐𐤕𐤉', latin: 'pty', meaning: { en: 'Simpleton', fr: 'Simple d\'esprit', ar: 'ساذج' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

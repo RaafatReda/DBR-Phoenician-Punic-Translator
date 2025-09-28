@@ -26,4 +26,5 @@ export const resh: GlossaryEntry[] = [
   { phoenician: '𐤓𐤐𐤀', latin: "rp'", meaning: { en: 'To heal', fr: 'Guérir', ar: 'يشفي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤓𐤑𐤄', latin: 'rṣh', meaning: { en: 'To be pleased with', fr: 'Être satisfait de', ar: 'يرضى بـ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤓𐤒', latin: 'rq', meaning: { en: 'Empty', fr: 'Vide', ar: 'فارغ' }, grammar: { pos: 'Adjective' } },
+  { phoenician: '𐤓𐤔𐤐', latin: "ršp", meaning: { en: "Resheph, god of war and plague", fr: "Reshep, dieu de la guerre et de la peste", ar: "رشپ، إله الحرب والطاعون" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];

@@ -3,7 +3,7 @@ import { phoenicianGlossary } from '../lib/phoenicianGlossary';
 import CloseIcon from './icons/CloseIcon';
 import SearchIcon from './icons/SearchIcon';
 import { UILang } from '../lib/i18n';
-import { PhoenicianDialect } from '../types';
+import { PhoenicianDialect, GlossaryEntry } from '../types';
 import ScriptModeToggle from './ScriptModeToggle';
 
 interface PhoenicianDictionaryModalProps {
@@ -19,6 +19,7 @@ type GlossaryLang = 'en' | 'fr' | 'ar';
 const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, t }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<GlossaryEntry['category'] | null>(null);
   const [glossaryLang, setGlossaryLang] = useState<GlossaryLang>('en');
   const [scriptMode, setScriptMode] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
   const listRef = useRef<HTMLUListElement>(null);
@@ -31,6 +32,10 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
     if (selectedLetter) {
       results = results.filter(entry => entry.phoenician.startsWith(selectedLetter));
     }
+    
+    if (selectedCategory) {
+      results = results.filter(entry => entry.category === selectedCategory);
+    }
 
     if (searchTerm.trim()) {
       const lowercasedTerm = searchTerm.toLowerCase();
@@ -42,12 +47,24 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
     }
     
     return results;
-  }, [searchTerm, selectedLetter, glossaryLang]);
+  }, [searchTerm, selectedLetter, selectedCategory, glossaryLang]);
 
-  const handleLetterSelect = (letter: string | null) => {
-    setSelectedLetter(letter);
-    listRef.current?.scrollTo(0, 0); // Scroll to top on filter change
+  const handleLetterSelect = (letter: string) => {
+    setSelectedLetter(prev => (prev === letter ? null : letter));
+    listRef.current?.scrollTo(0, 0);
   };
+  
+  const handleCategorySelect = (category: GlossaryEntry['category']) => {
+    setSelectedCategory(prev => (prev === category ? null : category));
+    listRef.current?.scrollTo(0, 0);
+  };
+
+  const handleClearFilters = () => {
+    setSelectedLetter(null);
+    setSelectedCategory(null);
+    listRef.current?.scrollTo(0, 0);
+  };
+
 
   const handleWordClick = (word: string) => {
     onWordSelect(word);
@@ -105,17 +122,24 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
             </div>
           </div>
           
-           <div className="flex justify-center items-center gap-2">
-            <button onClick={() => setGlossaryLang('en')} className={langButtonClass('en')} aria-pressed={glossaryLang === 'en'}>{t('english')}</button>
-            <button onClick={() => setGlossaryLang('fr')} className={langButtonClass('fr')} aria-pressed={glossaryLang === 'fr'}>{t('french')}</button>
-            <button onClick={() => setGlossaryLang('ar')} className={`${langButtonClass('ar')} text-base`} aria-pressed={glossaryLang === 'ar'}>{t('arabic')}</button>
+           <div className="flex justify-between items-center gap-4 flex-wrap">
+                <div className="flex items-center gap-2">
+                    <button onClick={() => setGlossaryLang('en')} className={langButtonClass('en')} aria-pressed={glossaryLang === 'en'}>{t('english')}</button>
+                    <button onClick={() => setGlossaryLang('fr')} className={langButtonClass('fr')} aria-pressed={glossaryLang === 'fr'}>{t('french')}</button>
+                    <button onClick={() => setGlossaryLang('ar')} className={`${langButtonClass('ar')} text-base`} aria-pressed={glossaryLang === 'ar'}>{t('arabic')}</button>
+                </div>
+                 <div className="flex items-center gap-2">
+                    <button onClick={() => handleCategorySelect('theonym')} className={`${langButtonClass('en')} ${selectedCategory === 'theonym' ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`} aria-pressed={selectedCategory === 'theonym'}>{t('theonyms')}</button>
+                    <button onClick={() => handleCategorySelect('personal_name')} className={`${langButtonClass('en')} ${selectedCategory === 'personal_name' ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`} aria-pressed={selectedCategory === 'personal_name'}>{t('personalNames')}</button>
+                    <button onClick={() => handleCategorySelect('location')} className={`${langButtonClass('en')} ${selectedCategory === 'location' ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`} aria-pressed={selectedCategory === 'location'}>{t('locationNames')}</button>
+                 </div>
           </div>
 
           <div className="flex flex-wrap gap-1 justify-center">
             <button
-              onClick={() => handleLetterSelect(null)}
-              className={`px-3 py-1 text-sm rounded-md font-semibold transition-colors ${!selectedLetter ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
-              aria-pressed={!selectedLetter}
+              onClick={handleClearFilters}
+              className={`px-3 py-1 text-sm rounded-md font-semibold transition-colors ${!selectedLetter && !selectedCategory ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
+              aria-pressed={!selectedLetter && !selectedCategory}
             >
               {t('dictionaryAll')}
             </button>

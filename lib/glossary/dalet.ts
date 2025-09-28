@@ -12,7 +12,7 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤁𐤔', latin: 'dbš', meaning: { en: 'Honey', fr: 'Miel', ar: 'عسل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤂', latin: 'dg', meaning: { en: 'Fish', fr: 'Poisson', ar: 'سمك' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤂𐤄', latin: 'dgh', meaning: { en: 'Fish (collective)', fr: 'Poissons (collectif)', ar: 'سمك (جمع)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  { phoenician: '𐤃𐤂𐤍', latin: 'dgn', meaning: { en: 'Grain, corn', fr: 'Grain, maïs', ar: 'حبوب، غلة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤃𐤂𐤍', latin: 'dgn', meaning: { en: "Dagon, god of grain and fertility; also grain, corn", fr: "Dagon, dieu des céréales et de la fertilité; aussi grain, maïs", ar: "داجون، إله الحبوب والخصوبة؛ وأيضاً حبوب، غلة" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
   { phoenician: '𐤃𐤂𐤓', latin: 'dgr', meaning: { en: 'To brood, gather', fr: 'Couver, rassembler', ar: 'يحضن، يجمع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤂𐤋', latin: 'dgl', meaning: { en: 'Banner, standard', fr: 'Bannière, étendard', ar: 'راية، علم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤃', latin: 'dd', meaning: { en: 'Beloved, uncle', fr: 'Bien-aimé, oncle', ar: 'حبيب، عم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },

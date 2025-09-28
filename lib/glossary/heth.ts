@@ -40,6 +40,7 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤌𐤔', latin: 'ḥmš', meaning: { en: 'Five', fr: 'Cinq', ar: 'خمسة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤇𐤌𐤏', latin: "ḥmʿ", meaning: { en: 'Butter, curd', fr: 'Beurre, caillé', ar: 'زبدة، لبن رائب' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤇𐤍', latin: 'ḥn', meaning: { en: 'Grace, favor', fr: 'Grâce, faveur', ar: 'نعمة، فضل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤇𐤍𐤁𐤏𐤋', latin: "ḥnbʿl", meaning: { en: 'Hannibal ("Grace of Ba\'al")', fr: 'Hannibal ("Grâce de Ba\'al")', ar: 'حنبعل ("نعمة بعل")' }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'personal_name' },
   { phoenician: '𐤇𐤍𐤄', latin: 'ḥnh', meaning: { en: 'To encamp', fr: 'Camper', ar: 'يخيم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤍𐤈', latin: 'ḥnṭ', meaning: { en: 'To embalm', fr: 'Embaumer', ar: 'يحنط' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤎𐤃', latin: 'ḥsd', meaning: { en: 'Kindness, faithfulness', fr: 'Bonté, fidélité', ar: 'إحسان، أمانة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
@@ -56,4 +57,6 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤓𐤔', latin: 'ḥrš', meaning: { en: 'Craftsman, to be silent', fr: 'Artisan, être silencieux', ar: 'حرفي، يصمت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤇𐤔𐤁', latin: 'ḥšb', meaning: { en: 'To think, devise', fr: 'Penser, concevoir', ar: 'يفكر، يدبر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤔𐤄', latin: 'ḥšh', meaning: { en: 'To be silent', fr: 'Être silencieux', ar: 'يصمت' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤇𐤕𐤇𐤓', latin: 'ḥtḥr', meaning: { en: "Hathor — goddess of love, music, and fertility", fr: "Hathor — déesse de l'amour, de la musique et de la fertilité", ar: "حتحور — إلهة الحب والموسيقى والخصوبة" }, grammar: { pos: 'Noun', gender: 'f', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤇𐤓𐤐𐤊𐤓𐤈', latin: 'ḥrpkrṭ', meaning: { en: "Harpocrates — the child form of the god Horus, representing the newborn sun and hope", fr: "Harpocrate — la forme enfantine du dieu Horus, représentant le soleil naissant et l'espoir", ar: "حربوقراط / Harpocrates — شكل الطفل لإله حورس، يمثل الشمس المولودة والأمل" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];

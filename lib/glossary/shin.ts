@@ -24,6 +24,7 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤌𐤌', latin: 'šmm', meaning: { en: 'Heaven, sky', fr: 'Ciel', ar: 'سماء' }, grammar: { pos: 'Noun', gender: 'm', number: 'p' } },
   { phoenician: '𐤔𐤌𐤍', latin: 'šmn', meaning: { en: 'Oil, fat', fr: 'Huile, graisse', ar: 'زيت، دهن' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤌𐤔', latin: 'šmš', meaning: { en: 'Sun', fr: 'Soleil', ar: 'شمس' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤔𐤌𐤔', latin: 'šmš', meaning: { en: "Shamash — sun god, imported from Mesopotamian and Canaanite traditions", fr: "Shamash — dieu du soleil, importé des traditions mésopotamiennes et cananéennes", ar: "شمش — إله الشمس، مستورد من تقاليد بلاد ما بين النهرين وكنعان" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
   { phoenician: '𐤔𐤍', latin: 'šn', meaning: { en: 'Tooth', fr: 'Dent', ar: 'سن' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤔𐤍𐤄', latin: 'šnh', meaning: { en: 'Year', fr: 'Année', ar: 'سنة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤔𐤍𐤉', latin: 'šny', meaning: { en: 'Two, second', fr: 'Deux, second', ar: 'اثنان، ثانٍ' }, grammar: { pos: 'Numeral' } },
@@ -35,4 +36,5 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤓𐤔', latin: 'šrš', meaning: { en: 'Root', fr: 'Racine', ar: 'جذر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤔', latin: 'šš', meaning: { en: 'Six', fr: 'Six', ar: 'ستة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤔𐤕𐤄', latin: 'šth', meaning: { en: 'To drink', fr: 'Boire', ar: 'يشرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤔𐤃𐤓𐤐', latin: 'šdrp', meaning: { en: "Shadrapa — a healing god associated with serpents", fr: "Shadrapa — un dieu de la guérison associé aux serpents", ar: "شدرپ — إله شفاء مرتبط بالأفاعي" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];

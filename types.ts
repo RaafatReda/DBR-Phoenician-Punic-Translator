@@ -112,6 +112,7 @@ export interface GlossaryEntry {
     stem?: 'G-stem' | 'D-stem' | 'N-stem' | 'C-stem'; // G=Qal, D=Pi'el, N=Niphal, C=Hiphil (Causative)
     notes?: string;
   };
+  category?: 'theonym' | 'personal_name' | 'location';
 }
 
 export interface AIAssistantResponse {

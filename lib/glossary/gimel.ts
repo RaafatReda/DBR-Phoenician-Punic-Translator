@@ -9,6 +9,7 @@ export const gimel: GlossaryEntry[] = [
   { phoenician: '𐤂𐤀𐤅𐤍', latin: "g'wn", meaning: { en: 'Pride', fr: 'Orgueil', ar: 'فخر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤁', latin: 'gb', meaning: { en: 'Back, hill, cistern', fr: 'Dos, colline, citerne', ar: 'ظهر، تل، جب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤁𐤄', latin: 'gbh', meaning: { en: 'High, tall', fr: 'Haut, grand', ar: 'عالٍ، طويل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤂𐤁𐤋', latin: 'gbl', meaning: { en: 'Byblos (city)', fr: 'Byblos (cité)', ar: 'جبيل (مدينة)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' }, category: 'location' },
   { phoenician: '𐤂𐤁𐤉𐤏', latin: "gbyʿ", meaning: { en: 'Cup, bowl', fr: 'Coupe, bol', ar: 'كأس، وعاء' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤁𐤉𐤍', latin: 'gbyn', meaning: { en: 'Cupola, boss', fr: 'Coupole, bosse', ar: 'قبة، نتوء' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤂𐤁𐤅𐤋', latin: 'gbwl', meaning: { en: 'Border, territory', fr: 'Frontière, territoire', ar: 'حد، إقليم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },

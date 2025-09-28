@@ -39,4 +39,7 @@ export const ayin: GlossaryEntry[] = [
   { phoenician: '𐤏𐤓𐤐', latin: 'ʿrp', meaning: { en: 'Neck', fr: 'Cou', ar: 'عنق' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤏𐤔𐤓', latin: 'ʿšr', meaning: { en: 'Ten', fr: 'Dix', ar: 'عشرة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤏𐤔𐤒', latin: 'ʿšq', meaning: { en: 'To oppress', fr: 'Opprimer', ar: 'يظلم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤏𐤌𐤍', latin: 'ʿmn', meaning: { en: "Amon — The Egyptian god, appears in some Punic and Phoenician inscriptions", fr: "Amon — Le dieu égyptien, apparaît dans certaines inscriptions puniques et phéniciennes", ar: "آمون — الإله المصري، يظهر في بعض النقوش البونية والفينيقية" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤏𐤍𐤕', latin: 'ʿnt', meaning: { en: "Anat — goddess of war and fertility", fr: "Anat — déesse de la guerre et de la fertilité", ar: "عنات / Anat — إلهة الحرب والخصوبة" }, grammar: { pos: 'Noun', gender: 'f', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤏𐤆𐤓', latin: 'ʿzr', meaning: { en: "Azor — a local deity", fr: "Azor — une divinité locale", ar: "عزر — إله محلي" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
 ];
