@@ -18,6 +18,7 @@ export const yodh: GlossaryEntry[] = [
   { phoenician: '𐤉𐤇𐤋', latin: 'yḥl', meaning: { en: 'To wait, hope', fr: 'Attendre, espérer', ar: 'ينتظر، يأمل' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
   { phoenician: '𐤉𐤈𐤁', latin: 'yṭb', meaning: { en: 'To be good', fr: 'Être bon', ar: 'يكون صالحًا' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤈𐤓', latin: 'ytr', meaning: { en: 'Remainder, excess', fr: 'Reste, excès', ar: 'بقية، فائض' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤉𐤍', latin: 'yēn', meaning: { en: 'Wine, an important product derived from vines.', fr: 'Vin, un produit important dérivé de la vigne.', ar: 'خمر، منتج مهم مشتق من الكروم.' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤉𐤉𐤍', latin: 'yyn', meaning: { en: 'Wine', fr: 'Vin', ar: 'خمر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤉𐤋𐤃', latin: 'yld', meaning: { en: 'Child, to give birth', fr: 'Enfant, accoucher', ar: 'ولد، يلد' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤉𐤋𐤋', latin: 'yll', meaning: { en: 'To wail, howl', fr: 'Gémir, hurler', ar: 'يولول، يعوي' }, grammar: { pos: 'Verb', stem: 'C-stem' } },

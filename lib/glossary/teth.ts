@@ -16,6 +16,7 @@ export const teth: GlossaryEntry[] = [
   { phoenician: '𐤈𐤉𐤈', latin: 'ṭyṭ', meaning: { en: 'Mud, clay', fr: 'Boue, argile', ar: 'طين' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤈𐤋', latin: 'ṭl', meaning: { en: 'Dew', fr: 'Rosée', ar: 'طل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤈𐤌𐤀', latin: "ṭm'", meaning: { en: 'To be unclean', fr: 'Être impur', ar: 'يكون نجسًا' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤈𐤍', latin: 'tēn', meaning: { en: 'Fig', fr: 'Figue', ar: 'تين' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤈𐤍𐤀', latin: "ṭn'", meaning: { en: 'To load', fr: 'Charger', ar: 'يحمل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤈𐤏𐤌', latin: "ṭʿm", meaning: { en: 'Taste, decree', fr: 'Goût, décret', ar: 'طعم، مرسوم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤈𐤐𐤋', latin: 'ṭpl', meaning: { en: 'To smear', fr: 'Enduire', ar: 'يلطخ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },

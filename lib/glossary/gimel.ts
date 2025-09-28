@@ -17,6 +17,7 @@ export const gimel: GlossaryEntry[] = [
   { phoenician: '𐤂𐤁𐤏', latin: "gbʿ", meaning: { en: 'Hill', fr: 'Colline', ar: 'تل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤂', latin: 'gg', meaning: { en: 'Roof', fr: 'Toit', ar: 'سطح' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤃', latin: 'gd', meaning: { en: 'Fortune (a god)', fr: 'Fortune (un dieu)', ar: 'الحظ (إله)' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Proper noun.' } },
+  { phoenician: '𐤂𐤃', latin: 'gd', meaning: { en: '(Goat-)kid', fr: 'Chevreau', ar: 'جدي' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤃𐤓', latin: 'gdr', meaning: { en: 'Gades (Cádiz, Spain)', fr: 'Gades (Cadix, Espagne)', ar: 'جاديش (قادس، إسبانيا)' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤂𐤃𐤅𐤋', latin: 'gdwl', meaning: { en: 'Great, large', fr: 'Grand', ar: 'عظيم، كبير' }, grammar: { pos: 'Adjective' } },
   { phoenician: '𐤂𐤃𐤋', latin: 'gdl', meaning: { en: 'To be great', fr: 'Être grand', ar: 'يكون عظيماً' }, grammar: { pos: 'Verb', stem: 'G-stem' } },

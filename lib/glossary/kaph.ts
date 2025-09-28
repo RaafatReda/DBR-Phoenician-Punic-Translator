@@ -25,6 +25,7 @@ export const kaph: GlossaryEntry[] = [
   { phoenician: '𐤊𐤋𐤄', latin: 'klh', meaning: { en: 'To be finished, complete', fr: 'Être fini, complet', ar: 'ينتهي، يكتمل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤊𐤋𐤉', latin: 'kly', meaning: { en: 'Vessel, instrument', fr: 'Vaisseau, instrument', ar: 'إناء، أداة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤊𐤋𐤌', latin: 'klm', meaning: { en: 'To shame, insult', fr: 'Faire honte, insulter', ar: 'يخزي، يهين' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
+  { phoenician: '𐤊𐤌𐤍', latin: 'kammūn', meaning: { en: 'Cumin', fr: 'Cumin', ar: 'كمون' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤊𐤍', latin: 'kn', meaning: { en: 'Thus, so', fr: 'Ainsi, donc', ar: 'هكذا، كذلك' }, grammar: { pos: 'Adverb' } },
   { phoenician: '𐤊𐤍𐤏𐤍', latin: "knʿn", meaning: { en: 'Canaan', fr: 'Canaan', ar: 'كنعان' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤊𐤍𐤏', latin: "knʿ", meaning: { en: 'To be humble', fr: 'Être humble', ar: 'يتواضع' }, grammar: { pos: 'Verb', stem: 'N-stem' } },

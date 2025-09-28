@@ -51,6 +51,7 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤒𐤓', latin: 'ḥqr', meaning: { en: 'To search, investigate', fr: 'Chercher, enquêter', ar: 'يبحث، يحقق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤒𐤒', latin: 'ḥqq', meaning: { en: 'To inscribe', fr: 'Inscrire', ar: 'ينقش' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤓𐤁', latin: 'ḥrb', meaning: { en: 'Sword', fr: 'Épée', ar: 'سيف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤇𐤓𐤁', latin: 'ḥrb', meaning: { en: 'Carob', fr: 'Caroube', ar: 'خروب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤇𐤓𐤃', latin: 'ḥrd', meaning: { en: 'To tremble', fr: 'Trembler', ar: 'يرتجف' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤓𐤌', latin: 'ḥrm', meaning: { en: 'To devote, ban', fr: 'Consacrer, interdire', ar: 'يحرم' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
   { phoenician: '𐤇𐤓𐤐', latin: 'ḥrp', meaning: { en: 'Autumn, reproach', fr: 'Automne, reproche', ar: 'خريف، تعيير' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },

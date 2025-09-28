@@ -3,6 +3,7 @@ import type { GlossaryEntry } from '../../types';
 export const shin: GlossaryEntry[] = [
   // Shin - 𐤔
   { phoenician: '𐤔', latin: 'š', meaning: { en: 'Shin (twenty-first letter)', fr: 'Shin (vingt-et-unième lettre)', ar: 'شين (الحرف الحادي والعشرون)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤔', latin: 'š', meaning: { en: 'Sheep (individual)', fr: 'Mouton (individu)', ar: 'خروف (فرد)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤀𐤋', latin: "š'l", meaning: { en: 'To ask, inquire', fr: 'Demander, s\'enquérir', ar: 'يسأل، يستعلم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤀𐤓', latin: "š'r", meaning: { en: 'Remnant, rest', fr: 'Reste', ar: 'بقية' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤁', latin: 'šb', meaning: { en: 'To return', fr: 'Retourner', ar: 'يرجع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
@@ -13,6 +14,7 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤃𐤓𐤐', latin: 'šdrp', meaning: { en: "Shadrapa — a healing god associated with serpents", fr: "Shadrapa — un dieu de la guérison associé aux serpents", ar: "شدرپ — إله شفاء مرتبط بالأفاعي" }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
   { phoenician: '𐤔𐤅𐤁', latin: 'šwb', meaning: { en: 'To return, turn back', fr: 'Retourner', ar: 'يعود، يرجع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤅𐤓', latin: 'šwr', meaning: { en: 'Ox, bull; wall', fr: 'Bœuf, taureau; mur', ar: 'ثور؛ سور' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤔𐤉𐤔', latin: 'šīš', meaning: { en: 'Moth', fr: 'Mite', ar: 'عثة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤇𐤕', latin: 'šḥt', meaning: { en: 'Pit, to destroy', fr: 'Fosse, détruire', ar: 'حفرة، يدمر' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Also a verb (D-stem).' } },
   { phoenician: '𐤔𐤊𐤁', latin: 'škb', meaning: { en: 'To lie down', fr: 'Se coucher', ar: 'يضطجع' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤊𐤓', latin: 'škr', meaning: { en: 'To be drunk', fr: 'Être ivre', ar: 'يسكر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
@@ -37,5 +39,6 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤓𐤃𐤍', latin: 'šrdn', meaning: { en: 'Sardinia - An important island for trade and resources.', fr: 'Sardaigne - Île importante pour le commerce et les ressources.', ar: 'سردينيا - جزيرة مهمة للتجارة والموارد.' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤔𐤓𐤔', latin: 'šrš', meaning: { en: 'Root', fr: 'Racine', ar: 'جذر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤔', latin: 'šš', meaning: { en: 'Six', fr: 'Six', ar: 'ستة' }, grammar: { pos: 'Numeral' } },
+  { phoenician: '𐤔𐤔𐤌', latin: 'ššm', meaning: { en: 'Sesame', fr: 'Sésame', ar: 'سمسم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤔𐤕𐤄', latin: 'šth', meaning: { en: 'To drink', fr: 'Boire', ar: 'يشرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
 ];

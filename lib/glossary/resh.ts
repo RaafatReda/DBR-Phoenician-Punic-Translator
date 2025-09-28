@@ -21,6 +21,7 @@ export const resh: GlossaryEntry[] = [
   { phoenician: '𐤓𐤊𐤁', latin: 'rkb', meaning: { en: 'To ride', fr: 'Monter (un animal)', ar: 'يركب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤓𐤌𐤇', latin: 'rmḥ', meaning: { en: 'Spear, lance', fr: 'Lance', ar: 'رمح' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤓𐤌𐤌', latin: 'rmm', meaning: { en: 'To rise, be exalted', fr: 'S\'élever, être exalté', ar: 'يرتفع، يتعالى' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
+  { phoenician: '𐤓𐤌𐤍', latin: 'rimmūn', meaning: { en: 'Pomegranate', fr: 'Grenade', ar: 'رمان' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤓𐤏', latin: "rʿ", meaning: { en: 'Evil, bad', fr: 'Mal, mauvais', ar: 'شر، سيء' }, grammar: { pos: 'Adjective' } },
   { phoenician: '𐤓𐤏𐤄', latin: "rʿh", meaning: { en: 'To pasture, shepherd', fr: 'Paître, berger', ar: 'يرعى، راعٍ' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤓𐤐𐤀', latin: "rp'", meaning: { en: 'To heal', fr: 'Guérir', ar: 'يشفي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
