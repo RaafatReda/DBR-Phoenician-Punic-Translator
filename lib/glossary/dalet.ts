@@ -3,9 +3,9 @@ import type { GlossaryEntry } from '../../types';
 export const dalet: GlossaryEntry[] = [
   // Daleth - 𐤃
   { phoenician: '𐤃', latin: 'd', meaning: { en: 'Daleth (fourth letter)', fr: 'Daleth (quatrième lettre)', ar: 'دال (الحرف الرابع)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  { phoenician: '𐤃𐤀𐤁', latin: "d'b", meaning: { en: 'To languish', fr: 'Languir', ar: 'يذوي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤃𐤀𐤁𐤄', latin: "d'bh", meaning: { en: 'Languishing', fr: 'Languissant', ar: 'ذابل' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  { phoenician: '𐤃𐤀𐤂', latin: "d'g", meaning: { en: 'To be anxious', fr: 'Être anxieux', ar: 'يقلق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤃𐤀𐤁', latin: "dʾb", meaning: { en: 'To languish', fr: 'Languir', ar: 'يذوي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤃𐤀𐤁𐤄', latin: "dʾbh", meaning: { en: 'Languishing', fr: 'Languissant', ar: 'ذابل' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤃𐤀𐤂', latin: "dʾg", meaning: { en: 'To be anxious', fr: 'Être anxieux', ar: 'يقلق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤁𐤉𐤓', latin: 'dbyr', meaning: { en: 'Inner sanctuary, oracle', fr: 'Sanctuaire intérieur, oracle', ar: 'قدس الأقداس، محراب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤁𐤒', latin: 'dbq', meaning: { en: 'To cling', fr: 'S\'attacher', ar: 'يلتصق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤁𐤓', latin: 'dbr', meaning: { en: 'Word, matter, thing, to speak', fr: 'Mot, affaire, chose, parler', ar: 'كلمة، أمر، شيء، يتكلم' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
@@ -28,7 +28,7 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤉𐤍', latin: 'dyn', meaning: { en: 'Judgment, to judge', fr: 'Jugement, juger', ar: 'دينونة، يحكم' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤃𐤉𐤔', latin: 'dyš', meaning: { en: 'Threshing', fr: 'Battage', ar: 'درس' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤊', latin: 'dk', meaning: { en: 'Crushed', fr: 'Écrasé', ar: 'مسحوق' }, grammar: { pos: 'Adjective' } },
-  { phoenician: '𐤃𐤊𐤀', latin: "dk'", meaning: { en: 'To crush', fr: 'Écraser', ar: 'يسحق' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
+  { phoenician: '𐤃𐤊𐤀', latin: "dkʾ", meaning: { en: 'To crush', fr: 'Écraser', ar: 'يسحق' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
   { phoenician: '𐤃𐤊𐤓', latin: 'dkr', meaning: { en: 'Male', fr: 'Mâle', ar: 'ذكر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤋', latin: 'dl', meaning: { en: 'Poor, weak', fr: 'Pauvre, faible', ar: 'فقير، ضعيف' }, grammar: { pos: 'Adjective' } },
   { phoenician: '𐤃𐤋𐤄', latin: 'dlh', meaning: { en: 'To draw water', fr: 'Puiser de l\'eau', ar: 'يستقي الماء' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
@@ -53,7 +53,7 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤓𐤊', latin: 'drk', meaning: { en: 'Way, path, to tread', fr: 'Chemin, sentier, fouler', ar: 'طريق، درب، يدوس' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤃𐤓𐤓', latin: 'drr', meaning: { en: 'Freedom', fr: 'Liberté', ar: 'حرية' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤓𐤔', latin: 'drš', meaning: { en: 'To seek, inquire', fr: 'Chercher, s\'enquérir', ar: 'يبحث، يسأل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤃𐤔𐤀', latin: "dš'", meaning: { en: 'Grass, to sprout', fr: 'Herbe, germer', ar: 'عشب، ينبت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
+  { phoenician: '𐤃𐤔𐤀', latin: "dšʾ", meaning: { en: 'Grass, to sprout', fr: 'Herbe, germer', ar: 'عشب، ينبت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤃𐤔𐤍', latin: 'dšn', meaning: { en: 'Fat, prosperous', fr: 'Gras, prospère', ar: 'سمين، مزدهر' }, grammar: { pos: 'Verb', stem: 'D-stem', notes: 'Also an adjective.' } },
   { phoenician: '𐤃𐤕', latin: 'dat', meaning: { en: 'Date palm / date fruit', fr: 'Palmier dattier / datte', ar: 'نخلة / تمر' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
 ];

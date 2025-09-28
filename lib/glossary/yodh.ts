@@ -3,7 +3,7 @@ import type { GlossaryEntry } from '../../types';
 export const yodh: GlossaryEntry[] = [
   // Yodh - 𐤉
   { phoenician: '𐤉', latin: 'y', meaning: { en: 'Yodh (tenth letter)', fr: 'Yodh (dixième lettre)', ar: 'ياء (الحرف العاشر)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  { phoenician: '𐤉𐤀𐤔', latin: "y'š", meaning: { en: 'To despair', fr: 'Désespérer', ar: 'ييأس' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
+  { phoenician: '𐤉𐤀𐤔', latin: "yʾš", meaning: { en: 'To despair', fr: 'Désespérer', ar: 'ييأس' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
   { phoenician: '𐤉𐤁𐤋', latin: 'ybl', meaning: { en: 'To bring, carry', fr: 'Apporter, porter', ar: 'يحضر، يحمل' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
   { phoenician: '𐤉𐤁𐤌', latin: 'ybm', meaning: { en: "Husband's brother", fr: 'Beau-frère (frère du mari)', ar: 'أخ الزوج' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤉𐤁𐤔', latin: 'ybš', meaning: { en: 'Dry', fr: 'Sec', ar: 'جاف' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
@@ -30,12 +30,12 @@ export const yodh: GlossaryEntry[] = [
   { phoenician: '𐤉𐤏𐤑', latin: "yʿṣ", meaning: { en: 'To advise, counsel', fr: 'Conseiller', ar: 'ينصح، يشير' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤏𐤓', latin: "yʿr", meaning: { en: 'Forest', fr: 'Forêt', ar: 'غابة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤉𐤐𐤄', latin: 'yph', meaning: { en: 'Beautiful', fr: 'Beau', ar: 'جميل' }, grammar: { pos: 'Adjective' } },
-  { phoenician: '𐤉𐤑𐤀', latin: "yṣ'", meaning: { en: 'To go out', fr: 'Sortir', ar: 'يخرج' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤉𐤑𐤀', latin: "yṣʾ", meaning: { en: 'To go out', fr: 'Sortir', ar: 'يخرج' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤑𐤁', latin: 'yṣb', meaning: { en: 'To place, set', fr: 'Placer, poser', ar: 'يضع، ينصب' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
   { phoenician: '𐤉𐤑𐤓', latin: 'yṣr', meaning: { en: 'To form, potter', fr: 'Former, potier', ar: 'يشكل، خزاف' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤉𐤒𐤑', latin: 'yqṣ', meaning: { en: 'To awake', fr: 'Se réveiller', ar: 'يستيقظ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤒𐤓', latin: 'yqr', meaning: { en: 'Precious, honor', fr: 'Précieux, honneur', ar: 'ثمين، كرامة' }, grammar: { pos: 'Adjective', notes: 'Also a noun.' } },
-  { phoenician: '𐤉𐤓𐤀', latin: "yr'", meaning: { en: 'To fear', fr: 'Craindre', ar: 'يخاف' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤉𐤓𐤀', latin: "yrʾ", meaning: { en: 'To fear', fr: 'Craindre', ar: 'يخاف' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤓𐤃', latin: 'yrd', meaning: { en: 'To go down', fr: 'Descendre', ar: 'ينزل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤓𐤇', latin: 'yrḥ', meaning: { en: 'Moon, month', fr: 'Lune, mois', ar: 'قمر، شهر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤉𐤓𐤒', latin: 'yrq', meaning: { en: 'Green, vegetable', fr: 'Vert, légume', ar: 'أخضر، خضار' }, grammar: { pos: 'Adjective', notes: 'Also a noun.' } },

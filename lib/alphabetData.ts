@@ -6,7 +6,7 @@ export interface AlphabetLetter {
 }
 
 export const alphabetData: AlphabetLetter[] = [
-  { char: '𐤀', translit: '’', nameKey: 'aleph', meaningKey: 'ox' },
+  { char: '𐤀', translit: 'ʾ', nameKey: 'aleph', meaningKey: 'ox' },
   { char: '𐤁', translit: 'b', nameKey: 'bet', meaningKey: 'house' },
   { char: '𐤂', translit: 'g', nameKey: 'gimel', meaningKey: 'camel' },
   { char: '𐤃', translit: 'd', nameKey: 'dalet', meaningKey: 'door' },

@@ -3,10 +3,10 @@ import type { GlossaryEntry } from '../../types';
 export const gimel: GlossaryEntry[] = [
   // Gimel - 𐤂
   { phoenician: '𐤂', latin: 'g', meaning: { en: 'Gimel (third letter)', fr: 'Gimel (troisième lettre)', ar: 'جيم (الحرف الثالث)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
-  { phoenician: '𐤂𐤀𐤄', latin: "g'h", meaning: { en: 'Pride', fr: 'Orgueil', ar: 'كبرياء' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤂𐤀𐤋', latin: "g'l", meaning: { en: 'To redeem', fr: 'Racheter', ar: 'يفدي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
-  { phoenician: '𐤂𐤀𐤅𐤄', latin: "g'wh", meaning: { en: 'Arrogance, majesty', fr: 'Arrogance, majesté', ar: 'غطرسة، جلال' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  { phoenician: '𐤂𐤀𐤅𐤍', latin: "g'wn", meaning: { en: 'Pride', fr: 'Orgueil', ar: 'فخر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤂𐤀𐤄', latin: "gʾh", meaning: { en: 'Pride', fr: 'Orgueil', ar: 'كبرياء' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤂𐤀𐤋', latin: "gʾl", meaning: { en: 'To redeem', fr: 'Racheter', ar: 'يفدي' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤂𐤀𐤅𐤄', latin: "gʾwh", meaning: { en: 'Arrogance, majesty', fr: 'Arrogance, majesté', ar: 'غطرسة، جلال' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤂𐤀𐤅𐤍', latin: "gʾwn", meaning: { en: 'Pride', fr: 'Orgueil', ar: 'فخر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤁', latin: 'gb', meaning: { en: 'Back, hill, cistern', fr: 'Dos, colline, citerne', ar: 'ظهر، تل، جب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤁𐤄', latin: 'gbh', meaning: { en: 'High, tall', fr: 'Haut, grand', ar: 'عالٍ، طويل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤂𐤁𐤋', latin: 'gbl', meaning: { en: 'Byblos - A coastal city, center of paper and writing industries', fr: 'Byblos - Cité côtière, centre de l\'industrie du papier et de l\'écriture', ar: 'جبيل - مدينة ساحلية ومركز لصناعة الورق والكتابة' }, grammar: { pos: 'Noun' }, category: 'location' },
@@ -50,7 +50,7 @@ export const gimel: GlossaryEntry[] = [
   { phoenician: '𐤂𐤏𐤋', latin: "gʿl", meaning: { en: 'To loathe, abhor', fr: 'Détester, abhorrer', ar: 'يمقت، يكره' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤂𐤐𐤍', latin: 'gpn', meaning: { en: 'Vine', fr: 'Vigne', ar: 'كرمة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤂𐤓', latin: 'gr', meaning: { en: 'Sojourner, stranger', fr: 'Étranger résidant', ar: 'غريب، نزيل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
-  { phoenician: '𐤂𐤓𐤀', latin: "gr'", meaning: { en: 'To gargle, throat', fr: 'Se gargariser, gorge', ar: 'يغرغر، حلق' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
+  { phoenician: '𐤂𐤓𐤀', latin: "grʾ", meaning: { en: 'To gargle, throat', fr: 'Se gargariser, gorge', ar: 'يغرغر، حلق' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤂𐤓𐤁', latin: 'grb', meaning: { en: 'Scab, itch', fr: 'Gale, démangeaison', ar: 'جرب، حكة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤂𐤓𐤂𐤓', latin: 'grgr', meaning: { en: 'To saw, throat', fr: 'Scier, gorge', ar: 'ينشر، حلق' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤂𐤓𐤆𐤍', latin: 'grzn', meaning: { en: 'Axe', fr: 'Hache', ar: 'فأس' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },

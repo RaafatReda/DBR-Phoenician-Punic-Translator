@@ -7,6 +7,15 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
 const model = 'gemini-2.5-flash';
 
+const transliterationSystemInstruction = `
+- For all Latin transliterations, you MUST adhere strictly to the following academic standard mapping:
+  𐤀 = ʾ (U+02BE), 𐤁 = b, 𐤂 = g, 𐤃 = d, 𐤄 = h, 𐤅 = w, 𐤆 = z, 𐤇 = ḥ (U+1E25), 𐤈 = ṭ (U+1E6D), 𐤉 = y, 𐤊 = k, 𐤋 = l, 𐤌 = m, 𐤍 = n, 𐤎 = s, 𐤏 = ʿ (U+02BF), 𐤐 = p, 𐤑 = ṣ (U+1E63), 𐤒 = q, 𐤓 = r, 𐤔 = š (U+0161), 𐤕 = t.
+- For all Arabic transliterations, you MUST adhere strictly to the following mapping:
+  𐤀 = أ, 𐤁 = ب, 𐤂 = ج, 𐤃 = د, 𐤄 = هـ, 𐤅 = و, 𐤆 = ز, 𐤇 = ح, 𐤈 = ط, 𐤉 = ي, 𐤊 = ك, 𐤋 = ل, 𐤌 = م, 𐤍 = ن, 𐤎 = س, 𐤏 = ع, 𐤐 = پ, 𐤑 = ص, 𐤒 = ق, 𐤓 = ر, 𐤔 = ش, 𐤕 = ت.
+- Punic Dialect Note: When transliterating the Punic dialect, be aware that 𐤐 (p) often represents an [f] sound (so it can be transliterated to ف in Arabic), and 𐤂 (g) may represent a [ɣ] sound (غ in Arabic). Use context to decide.
+- Vowel representation (Matres Lectionis): In later Phoenician and Punic, some consonants were used to indicate vowels. When transliterating, infer vowels where appropriate based on these letters: 𐤀 can represent 'a', 𐤉 for 'i', and 𐤅 for 'u'. Your Latin transliteration should reflect this vocalization for better readability (e.g., 'mlk' could be transliterated 'milk').
+`;
+
 // FIX: Define a reusable JSON schema for the translation output.
 const translationSchema = {
   type: Type.OBJECT,
@@ -17,11 +26,11 @@ const translationSchema = {
     },
     latin: {
       type: Type.STRING,
-      description: "A Latin-based transliteration of the Phoenician text.",
+      description: "A Latin-based transliteration of the Phoenician text, following the standard mapping provided.",
     },
     arabic: {
       type: Type.STRING,
-      description: "An Arabic-based transliteration of the Phoenician text. Use Arabic characters. For sounds not present in standard Arabic, use extended Arabic characters (e.g., 'پ' U+067E for the 'p' sound, 'گ' U+06AF for the 'g' sound).",
+      description: "An Arabic-based transliteration of the Phoenician text, following the standard mapping provided.",
     },
     grammar: {
       type: Type.ARRAY,
@@ -84,10 +93,10 @@ export const translateText = async (
   const isTranslatingToPhoenician = targetLang === Language.PHOENICIAN;
 
   const systemInstruction = `You are an expert linguist specializing in ancient Semitic languages. Your task is to provide high-quality translations.
+${transliterationSystemInstruction}
 - When translating TO Phoenician, you MUST respond in the requested JSON format.
 - Your Phoenician output must use Unicode characters from the Phoenician block (U+10900–U+1091F).
 - The description for each grammar token MUST be provided in three languages: English, French, and Arabic.
-- When providing an Arabic transliteration, accurately represent Phoenician sounds. Use 'پ' (U+067E) for the 'p' sound and 'گ' (U+06AF) for the 'g' sound.
 - When translating FROM Phoenician, just provide the direct translation as plain text.
 ${includeCognates && isTranslatingToPhoenician ? "\n- You MUST also provide the Modern Hebrew, Modern Standard Arabic, and Imperial Aramaic translations or closest cognates for the source text. For each cognate, provide BOTH the text in its native script AND a simple Latin phonetic transliteration. Use Syriac script for Aramaic." : ""}`;
   
@@ -163,10 +172,10 @@ export const comparePhoenicianDialects = async (
 
     const systemInstruction = `You are an expert linguist specializing in ancient Semitic languages.
 Your task is to take a given text in one Phoenician dialect and render it into all major Phoenician dialects.
+${transliterationSystemInstruction}
 You MUST respond in the requested JSON format, using the specified JSON keys.
 - Your Phoenician output must use Unicode characters from the Phoenician block (U+10900–U+1091F).
-- The description for each grammar token MUST be provided in three languages: English, French, and Arabic.
-- When providing an Arabic transliteration, accurately represent Phoenician sounds. Use 'پ' (U+067E) for the 'p' sound and 'گ' (U+06AF) for the 'g' sound.`;
+- The description for each grammar token MUST be provided in three languages: English, French, and Arabic.`;
 
     const prompt = `The following text is in the ${sourceDialect} dialect: "${text}".
 Please provide this text in all of the following dialects: ${allDialects.join(', ')}.
@@ -214,10 +223,10 @@ For each dialect, provide the text in Phoenician script, a Latin transliteration
 
 export const getPhoenicianWordDetails = async (word: string): Promise<PhoenicianWordDetails> => {
     const systemInstruction = `You are a linguist specializing in Phoenician. For a given Phoenician word, provide its details in a specific JSON format.
+${transliterationSystemInstruction}
 - The Phoenician text must use Unicode characters from the Phoenician block (U+10900–U+1091F).
 - Provide the word's meaning in English, French, and Arabic.
 - The example sentence should be simple and clearly demonstrate the word's usage. Provide a Latin transliteration, an Arabic transliteration, and translations of the example sentence in English, French, and Arabic.
-- When providing an Arabic transliteration, accurately represent Phoenician sounds. Use 'پ' (U+067E) for the 'p' sound and 'گ' (U+06AF) for the 'g' sound.
 - All fields are mandatory.`;
     
     const prompt = `Provide details for the Phoenician word: "${word}"`;
@@ -292,6 +301,7 @@ export const getTranslationCorrection = async (
     const languageName = getLanguageName(uiLang);
 
     const systemInstruction = `You are an expert AI linguistic assistant specializing in Phoenician. Your task is to help a user refine a translation.
+${transliterationSystemInstruction}
 - You will receive a source text, its original Phoenician translation, and a user's request for modification.
 - You MUST respond in the requested JSON format.
 - The 'improvedTranslation' object must be a complete, valid translation output, including Phoenician script, Latin and Arabic transliterations, and a full grammatical analysis, even if only one word was changed.
@@ -500,10 +510,14 @@ export const recognizeObjectsInImage = async (
 
     const textPart = {
         text: `You are an expert AI assistant for analyzing images and translating to ancient languages. Your task is to identify up to 5 prominent objects in the provided image.
+For your transliterations, adhere STRICTLY to this standard: 
+- Latin: 𐤀=ʾ, 𐤁=b, 𐤂=g, 𐤃=d, 𐤄=h, 𐤅=w, 𐤆=z, 𐤇=ḥ, 𐤈=ṭ, 𐤉=y, 𐤊=k, 𐤋=l, 𐤌=m, 𐤍=n, 𐤎=s, 𐤏=ʿ, 𐤐=p, 𐤑=ṣ, 𐤒=q, 𐤓=r, 𐤔=š, 𐤕=t.
+- Arabic: 𐤀=أ, 𐤁=ب, 𐤂=ج, 𐤃=د, 𐤄=هـ, 𐤅=و, 𐤆=ز, 𐤇=ح, 𐤈=ط, 𐤉=ي, 𐤊=ك, 𐤋=ل, 𐤌=م, 𐤍=ن, 𐤎=س, 𐤏=ع, 𐤐=پ, 𐤑=ص, 𐤒=ق, 𐤓=ر, 𐤔=ش, 𐤕=ت.
+
 For each object you identify, provide a JSON object containing seven fields:
 1. 'name': A simple, one-word English name for the object (e.g., 'tree', 'person', 'dog', 'car').
 2. 'phoenician': The translation of this English name into the ${dialectName} dialect of Phoenician. The translation must use Unicode characters from the Phoenician script block (U+10900–U+1091F). If a direct translation is not available, provide the closest conceptual equivalent.
-3. 'latin': A clear, phonetic Latin-based transliteration of the Phoenician word (e.g., /kom'pi.uter maħ'mu.ul/).
+3. 'latin': A Latin-based transliteration of the Phoenician word.
 4. 'arabicTransliteration': An Arabic-based phonetic transliteration of the Phoenician word.
 5. 'translation': The translation of the English object 'name' into ${languageName}.
 6. 'pos': The grammatical part of speech for the Phoenician word, such as 'Noun'.

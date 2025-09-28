@@ -3,7 +3,7 @@ import type { GlossaryEntry } from '../../types';
 export const heth: GlossaryEntry[] = [
   // Heth - 𐤇
   { phoenician: '𐤇', latin: 'ḥ', meaning: { en: 'Heth (eighth letter)', fr: 'Heth (huitième lettre)', ar: 'حاء (الحرف الثامن)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
-  { phoenician: '𐤇𐤁𐤀', latin: "ḥb'", meaning: { en: 'To hide', fr: 'Cacher', ar: 'يخبئ' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
+  { phoenician: '𐤇𐤁𐤀', latin: "ḥbʾ", meaning: { en: 'To hide', fr: 'Cacher', ar: 'يخبئ' }, grammar: { pos: 'Verb', stem: 'N-stem' } },
   { phoenician: '𐤇𐤁𐤄', latin: 'ḥbh', meaning: { en: 'To love, affection', fr: 'Aimer, affection', ar: 'يحب، مودة' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'Also a noun.' } },
   { phoenician: '𐤇𐤁𐤋', latin: 'ḥbl', meaning: { en: 'Rope, cord', fr: 'Corde', ar: 'حبل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤇𐤁𐤒', latin: 'ḥbq', meaning: { en: 'To embrace', fr: 'Étreindre', ar: 'يعانق' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
@@ -18,7 +18,7 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤅𐤌', latin: 'ḥwm', meaning: { en: 'Wall', fr: 'Mur', ar: 'سور' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤇𐤅𐤓', latin: 'ḥwr', meaning: { en: 'White stuff, noble', fr: 'Matière blanche, noble', ar: 'شيء أبيض، نبيل' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also an adjective.' } },
   { phoenician: '𐤇𐤅𐤒', latin: 'ḥwq', meaning: { en: 'Statute, ordinance', fr: 'Statut, ordonnance', ar: 'فريضة، قانون' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
-  { phoenician: '𐤇𐤈𐤀', latin: "ḥṭ'", meaning: { en: 'Sin', fr: 'Péché', ar: 'خطية' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤇𐤈𐤀', latin: "ḥṭʾ", meaning: { en: 'Sin', fr: 'Péché', ar: 'خطية' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤈𐤁', latin: 'ḥṭb', meaning: { en: 'To gather wood', fr: 'Ramasser du bois', ar: 'يحتطب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤇𐤈𐤄', latin: 'ḥṭh', meaning: { en: 'Wheat', fr: 'Blé', ar: 'قمح' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤇𐤈𐤌', latin: 'ḥṭm', meaning: { en: 'Muzzle', fr: 'Muselière', ar: 'كمامة' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
