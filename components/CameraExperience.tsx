@@ -15,6 +15,7 @@ import RefreshIcon from './icons/RefreshIcon';
 import ScriptModeToggle from './ScriptModeToggle';
 import EyeIcon from './icons/EyeIcon';
 import ResetIcon from './icons/ResetIcon';
+import SwitchCameraIcon from './icons/SwitchCameraIcon';
 
 
 // Add type definitions for experimental MediaTrackCapabilities properties.
@@ -56,7 +57,7 @@ interface CameraExperienceProps {
 }
 
 const LERP_FACTOR = 0.1; // For smooth animation of AR tags
-const ANALYSIS_INTERVAL = 2500; // ms between AR recognition calls
+const ANALYSIS_INTERVAL = 1500; // ms between AR recognition calls
 
 const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, dialect, t, uiLang }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -134,6 +135,10 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             if (caps.exposureMode?.includes('continuous')) {
                 await track.applyConstraints({ advanced: [{ exposureMode: 'continuous' } as any] })
                     .catch(e => console.warn("Could not set continuous exposure.", e));
+            }
+             if (caps.whiteBalanceMode?.includes('continuous')) {
+                await track.applyConstraints({ advanced: [{ whiteBalanceMode: 'continuous' } as any] })
+                    .catch(e => console.warn("Could not set continuous white balance.", e));
             }
 
             setZoom(caps.zoom?.min ?? 1);
@@ -252,8 +257,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     }, [isRecognizing, arDialect, uiLang, t]);
     
     const runArAnimation = useCallback(() => {
-        if (!isArEnabled) { stopAr(); return; }
-
         setArObjects(prev => {
             const next = prev.map(obj => {
                 const newObj = { ...obj };
@@ -267,19 +270,23 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         });
 
         animationFrameId.current = requestAnimationFrame(runArAnimation);
-    }, [isArEnabled, stopAr]);
+    }, []);
 
     useEffect(() => {
-        if (isArEnabled) {
-            stopAr();
-            analyzeFrame();
+        if (isArEnabled && isOpen) {
+            stopAr(); // Reset previous state
+            const timeoutId = setTimeout(() => analyzeFrame(), 500);
             analysisIntervalId.current = window.setInterval(analyzeFrame, ANALYSIS_INTERVAL);
             animationFrameId.current = requestAnimationFrame(runArAnimation);
+            
+            return () => {
+                clearTimeout(timeoutId);
+                stopAr();
+            };
         } else {
             stopAr();
         }
-        return () => stopAr();
-    }, [isArEnabled, analyzeFrame, runArAnimation, stopAr]);
+    }, [isArEnabled, isOpen, analyzeFrame, runArAnimation, stopAr]);
 
     const handleShare = async () => {
         const container = containerRef.current;
@@ -374,11 +381,11 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <button onClick={() => setIsArEnabled(e => !e)} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('arToggle')}>
-                           <EyeIcon className="h-6 w-6" isSlashed={!isArEnabled}/>
-                        </button>
                         <button onClick={() => analyzeFrame()} disabled={isLoading || !isArEnabled || isRecognizing} className="p-3 rounded-full bg-black/30 backdrop-blur-sm disabled:opacity-50" title={t('analyzeObjects')}>
                            <RefreshIcon className="h-6 w-6" />
+                        </button>
+                         <button onClick={() => setFacingMode(m => m === 'user' ? 'environment' : 'user')} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('switchCamera')}>
+                            <SwitchCameraIcon className="h-6 w-6" />
                         </button>
                         <button onClick={() => setIsSettingsOpen(o => !o)} className="p-3 rounded-full bg-black/30 backdrop-blur-sm" title={t('advancedSettings')}>
                             <SettingsIcon className="w-6 h-6" />
@@ -429,7 +436,23 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 </div>}
 
                 <footer className="camera-bottom-bar px-4">
-                    <ScriptModeToggle scriptMode={arDialect} setScriptMode={setArDialect} t={t} />
+                     <div className="camera-controls-panel">
+                        <div className="flex items-center space-x-2" title={t('arToggle')}>
+                            <EyeIcon className="w-5 h-5" isSlashed={!isArEnabled}/>
+                            <label htmlFor="ar-toggle" className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    id="ar-toggle"
+                                    className="sr-only peer"
+                                    checked={isArEnabled}
+                                    onChange={() => setIsArEnabled(e => !e)}
+                                />
+                                <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[color:var(--color-primary)]"></div>
+                            </label>
+                        </div>
+                        <div className="w-px h-6 bg-white/20"></div>
+                        <ScriptModeToggle scriptMode={arDialect} setScriptMode={setArDialect} t={t} />
+                    </div>
                 </footer>
             </div>
         </div>
