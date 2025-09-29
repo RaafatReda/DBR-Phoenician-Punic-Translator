@@ -22,9 +22,9 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ currentLang, onChan
           <button
             key={lang.code}
             onClick={() => onChangeLang(lang.code)}
-            className={`font-semibold text-sm transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent focus:ring-yellow-400 flex items-center justify-center h-8
+            className={`font-semibold text-sm transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent focus:ring-[color:var(--color-primary)] flex items-center justify-center h-8
               ${ isActive
-                ? 'bg-yellow-400 text-gray-900 shadow-lg w-8'
+                ? 'bg-[color:var(--color-primary)] text-white shadow-lg w-8'
                 : 'text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] w-8'
               }`}
             aria-pressed={isActive}

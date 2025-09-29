@@ -20,7 +20,6 @@ import KeyboardIcon from './components/icons/KeyboardIcon';
 import HandwritingCanvas from './components/HandwritingCanvas';
 import PencilIcon from './components/icons/PencilIcon';
 import CameraIcon from './components/icons/CameraIcon';
-import ThemeToggle from './components/ThemeToggle';
 import ManualModal from './components/ManualModal';
 import CopyIcon from './components/icons/CopyIcon';
 import CheckIcon from './components/icons/CheckIcon';
@@ -45,9 +44,6 @@ import PhoenicianDictionaryModal from './components/PhoenicianDictionaryModal';
 import { translations, UILang } from './lib/i18n';
 import LayoutEditIcon from './components/icons/LayoutEditIcon';
 import GroupEditCanvas from './components/GroupEditCanvas';
-import FontSizeIcon from './components/icons/FontSizeIcon';
-import FontSizeManager from './components/FontSizeManager';
-import LanguageSwitcher from './components/LanguageSwitcher';
 import CognateComparisonToggle from './components/CognateComparisonToggle';
 import CognateDisplay from './components/CognateDisplay';
 import CameraExperience from './components/CameraExperience';
@@ -56,10 +52,11 @@ import SpeakerIcon from './components/icons/SpeakerIcon';
 import AIAssistantModal from './components/AIAssistantModal';
 import SparklesIcon from './components/icons/SparklesIcon';
 import LessonsPage from './components/LessonsPage';
-import DatabaseIcon from './components/icons/DatabaseIcon';
+import MainMenu from './components/MainMenu';
 import DictionaryIcon from './components/icons/DictionaryIcon';
-import ManualIcon from './components/icons/ManualIcon';
 import NewspaperIcon from './components/icons/NewspaperIcon';
+import ManualIcon from './components/icons/ManualIcon';
+import DatabaseIcon from './components/icons/DatabaseIcon';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -141,7 +138,7 @@ declare global {
   }
 }
 
-type Theme = 'light' | 'dark' | 'papyrus';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy';
 type FontSize = 'small' | 'medium' | 'large';
 
 const App: React.FC = () => {
@@ -173,7 +170,7 @@ const App: React.FC = () => {
   const [isHandwritingCanvasOpen, setIsHandwritingCanvasOpen] = useState<boolean>(false);
   const [isProcessingImage, setIsProcessingImage] = useState<boolean>(false);
   const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem('dbr-translator-theme') as Theme) || 'dark';
+    return (localStorage.getItem('dbr-translator-theme') as Theme) || 'purple-glassy';
   });
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
@@ -186,7 +183,6 @@ const App: React.FC = () => {
   const [fontSize, setFontSize] = useState<FontSize>(() => {
     return (localStorage.getItem('dbr-translator-fontsize') as FontSize) || 'medium';
   });
-  const [isFontSizeManagerOpen, setIsFontSizeManagerOpen] = useState(false);
   const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
   const [isAssistantModalOpen, setIsAssistantModalOpen] = useState<boolean>(false);
   const [isLessonsPageOpen, setIsLessonsPageOpen] = useState<boolean>(false);
@@ -229,18 +225,6 @@ const App: React.FC = () => {
     document.documentElement.style.fontSize = sizeMap[fontSize];
     localStorage.setItem('dbr-translator-fontsize', fontSize);
   }, [fontSize]);
-
-  useEffect(() => {
-    const handleClickOutside = () => {
-      setIsFontSizeManagerOpen(false);
-    };
-    if (isFontSizeManagerOpen) {
-      window.addEventListener('click', handleClickOutside);
-    }
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, [isFontSizeManagerOpen]);
 
   useEffect(() => {
     const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -411,7 +395,8 @@ const App: React.FC = () => {
     setTheme(prevTheme => {
       if (prevTheme === 'light') return 'dark';
       if (prevTheme === 'dark') return 'papyrus';
-      return 'light'; // papyrus -> light
+      if (prevTheme === 'papyrus') return 'purple-glassy';
+      return 'light'; // purple-glassy -> light
     });
   };
 
@@ -725,32 +710,15 @@ const App: React.FC = () => {
       <div className={`min-h-screen flex flex-col items-center p-4 sm:p-6 md:p-8 transition-all duration-300 ${isKeyboardOpen ? 'pb-80 sm:pb-72' : ''}`}>
         <header className="w-full max-w-5xl flex justify-between items-start mb-10">
           <div className="flex-1 flex justify-start items-center">
-            <div className="glass-panel rounded-full p-1 flex items-center">
-                <LanguageSwitcher currentLang={uiLang} onChangeLang={setUiLang} />
-                <div className="w-px h-5 bg-[color:var(--color-border)] mx-1"></div>
-                <ThemeToggle theme={theme} onToggle={handleThemeToggle} t={t} />
-                <div className="w-px h-5 bg-[color:var(--color-border)] mx-1"></div>
-                <div className="relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsFontSizeManagerOpen(prev => !prev);
-                    }}
-                    className="p-2 rounded-full text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] focus:outline-none transition-colors"
-                    aria-label={t('fontSizeManagerTitle')}
-                    title={t('fontSizeManagerTitle')}
-                  >
-                    <FontSizeIcon className="w-5 h-5" />
-                  </button>
-                  {isFontSizeManagerOpen && (
-                    <FontSizeManager
-                      currentSize={fontSize}
-                      onSizeChange={handleFontSizeChange}
-                      t={t}
-                    />
-                  )}
-                </div>
-            </div>
+             <MainMenu
+                uiLang={uiLang}
+                setUiLang={setUiLang}
+                theme={theme}
+                onThemeToggle={handleThemeToggle}
+                fontSize={fontSize}
+                onFontSizeChange={handleFontSizeChange}
+                t={t}
+              />
           </div>
           <div className="text-center">
             <h1 className="text-8xl sm:text-9xl font-bold [font-family:var(--font-punic)] text-[color:var(--color-primary)] leading-tight animate-pulse [animation-duration:3s]">
@@ -763,39 +731,21 @@ const App: React.FC = () => {
               {t('subtitle')}
             </p>
           </div>
-          <div className="flex-1 flex justify-end items-center space-x-1 flex-wrap">
-              <button
-                  onClick={() => setIsDictionaryOpen(true)}
-                  className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-                  aria-label={t('dictionaryTitle')}
-                  title={t('dictionaryTitle')}
-              >
-                  <DictionaryIcon className="w-6 h-6" />
-              </button>
-              <button
-                  onClick={() => setIsLessonsPageOpen(true)}
-                  className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-                  aria-label={t('lessonsTitle')}
-                  title={t('lessonsTitle')}
-              >
-                  <NewspaperIcon className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => setIsManualModalOpen(true)}
-                className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-                aria-label={t('manualTitle')}
-                title={t('manualTitle')}
-              >
-                <ManualIcon className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors"
-                aria-label={t('savedTranslationsTitle')}
-                title={t('savedTranslationsTitle')}
-              >
-                <DatabaseIcon className="w-6 h-6" />
-              </button>
+          <div className="flex-1 flex justify-end items-center">
+              <div className="flex items-center glass-panel rounded-full p-2 space-x-1">
+                  <button onClick={() => setIsDictionaryOpen(true)} className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors" title={t('dictionaryTitle')}>
+                      <DictionaryIcon className="w-6 h-6" />
+                  </button>
+                  <button onClick={() => setIsLessonsPageOpen(true)} className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors" title={t('lessonsTitle')}>
+                      <NewspaperIcon className="w-6 h-6" />
+                  </button>
+                  <button onClick={() => setIsManualModalOpen(true)} className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors" title={t('manualTitle')}>
+                    <ManualIcon className="w-6 h-6" />
+                  </button>
+                  <button onClick={() => setIsModalOpen(true)} className="p-3 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-colors" title={t('savedTranslationsTitle')}>
+                    <DatabaseIcon className="w-6 h-6" />
+                  </button>
+              </div>
           </div>
         </header>
 

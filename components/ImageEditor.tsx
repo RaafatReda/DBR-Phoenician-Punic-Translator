@@ -78,12 +78,13 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
         ctx.restore();
         
         // 3. Draw crop box border and handles
-        ctx.strokeStyle = '#FBBF24'; // amber-400
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
+        ctx.strokeStyle = primaryColor;
         ctx.lineWidth = 2;
         ctx.strokeRect(crop.x, crop.y, crop.width, crop.height);
         
         const hs = HANDLE_SIZE / 2;
-        ctx.fillStyle = '#FBBF24';
+        ctx.fillStyle = primaryColor;
         
         const drawHandle = (x: number, y: number) => {
             ctx.fillRect(x - hs, y - hs, HANDLE_SIZE, HANDLE_SIZE);
@@ -246,9 +247,9 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
     };
 
     return (
-        <div className="w-full h-full flex flex-col bg-[#0D1117] text-white/90">
-             <header className="flex justify-between items-center p-4 border-b border-white/10 flex-shrink-0">
-                <h2 id="scanner-title" className="text-lg font-semibold text-amber-300">{titleText}</h2>
+        <div className="w-full h-full flex flex-col bg-[color:var(--color-bg-start)] text-[color:var(--color-text)]">
+             <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0">
+                <h2 id="scanner-title" className="text-lg font-semibold text-[color:var(--color-primary)]">{titleText}</h2>
              </header>
 
             <div className="flex-grow relative cursor-grab active:cursor-grabbing bg-black">
@@ -270,17 +271,17 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
                     <div className="flex items-center space-x-2">
                         <SunIcon className="w-5 h-5 opacity-80" />
                         <label htmlFor="brightness" className="text-sm font-semibold w-20 shrink-0">{t('brightness')}</label>
-                        <input id="brightness" type="range" min="0" max="200" value={brightness} onChange={(e) => setBrightness(parseInt(e.target.value, 10))} className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer range-slider" />
+                        <input id="brightness" type="range" min="0" max="200" value={brightness} onChange={(e) => setBrightness(parseInt(e.target.value, 10))} className="w-full h-1.5 rounded-lg appearance-none cursor-pointer range-slider" />
                     </div>
                     <div className="flex items-center space-x-2">
                         <ContrastIcon className="w-5 h-5 opacity-80" />
                         <label htmlFor="contrast" className="text-sm font-semibold w-20 shrink-0">{t('contrast')}</label>
-                        <input id="contrast" type="range" min="0" max="200" value={contrast} onChange={(e) => setContrast(parseInt(e.target.value, 10))} className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer range-slider" />
+                        <input id="contrast" type="range" min="0" max="200" value={contrast} onChange={(e) => setContrast(parseInt(e.target.value, 10))} className="w-full h-1.5 rounded-lg appearance-none cursor-pointer range-slider" />
                     </div>
                 </div>
                  <div className="flex justify-between items-center pt-2">
                     <div className="flex items-center">
-                        <input id="grayscale" type="checkbox" checked={grayscale} onChange={(e) => setGrayscale(e.target.checked)} className="w-4 h-4 text-purple-400 bg-gray-800 border-gray-600 rounded focus:ring-purple-500 focus:ring-offset-gray-900" />
+                        <input id="grayscale" type="checkbox" checked={grayscale} onChange={(e) => setGrayscale(e.target.checked)} className="w-4 h-4 text-[color:var(--color-primary)] bg-[color:var(--color-surface-solid)] border-[color:var(--color-border)] rounded focus:ring-[color:var(--color-primary)] focus:ring-offset-[color:var(--color-bg-start)]" />
                         <label htmlFor="grayscale" className="ml-2 text-sm font-semibold">{t('grayscale')}</label>
                     </div>
                     <button onClick={handleReset} className="p-2 rounded-full hover:bg-white/10" title={t('resetAdjustments')}>
@@ -288,11 +289,11 @@ const ImageEditor: React.FC<ImageEditorProps> = ({ src, onConfirm, onCancel, t, 
                     </button>
                 </div>
             </div>
-            <div className="p-4 border-t border-white/10 flex-shrink-0 flex items-center justify-center space-x-4">
-                 <button onClick={onCancel} className="px-8 py-2.5 font-semibold text-white bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors">
+            <div className="p-4 border-t border-[color:var(--color-border)] flex-shrink-0 flex items-center justify-center space-x-4">
+                 <button onClick={onCancel} className="px-8 py-2.5 font-semibold bg-transparent border border-[color:var(--color-border)] rounded-lg hover:bg-white/10 transition-colors">
                     {cancelText}
                 </button>
-                 <button onClick={handleConfirm} disabled={isProcessing} className="flex items-center justify-center w-48 px-8 py-3 font-semibold text-black bg-amber-400 rounded-lg shadow-md hover:bg-amber-300 transition-all disabled:opacity-50">
+                 <button onClick={handleConfirm} disabled={isProcessing} className="flex items-center justify-center w-48 px-8 py-3 font-semibold text-white bg-[color:var(--color-primary)] rounded-lg shadow-md hover:opacity-90 transition-all disabled:opacity-50">
                     {isProcessing ? <Loader className="w-5 h-5"/> : confirmText}
                 </button>
             </div>
