@@ -6,18 +6,16 @@ import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import SettingsIcon from './icons/SettingsIcon';
 import FocusIcon from './icons/FocusIcon';
-import ExposureIcon from './icons/ExposureIcon';
-import WhiteBalanceIcon from './icons/WhiteBalanceIcon';
 import SunIcon from './icons/SunIcon';
 import ContrastIcon from './icons/ContrastIcon';
 import UploadIcon from './icons/UploadIcon';
-import RefreshIcon from './icons/RefreshIcon';
-import ScriptModeToggle from './ScriptModeToggle';
 import EyeIcon from './icons/EyeIcon';
 import ResetIcon from './icons/ResetIcon';
 import SwitchCameraIcon from './icons/SwitchCameraIcon';
 import ImageEditor from './ImageEditor';
 import CameraIcon from './icons/CameraIcon';
+import HistoryIcon from './icons/HistoryIcon';
+import FontSizeIcon from './icons/FontSizeIcon';
 
 
 // Add type definitions for experimental MediaTrackCapabilities properties.
@@ -49,6 +47,7 @@ interface ArObject {
     opacity: number;
     targetOpacity: number;
     isDead: boolean;
+    lastSeen: number;
 }
 
 interface CameraExperienceProps {
@@ -59,7 +58,6 @@ interface CameraExperienceProps {
     uiLang: UILang;
 }
 
-const LERP_FACTOR = 0.1; // For smooth animation of AR tags
 const ANALYSIS_INTERVAL = 2000; // ms between AR recognition calls
 
 const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, dialect, t, uiLang }) => {
@@ -69,6 +67,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const animationFrameId = useRef<number | null>(null);
     const analysisIntervalId = useRef<number | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const lastFrameTimeRef = useRef<number>(performance.now());
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -78,9 +77,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     // Camera Capabilities State
     const [capabilities, setCapabilities] = useState<ExtendedMediaTrackCapabilities | null>(null);
     const [zoom, setZoom] = useState(1);
-    const [focus, setFocus] = useState(0);
-    const [exposure, setExposure] = useState(0);
-    const [whiteBalance, setWhiteBalance] = useState(0);
     const [brightness, setBrightness] = useState(100);
     const [contrast, setContrast] = useState(100);
 
@@ -92,6 +88,11 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     const [arDialect, setArDialect] = useState<PhoenicianDialect>(dialect);
     const [expandedBubbleId, setExpandedBubbleId] = useState<string | null>(null);
     
+    // AR User Settings
+    const [arPersistence, setArPersistence] = useState(2000); // ms
+    const [arAnimationSpeed, setArAnimationSpeed] = useState(8); // 1-20
+    const [arFontSizeScale, setArFontSizeScale] = useState(1); // 0.8 to 1.5
+
     // Image Upload Flow State
     const [imageToEdit, setImageToEdit] = useState<string | null>(null);
     const [analyzedImage, setAnalyzedImage] = useState<string | null>(null);
@@ -135,7 +136,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             streamRef.current = stream;
             if (videoRef.current) videoRef.current.srcObject = stream;
             
-            // Wait for the video to start playing to get metadata
             await new Promise((resolve) => {
                 if(videoRef.current) videoRef.current.onloadedmetadata = resolve;
             });
@@ -143,12 +143,10 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             const track = stream.getVideoTracks()[0];
             if (!track) throw new Error("No video track found");
 
-            // Attempt to set continuous modes for better automatic adjustments
             try {
-                // FIX: Cast to 'any' to access experimental/non-standard browser API properties for camera constraints.
-                // This resolves errors where properties like 'exposureMode' are not found on the standard types.
                 const supportedConstraints = navigator.mediaDevices.getSupportedConstraints() as any;
-                const constraintsToApply: MediaTrackConstraints = {} as any;
+                // FIX: Changed type of constraintsToApply to `any` to allow setting non-standard experimental properties.
+                const constraintsToApply: any = {};
                 if (supportedConstraints.exposureMode) constraintsToApply.exposureMode = 'continuous';
                 if (supportedConstraints.whiteBalanceMode) constraintsToApply.whiteBalanceMode = 'continuous';
                 if (supportedConstraints.focusMode) constraintsToApply.focusMode = 'continuous';
@@ -159,12 +157,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             
             const caps = track.getCapabilities() as ExtendedMediaTrackCapabilities;
             setCapabilities(caps);
-
-            // Initialize sliders to default/minimum values
             setZoom(caps.zoom?.min ?? 1);
-            setFocus(caps.focusDistance?.min ?? 0);
-            setExposure(caps.exposureTime?.min ?? 0);
-            setWhiteBalance(caps.colorTemperature?.min ?? 0);
 
         } catch (err) {
             console.error("Camera access error:", err);
@@ -191,21 +184,19 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
 
     useEffect(() => {
         const track = streamRef.current?.getVideoTracks()[0];
-        if (!track || !capabilities) return;
-        const constraints: any = { advanced: [] };
-        if (capabilities.zoom) constraints.advanced.push({ zoom });
-        track.applyConstraints(constraints).catch(e => console.warn("Failed to apply zoom", e));
+        if (!track || !capabilities?.zoom) return;
+        track.applyConstraints({ advanced: [{ zoom }] }).catch(e => console.warn("Failed to apply zoom", e));
     }, [zoom, capabilities]);
 
     const analyzeFrame = useCallback(async (isManualTrigger = false) => {
-        if (isRecognizing || !videoRef.current || videoRef.current.readyState < 2) return;
+        if ((!isManualTrigger && isRecognizing) || !videoRef.current || videoRef.current.readyState < 2) return;
         
         setIsRecognizing(true);
         setArError(null);
         const video = videoRef.current;
         const tempCanvas = document.createElement('canvas');
         
-        const MAX_WIDTH = 720;
+        const MAX_WIDTH = 640;
         const scale = video.videoWidth > MAX_WIDTH ? MAX_WIDTH / video.videoWidth : 1;
         tempCanvas.width = video.videoWidth * scale;
         tempCanvas.height = video.videoHeight * scale;
@@ -215,20 +206,22 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         
         ctx.filter = video.style.filter;
         ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-        const base64Data = tempCanvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+        const base64Data = tempCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
 
         try {
             const results: RecognizedObject[] = await recognizeObjectsInImage(base64Data, arDialect, uiLang);
             
             setArObjects(prev => {
                 const matchedIds = new Set<string>();
+                const now = Date.now();
+
                 const nextObjects: ArObject[] = results.map(res => {
                     const id = `${res.name}-${res.phoenician}`;
                     matchedIds.add(id);
                     
                     const existing = prev.find(p => p.id === id);
                     if (existing) {
-                        return { ...existing, box: res.box, targetOpacity: 1, isDead: false };
+                        return { ...existing, box: res.box, targetOpacity: 1, isDead: false, lastSeen: now };
                     }
                     return {
                         id, ...res,
@@ -236,13 +229,13 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                         currentY: (res.box.y + res.box.height / 2) * 100,
                         targetX: (res.box.x + res.box.width / 2) * 100, 
                         targetY: (res.box.y + res.box.height / 2) * 100,
-                        opacity: 0, targetOpacity: 1, isDead: false,
+                        opacity: 0, targetOpacity: 1, isDead: false, lastSeen: now
                     };
                 });
                 
                 prev.forEach(p => {
                     if (!matchedIds.has(p.id)) {
-                        nextObjects.push({ ...p, targetOpacity: 0 });
+                        nextObjects.push({ ...p });
                     }
                 });
                 return nextObjects;
@@ -264,27 +257,41 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             return;
         }
 
+        const now = performance.now();
+        const deltaTime = now - lastFrameTimeRef.current;
+        lastFrameTimeRef.current = now;
+
+        const LERP_BASE = 0.25;
+        const lerpFactor = LERP_BASE * (arAnimationSpeed / 10);
+        const effectiveLerp = 1 - Math.pow(1 - lerpFactor, deltaTime / 16.67);
+
         const videoAR = video.videoWidth / video.videoHeight;
         const overlayAR = overlay.clientWidth / overlay.clientHeight;
         let scale, offsetX = 0, offsetY = 0;
 
-        if (videoAR > overlayAR) { // Video is wider (letterboxed logic for cover)
+        if (videoAR > overlayAR) {
             scale = overlay.clientHeight / video.videoHeight;
             offsetX = (overlay.clientWidth - video.videoWidth * scale) / 2;
-        } else { // Video is taller (pillarboxed logic for cover)
+        } else {
             scale = overlay.clientWidth / video.videoWidth;
             offsetY = (overlay.clientHeight - video.videoHeight * scale) / 2;
         }
 
         setArObjects(prev => {
+            const currentTime = Date.now();
             const next = prev.map(obj => {
                 const newObj = { ...obj };
+                
+                if (currentTime - newObj.lastSeen > arPersistence) {
+                    newObj.targetOpacity = 0;
+                }
+
                 const targetPixelX = (obj.box.x + obj.box.width / 2) * (video.videoWidth * scale) + offsetX;
                 const targetPixelY = (obj.box.y + obj.box.height / 2) * (video.videoHeight * scale) + offsetY;
 
-                newObj.currentX += (targetPixelX - newObj.currentX) * LERP_FACTOR;
-                newObj.currentY += (targetPixelY - newObj.currentY) * LERP_FACTOR;
-                newObj.opacity += (newObj.targetOpacity - newObj.opacity) * LERP_FACTOR;
+                newObj.currentX += (targetPixelX - newObj.currentX) * effectiveLerp;
+                newObj.currentY += (targetPixelY - newObj.currentY) * effectiveLerp;
+                newObj.opacity += (newObj.targetOpacity - newObj.opacity) * effectiveLerp;
                 
                 if (newObj.targetOpacity === 0 && newObj.opacity < 0.01) newObj.isDead = true;
                 return newObj;
@@ -293,12 +300,13 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         });
 
         animationFrameId.current = requestAnimationFrame(runArAnimation);
-    }, []);
+    }, [arAnimationSpeed, arPersistence]);
 
     useEffect(() => {
         if (isArEnabled && isOpen && !analyzedImage) {
-            stopAr(); // Reset previous state
-            const timeoutId = setTimeout(() => analyzeFrame(), 500); // Initial analysis
+            stopAr();
+            lastFrameTimeRef.current = performance.now();
+            const timeoutId = setTimeout(() => analyzeFrame(), 500);
             analysisIntervalId.current = window.setInterval(() => analyzeFrame(), ANALYSIS_INTERVAL);
             animationFrameId.current = requestAnimationFrame(runArAnimation);
             
@@ -360,9 +368,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     }
 
     const renderArBubble = (obj: ArObject | RecognizedObject, isStatic: boolean) => {
-        // FIX: Correctly distinguish between ArObject and RecognizedObject to generate a stable ID.
-        // The previous check ('name' in obj) was always true, leading to a type error.
-        // This now checks for the unique 'id' property in ArObject.
         const id = 'id' in obj ? obj.id : `${obj.name}-${obj.phoenician}`;
         const fontClass = arDialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)]' : '[font-family:var(--font-phoenician)]';
         const isExpanded = expandedBubbleId === id;
@@ -374,12 +379,14 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 positionStyle = {
                     left: `${(obj.box.x + obj.box.width / 2) * 100}%`,
                     top: `${(obj.box.y + obj.box.height / 2) * 100}%`,
+                    transform: 'translate(-50%, -50%)',
                     opacity: 1
                 }
             }
         } else if ('currentX' in obj) {
             positionStyle = {
-                transform: `translate(-50%, -50%) translate(${obj.currentX}px, ${obj.currentY}px) scale(${isExpanded ? 1.1 : 1})`,
+                '--transform-gpu': `translate(-50%, -50%) translate(${obj.currentX.toFixed(2)}px, ${obj.currentY.toFixed(2)}px)`,
+                transform: `var(--transform-gpu)`,
                 opacity: obj.opacity,
                 pointerEvents: obj.opacity > 0.5 ? 'auto' : 'none',
             };
@@ -433,7 +440,12 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 <video id="camera-feed" ref={videoRef} autoPlay playsInline muted />
             )}
 
-            <div ref={arOverlayRef} className="ar-canvas" onClick={() => setExpandedBubbleId(null)}>
+            <div 
+                ref={arOverlayRef} 
+                className="ar-canvas" 
+                onClick={() => setExpandedBubbleId(null)}
+                style={{ '--ar-font-size-scale': arFontSizeScale } as React.CSSProperties}
+            >
                 {analyzedImage 
                     ? staticArObjects.map(obj => renderArBubble(obj, true))
                     : arObjects.map(obj => renderArBubble(obj, false))
@@ -479,6 +491,23 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                         <label className="camera-slider-label"><ContrastIcon className="w-5 h-5"/>{t('contrast')}</label>
                         <input type="range" min="50" max="200" value={contrast} onChange={e => setContrast(parseFloat(e.target.value))} className="range-slider" />
                     </div>
+                    
+                    <hr className="border-white/10 my-2" />
+                    <h4 className="text-md font-semibold text-center -mb-2">AR Display</h4>
+                    
+                     <div className="camera-slider-container">
+                        <label className="camera-slider-label"><HistoryIcon className="w-5 h-5"/>AR Persistence</label>
+                        <input type="range" min="500" max="5000" step="100" value={arPersistence} onChange={e => setArPersistence(Number(e.target.value))} className="range-slider" />
+                    </div>
+                     <div className="camera-slider-container">
+                        <label className="camera-slider-label"><span className="w-5 h-5 text-center font-bold text-xs flex items-center justify-center">SPD</span>AR Speed</label>
+                        <input type="range" min="1" max="20" step="1" value={arAnimationSpeed} onChange={e => setArAnimationSpeed(Number(e.target.value))} className="range-slider" />
+                    </div>
+                     <div className="camera-slider-container">
+                        <label className="camera-slider-label"><FontSizeIcon className="w-5 h-5"/>AR Font Size</label>
+                        <input type="range" min="0.8" max="1.5" step="0.1" value={arFontSizeScale} onChange={e => setArFontSizeScale(Number(e.target.value))} className="range-slider" />
+                    </div>
+                    
                     <button 
                         onClick={handleResetAdjustments} 
                         className="flex items-center justify-center gap-2 w-full mt-2 px-4 py-2 text-sm font-semibold rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
