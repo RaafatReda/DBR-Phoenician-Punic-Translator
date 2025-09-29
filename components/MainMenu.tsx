@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { UILang } from '../lib/i18n';
 import HomeIcon from './icons/HomeIcon';
@@ -7,7 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import FontSizeManager from './FontSizeManager';
 import FontSizeIcon from './icons/FontSizeIcon';
 
-type Theme = 'light' | 'dark' | 'papyrus';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy';
 type FontSize = 'small' | 'medium' | 'large';
 
 interface MainMenuProps {
@@ -76,7 +75,7 @@ const MainMenu: React.FC<MainMenuProps> = ({
   return (
     <div
       ref={menuRef}
-      className="relative flex items-center h-[58px]"
+      className="relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -91,20 +90,22 @@ const MainMenu: React.FC<MainMenuProps> = ({
 
       <div
         className={`
-          absolute top-0 start-0 h-full
-          flex items-center transition-all duration-300 ease-in-out z-10
-          ${isOpen ? 'w-auto opacity-100' : 'w-0 opacity-0'}
-          overflow-hidden
+          absolute top-full start-0 mt-2
+          transition-all transform origin-top duration-300 ease-in-out z-10
+          ${isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}
         `}
       >
-        <div className="flex items-center glass-panel rounded-full p-1 ps-16 whitespace-nowrap">
-          {/* Settings */}
-          <div className="flex items-center p-1">
-             <LanguageSwitcher currentLang={uiLang} onChangeLang={setUiLang} />
-             <div className="w-px h-5 bg-[color:var(--color-border)] mx-1"></div>
-             <ThemeToggle theme={theme} onToggle={onThemeToggle} t={t} />
-             <div className="w-px h-5 bg-[color:var(--color-border)] mx-1"></div>
-             <div className="relative">
+        <div className="glass-panel rounded-2xl p-3 whitespace-nowrap">
+          <div className="flex flex-col items-center space-y-2">
+            <LanguageSwitcher currentLang={uiLang} onChangeLang={setUiLang} />
+            
+            <div className="w-full h-px bg-[color:var(--color-border)] opacity-50"></div>
+            
+            <ThemeToggle theme={theme} onToggle={onThemeToggle} t={t} />
+            
+            <div className="w-full h-px bg-[color:var(--color-border)] opacity-50"></div>
+            
+            <div className="relative">
                 <button
                     onClick={(e) => {
                     e.stopPropagation();

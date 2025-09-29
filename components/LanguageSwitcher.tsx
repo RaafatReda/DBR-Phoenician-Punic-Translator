@@ -15,17 +15,17 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ currentLang, onChan
   ];
 
   return (
-    <div className="flex items-center space-x-2 px-1">
+    <div className="flex flex-col items-center space-y-2">
       {languages.map(lang => {
         const isActive = currentLang === lang.code;
         return (
           <button
             key={lang.code}
             onClick={() => onChangeLang(lang.code)}
-            className={`font-semibold text-sm transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent focus:ring-[color:var(--color-primary)] flex items-center justify-center h-8
+            className={`font-semibold text-sm transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent focus:ring-[color:var(--color-primary)] flex items-center justify-center h-8 w-8
               ${ isActive
-                ? 'bg-[color:var(--color-primary)] text-white shadow-lg w-8'
-                : 'text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] w-8'
+                ? 'bg-[color:var(--color-primary)] text-[color:var(--keyboard-active-button-text)] shadow-lg'
+                : 'text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]'
               }`}
             aria-pressed={isActive}
           >
