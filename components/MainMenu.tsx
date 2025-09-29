@@ -95,7 +95,7 @@ const MainMenu: React.FC<MainMenuProps> = ({
           ${isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}
         `}
       >
-        <div className="glass-panel rounded-2xl p-3 whitespace-nowrap">
+        <div className="glass-panel rounded-2xl p-3 whitespace-nowrap" style={{ overflow: 'visible' }}>
           <div className="flex flex-col items-center space-y-2">
             <LanguageSwitcher currentLang={uiLang} onChangeLang={setUiLang} />
             
