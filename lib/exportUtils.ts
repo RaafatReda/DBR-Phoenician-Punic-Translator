@@ -8,7 +8,7 @@ const escapeHtml = (unsafe: string | undefined): string => {
     return unsafe.replace(/[&<"']/g, m => ({ '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": '&#039;' }[m]!));
 };
 
-const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQ-- LDR`;
+const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQ-- LDR`;
 
 export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang): string => {
     const translationsHtml = translations.map(item => {
@@ -55,7 +55,7 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
             <title>DBR Translations</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Handlee&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
             <style>
                 @font-face {
                   font-family: 'Punic LDR';
@@ -64,7 +64,7 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
                   font-style: normal;
                 }
                 body { 
-                    font-family: 'Poppins', sans-serif; 
+                    font-family: 'Handlee', cursive; 
                     margin: 20px; 
                     color: #333; 
                 }
@@ -136,6 +136,7 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
                 .transliteration .arabic {
                     margin: 2px 0 0;
                     direction: rtl;
+                    font-family: 'Noto Naskh Arabic', serif;
                 }
                 .notes { 
                     margin-top: 15px; 
@@ -204,7 +205,7 @@ export const generateGlossaryHtmlForPdf = (
         <title>${escapeHtml(pdfTitle)}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Poppins:wght@400;600&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Handlee&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
         <style>
           @font-face {
             font-family: 'Punic LDR';
@@ -213,9 +214,12 @@ export const generateGlossaryHtmlForPdf = (
             font-style: normal;
           }
           body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Handlee', cursive;
             margin: 20px;
             color: #333;
+          }
+          html[lang="ar"] body {
+            font-family: 'Noto Naskh Arabic', serif;
           }
           @media print {
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -263,6 +267,7 @@ export const generateGlossaryHtmlForPdf = (
             color: #777;
             font-style: italic;
             direction: ltr;
+            font-family: 'Handlee', cursive;
           }
           .meaning {
             flex-basis: 55%;
@@ -281,9 +286,10 @@ export const generateGlossaryHtmlForPdf = (
 }
 
 
-const FONT_SANS = `'Poppins', sans-serif`;
+const FONT_SANS = `'Handlee', cursive`;
 const FONT_PHOENICIAN = `'Noto Sans Phoenician', serif`;
 const FONT_SERIF = `'Cinzel', serif`;
+const FONT_ARABIC = `'Noto Naskh Arabic', serif`;
 
 const wrapText = (text: string, maxCharsPerLine: number): string[] => {
     const words = text.split(' ');
@@ -387,7 +393,7 @@ export const generateSvgDataUrl = (translations: SavedTranslation[], theme: 'lig
                 y += 2;
                 const arabicLines = wrapText(arabic, 50);
                 arabicLines.forEach(line => {
-                    itemContent += `<text x="${WIDTH - PADDING}" y="${y}" text-anchor="end" font-family="${FONT_SANS}" font-size="14" fill="${textColor}" opacity="0.7" direction="rtl">${escapeHtml(line)}</text>`;
+                    itemContent += `<text x="${WIDTH - PADDING}" y="${y}" text-anchor="end" font-family="${FONT_ARABIC}" font-size="14" fill="${textColor}" opacity="0.7" direction="rtl">${escapeHtml(line)}</text>`;
                     y += LINE_HEIGHT_NORMAL - 5;
                 });
             }
@@ -421,7 +427,7 @@ export const generateSvgDataUrl = (translations: SavedTranslation[], theme: 'lig
         <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Poppins:wght@400;600&family=Cinzel:wght@700&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Phoenician&family=Cinzel:wght@700&family=Handlee&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
                 </style>
             </defs>
             <rect width="100%" height="100%" fill="${bgColor}" />
