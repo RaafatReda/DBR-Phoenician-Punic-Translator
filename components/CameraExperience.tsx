@@ -16,6 +16,10 @@ import ImageEditor from './ImageEditor';
 import CameraIcon from './icons/CameraIcon';
 import HistoryIcon from './icons/HistoryIcon';
 import FontSizeIcon from './icons/FontSizeIcon';
+import ArBubble, { LiveArObject } from './ArBubble';
+import TrashIcon from './icons/TrashIcon';
+import GlobeIcon from './icons/GlobeIcon';
+import ScriptIcon from './icons/ScriptIcon';
 
 
 // Add type definitions for experimental MediaTrackCapabilities properties.
@@ -30,21 +34,8 @@ interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
 }
 
 // Internal type for animated AR objects on screen
-interface ArObject {
-    id: string; 
-    name: string;
-    phoenician: string;
-    latin: string;
-    arabicTransliteration: string;
-    translation: string;
-    pos: string;
+interface ArObject extends LiveArObject {
     box: { x: number; y: number; width: number; height: number; };
-    // Animation properties
-    currentX: number;
-    currentY: number;
-    targetX: number;
-    targetY: number;
-    opacity: number;
     targetOpacity: number;
     isDead: boolean;
     lastSeen: number;
@@ -90,8 +81,13 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
     
     // AR User Settings
     const [arPersistence, setArPersistence] = useState(2000); // ms
+    const [isPersistenceInfinite, setIsPersistenceInfinite] = useState(false);
     const [arAnimationSpeed, setArAnimationSpeed] = useState(8); // 1-20
     const [arFontSizeScale, setArFontSizeScale] = useState(1); // 0.8 to 1.5
+    const [showPhoenician, setShowPhoenician] = useState(true);
+    const [showTranslation, setShowTranslation] = useState(true);
+    const [showTransliteration, setShowTransliteration] = useState(true);
+
 
     // Image Upload Flow State
     const [imageToEdit, setImageToEdit] = useState<string | null>(null);
@@ -225,10 +221,8 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     }
                     return {
                         id, ...res,
-                        currentX: (res.box.x + res.box.width / 2) * 100, 
-                        currentY: (res.box.y + res.box.height / 2) * 100,
-                        targetX: (res.box.x + res.box.width / 2) * 100, 
-                        targetY: (res.box.y + res.box.height / 2) * 100,
+                        currentX: 0,
+                        currentY: 0,
                         opacity: 0, targetOpacity: 1, isDead: false, lastSeen: now
                     };
                 });
@@ -282,12 +276,18 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
             const next = prev.map(obj => {
                 const newObj = { ...obj };
                 
-                if (currentTime - newObj.lastSeen > arPersistence) {
+                if (!isPersistenceInfinite && currentTime - newObj.lastSeen > arPersistence) {
                     newObj.targetOpacity = 0;
                 }
 
                 const targetPixelX = (obj.box.x + obj.box.width / 2) * (video.videoWidth * scale) + offsetX;
                 const targetPixelY = (obj.box.y + obj.box.height / 2) * (video.videoHeight * scale) + offsetY;
+                
+                // Initialize position on first render
+                if (newObj.currentX === 0 && newObj.currentY === 0) {
+                    newObj.currentX = targetPixelX;
+                    newObj.currentY = targetPixelY;
+                }
 
                 newObj.currentX += (targetPixelX - newObj.currentX) * effectiveLerp;
                 newObj.currentY += (targetPixelY - newObj.currentY) * effectiveLerp;
@@ -300,7 +300,7 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         });
 
         animationFrameId.current = requestAnimationFrame(runArAnimation);
-    }, [arAnimationSpeed, arPersistence]);
+    }, [arAnimationSpeed, arPersistence, isPersistenceInfinite]);
 
     useEffect(() => {
         if (isArEnabled && isOpen && !analyzedImage) {
@@ -349,6 +349,16 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         }
     };
 
+    const clearArBubbles = () => {
+        setArObjects([]);
+        setStaticArObjects([]);
+        setExpandedBubbleId(null);
+        if (analyzedImage) {
+            setAnalyzedImage(null); 
+            startStream(facingMode); // Go back to live view
+        }
+    };
+
     if (!isOpen) return null;
     
     if (imageToEdit) {
@@ -367,71 +377,6 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
         )
     }
 
-    const renderArBubble = (obj: ArObject | RecognizedObject, isStatic: boolean) => {
-        const id = 'id' in obj ? obj.id : `${obj.name}-${obj.phoenician}`;
-        const fontClass = arDialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)]' : '[font-family:var(--font-phoenician)]';
-        const isExpanded = expandedBubbleId === id;
-        
-        let positionStyle: React.CSSProperties = {};
-        if (isStatic) {
-            const overlay = arOverlayRef.current;
-            if(overlay) {
-                positionStyle = {
-                    left: `${(obj.box.x + obj.box.width / 2) * 100}%`,
-                    top: `${(obj.box.y + obj.box.height / 2) * 100}%`,
-                    transform: 'translate(-50%, -50%)',
-                    opacity: 1
-                }
-            }
-        } else if ('currentX' in obj) {
-            positionStyle = {
-                '--transform-gpu': `translate(-50%, -50%) translate(${obj.currentX.toFixed(2)}px, ${obj.currentY.toFixed(2)}px)`,
-                transform: `var(--transform-gpu)`,
-                opacity: obj.opacity,
-                pointerEvents: obj.opacity > 0.5 ? 'auto' : 'none',
-            };
-        }
-        
-        return (
-             <div 
-                key={id} 
-                className={`ar-bubble ${isExpanded ? 'ar-bubble-expanded' : ''}`}
-                style={{
-                    ...positionStyle,
-                    zIndex: isExpanded ? 100 : 50,
-                }}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setExpandedBubbleId(isExpanded ? null : id);
-                }}
-            >
-                 {!isExpanded ? (
-                    <>
-                        <div className={`ar-bubble-phoenician ${fontClass}`}>{obj.phoenician}</div>
-                        <div className="ar-bubble-translation" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{obj.translation}</div>
-                        <div className="ar-bubble-pronunciation" dir="ltr">{uiLang === 'ar' ? obj.arabicTransliteration : obj.latin}</div>
-                    </>
-                ) : (
-                    <div className="ar-expanded-content">
-                        <div className={`ar-expanded-phoenician ${fontClass}`}>{obj.phoenician}</div>
-                        <div className="ar-expanded-pos">{t(obj.pos.toLowerCase())}</div>
-                        <hr className="ar-expanded-divider" />
-                        <div className="ar-expanded-transliterations">
-                            <div className="text-center">
-                                <div className="ar-expanded-label">Latin</div>
-                                <div dir="ltr">{obj.latin}</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="ar-expanded-label">Arabic</div>
-                                <div dir="rtl">{obj.arabicTransliteration}</div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-    };
-
     return (
         <div className="camera-experience-modal">
             {analyzedImage ? (
@@ -447,8 +392,37 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 style={{ '--ar-font-size-scale': arFontSizeScale } as React.CSSProperties}
             >
                 {analyzedImage 
-                    ? staticArObjects.map(obj => renderArBubble(obj, true))
-                    : arObjects.map(obj => renderArBubble(obj, false))
+                    ? staticArObjects.map(obj => {
+                        const id = `${obj.name}-${obj.phoenician}`;
+                        return <ArBubble 
+                            key={id}
+                            obj={{...obj, id}}
+                            isStatic={true}
+                            isExpanded={expandedBubbleId === id}
+                            onClick={setExpandedBubbleId}
+                            dialect={arDialect}
+                            uiLang={uiLang}
+                            t={t}
+                            showPhoenician={showPhoenician}
+                            showTranslation={showTranslation}
+                            showTransliteration={showTransliteration}
+                        />
+                    })
+                    : arObjects.map(obj => 
+                        <ArBubble 
+                            key={obj.id}
+                            obj={obj}
+                            isStatic={false}
+                            isExpanded={expandedBubbleId === obj.id}
+                            onClick={setExpandedBubbleId}
+                            dialect={arDialect}
+                            uiLang={uiLang}
+                            t={t}
+                            showPhoenician={showPhoenician}
+                            showTranslation={showTranslation}
+                            showTransliteration={showTransliteration}
+                        />
+                    )
                 }
             </div>
 
@@ -463,6 +437,11 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     <button onClick={onClose} className="camera-side-button" aria-label={t('close')}>
                         <CloseIcon className="w-6 h-6" />
                     </button>
+                    {(arObjects.length > 0 || staticArObjects.length > 0) && (
+                        <button onClick={clearArBubbles} className="camera-side-button" aria-label="Clear Annotations">
+                            <TrashIcon className="w-6 h-6" />
+                        </button>
+                    )}
                     {analyzedImage && (
                         <button onClick={() => startStream(facingMode)} className="camera-side-button" aria-label="Back to camera">
                            <CameraIcon className="w-6 h-6"/>
@@ -495,9 +474,30 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                     <hr className="border-white/10 my-2" />
                     <h4 className="text-md font-semibold text-center -mb-2">AR Display</h4>
                     
+                    <div className="camera-slider-container">
+                        <label className="camera-slider-label">Display Layers</label>
+                        <div className="flex justify-around items-center bg-black/20 rounded-lg p-1">
+                            <button onClick={() => setShowPhoenician(s => !s)} className={`p-2 rounded-md transition-colors w-1/3 ${showPhoenician ? 'bg-[color:var(--color-primary)]' : 'hover:bg-white/10'}`} title="Toggle Phoenician Text">
+                                <span className="[font-family:var(--font-phoenician)] text-xl w-6 h-6 flex items-center justify-center mx-auto">𐤀</span>
+                            </button>
+                            <button onClick={() => setShowTranslation(s => !s)} className={`p-2 rounded-md transition-colors w-1/3 ${showTranslation ? 'bg-[color:var(--color-primary)]' : 'hover:bg-white/10'}`} title="Toggle Translation">
+                                <GlobeIcon className="w-6 h-6 mx-auto"/>
+                            </button>
+                            <button onClick={() => setShowTransliteration(s => !s)} className={`p-2 rounded-md transition-colors w-1/3 ${showTransliteration ? 'bg-[color:var(--color-primary)]' : 'hover:bg-white/10'}`} title="Toggle Transliteration">
+                                <ScriptIcon className="w-6 h-6 mx-auto"/>
+                            </button>
+                        </div>
+                    </div>
+                    
                      <div className="camera-slider-container">
-                        <label className="camera-slider-label"><HistoryIcon className="w-5 h-5"/>AR Persistence</label>
-                        <input type="range" min="500" max="5000" step="100" value={arPersistence} onChange={e => setArPersistence(Number(e.target.value))} className="range-slider" />
+                        <div className="flex items-center justify-between">
+                             <label className="camera-slider-label"><HistoryIcon className="w-5 h-5"/>AR Persistence</label>
+                             <div className="flex items-center">
+                                <input id="infinite-persistence" type="checkbox" checked={isPersistenceInfinite} onChange={(e) => setIsPersistenceInfinite(e.target.checked)} className="w-4 h-4 accent-[color:var(--color-primary)] bg-transparent border-[color:var(--color-border)] rounded focus:ring-[color:var(--color-primary)]" />
+                                <label htmlFor="infinite-persistence" className="ml-2 text-xs font-semibold">Infinite</label>
+                            </div>
+                        </div>
+                        <input type="range" min="500" max="10000" step="100" value={arPersistence} onChange={e => setArPersistence(Number(e.target.value))} className="range-slider" disabled={isPersistenceInfinite} />
                     </div>
                      <div className="camera-slider-container">
                         <label className="camera-slider-label"><span className="w-5 h-5 text-center font-bold text-xs flex items-center justify-center">SPD</span>AR Speed</label>
