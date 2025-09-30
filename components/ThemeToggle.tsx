@@ -2,8 +2,9 @@ import React from 'react';
 import SunIcon from './icons/SunIcon';
 import MoonIcon from './icons/MoonIcon';
 import SparklesIcon from './icons/SparklesIcon';
+import SwirlIcon from './icons/SwirlIcon';
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 
 interface ThemeToggleProps {
   theme: Theme;
@@ -33,7 +34,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle, t }) => {
     if (theme === 'papyrus') {
       return { icon: <SparklesIcon className="w-5 h-5" />, title: t('themeSwitchPurple') };
     }
-    // theme is 'purple-glassy'
+    if (theme === 'purple-glassy') {
+      return { icon: <SwirlIcon className="w-5 h-5" />, title: t('themeSwitchGlassmorphism') };
+    }
+    // theme is 'glassmorphism'
     return { icon: <SunIcon className="w-5 h-5" />, title: t('themeSwitchLight') };
   };
 

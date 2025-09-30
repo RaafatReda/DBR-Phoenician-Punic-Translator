@@ -137,7 +137,7 @@ declare global {
   }
 }
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 type FontSize = 'small' | 'medium' | 'large';
 
 const App: React.FC = () => {
@@ -410,7 +410,8 @@ const App: React.FC = () => {
       if (prevTheme === 'light') return 'dark';
       if (prevTheme === 'dark') return 'papyrus';
       if (prevTheme === 'papyrus') return 'purple-glassy';
-      return 'light'; // purple-glassy -> light
+      if (prevTheme === 'purple-glassy') return 'glassmorphism';
+      return 'light'; // glassmorphism -> light
     });
   };
 
@@ -705,7 +706,7 @@ const App: React.FC = () => {
       <button
         onClick={() => handleTranslate(sourceText)}
         disabled={isLoading || !sourceText.trim()}
-        className="flex items-center justify-center w-full max-w-xs px-6 py-3.5 text-lg font-semibold text-[color:var(--color-bg-start)] bg-[color:var(--color-primary)] rounded-[var(--border-radius)] shadow-[var(--shadow-md)] hover:shadow-[0_0_20px_var(--color-glow)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none focus:outline-none transition-all duration-200"
+        className="flex items-center justify-center w-full max-w-xs px-6 py-3.5 text-lg font-semibold text-[color:var(--color-text-on-primary)] bg-[color:var(--color-primary)] rounded-[var(--border-radius)] shadow-[var(--shadow-md)] hover:shadow-[0_0_20px_var(--color-glow)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none focus:outline-none transition-all duration-200"
       >
         {isLoading ? <Loader className="w-6 h-6 mr-2" /> : null}
         {isLoading

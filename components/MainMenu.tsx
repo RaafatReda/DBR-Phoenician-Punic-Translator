@@ -6,7 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import FontSizeManager from './FontSizeManager';
 import FontSizeIcon from './icons/FontSizeIcon';
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 type FontSize = 'small' | 'medium' | 'large';
 
 interface MainMenuProps {
