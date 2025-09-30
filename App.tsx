@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useRef, useMemo, ChangeEvent, KeyboardEvent } from 'react';
 import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse } from './types';
 import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage } from './services/geminiService';
@@ -48,7 +47,7 @@ import CognateDisplay from './components/CognateDisplay';
 import CameraExperience from './components/CameraExperience';
 import { useSpeechSynthesis } from './hooks/useSpeechSynthesis';
 import SpeakerIcon from './components/icons/SpeakerIcon';
-import AIAssistantModal from './components/AIAssistantModal';
+import AIAssistantPanel from './components/AIAssistantPanel';
 import SparklesIcon from './components/icons/SparklesIcon';
 import LessonsPage from './components/LessonsPage';
 import MainMenu from './components/MainMenu';
@@ -183,7 +182,7 @@ const App: React.FC = () => {
     return (localStorage.getItem('dbr-translator-fontsize') as FontSize) || 'medium';
   });
   const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
-  const [isAssistantModalOpen, setIsAssistantModalOpen] = useState<boolean>(false);
+  const [isAiEditingMode, setIsAiEditingMode] = useState<boolean>(false);
   const [isLessonsPageOpen, setIsLessonsPageOpen] = useState<boolean>(false);
 
   const t = useCallback((key: keyof typeof translations.en) => {
@@ -674,7 +673,7 @@ const App: React.FC = () => {
   
   const handleApplyAssistantChanges = (newTranslation: TransliterationOutput) => {
     setTranslationResult(newTranslation);
-    setIsAssistantModalOpen(false);
+    setIsAiEditingMode(false);
   };
 
   const isMicDisabled = !isSpeechRecognitionSupported || sourceLang === Language.PHOENICIAN || sourceLang === Language.PUNIC;
@@ -890,10 +889,10 @@ const App: React.FC = () => {
                           ))}
                         </select>
                         
-                        {currentTranslatedTextString && !isGroupEditMode && (
+                        {currentTranslatedTextString && !isGroupEditMode && !isAiEditingMode && (
                             <div className="flex items-center space-x-1">
                                 {hasPhoenicianResult && (
-                                    <button onClick={() => setIsAssistantModalOpen(true)} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={t('aiAssistantTitle')} title={t('aiAssistantTitle')}>
+                                    <button onClick={() => setIsAiEditingMode(true)} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={t('aiAssistantTitle')} title={t('aiAssistantTitle')}>
                                         <SparklesIcon className="w-5 h-5" />
                                     </button>
                                 )}
@@ -922,7 +921,19 @@ const App: React.FC = () => {
                                 <span>{t('translating')}...</span>
                             </div>
                         )}
-                        {isGroupEditMode && typeof translationResult === 'object' && translationResult.grammar ? (
+                        {isAiEditingMode && typeof translationResult === 'object' ? (
+                            <AIAssistantPanel
+                                sourceText={sourceText}
+                                sourceLang={sourceLang}
+                                initialTranslation={translationResult}
+                                onClose={() => setIsAiEditingMode(false)}
+                                onApply={handleApplyAssistantChanges}
+                                t={t}
+                                uiLang={uiLang}
+                                dialect={phoenicianDialect}
+                                targetLang={targetLang}
+                            />
+                        ) : isGroupEditMode && typeof translationResult === 'object' && translationResult.grammar ? (
                             <div className="h-full absolute inset-2">
                                 <GroupEditCanvas
                                     translationResult={translationResult}
@@ -1068,18 +1079,6 @@ const App: React.FC = () => {
             onClose={() => setIsDictionaryOpen(false)}
             onWordSelect={handleDictionaryWordSelect}
             t={t}
-        />
-      )}
-      {isAssistantModalOpen && typeof translationResult === 'object' && (
-        <AIAssistantModal
-          isOpen={isAssistantModalOpen}
-          onClose={() => setIsAssistantModalOpen(false)}
-          onApply={handleApplyAssistantChanges}
-          sourceText={sourceText}
-          sourceLang={sourceLang}
-          originalTranslation={translationResult}
-          t={t}
-          uiLang={uiLang}
         />
       )}
       {isCameraExperienceOpen && (
