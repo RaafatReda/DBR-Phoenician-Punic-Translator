@@ -22,4 +22,6 @@ export const qoph: GlossaryEntry[] = [
   { phoenician: '𐤒𐤔𐤕', latin: 'qšt', meaning: { en: 'Bow (weapon)', fr: 'Arc (arme)', ar: 'قوس (سلاح)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤒𐤌𐤀', latin: 'qmʾ', meaning: { en: 'Reed plant', fr: 'Roseau', ar: 'نبات القصب' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(Common Egyptian plant).' } },
   { phoenician: '𐤒𐤕', latin: 'qt', meaning: { en: 'Ink', fr: 'Encre', ar: 'حبر' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: '(Borrowed Egyptian term for writing materials).' } },
+  { phoenician: '𐤒𐤓𐤅𐤍', latin: 'qrwn', meaning: { en: 'Saturn (potentially associated with Kronos)', fr: 'Saturne (potentiellement associé à Kronos)', ar: 'زحل (ربما مرتبط بكرونوس)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤒𐤁𐤋', latin: 'qbl', meaning: { en: 'Mercury', fr: 'Mercure', ar: 'عطارد' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

@@ -43,4 +43,7 @@ export const shin: GlossaryEntry[] = [
   { phoenician: '𐤔𐤕𐤄', latin: 'šth', meaning: { en: 'To drink', fr: 'Boire', ar: 'يشرب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤔𐤊𐤉𐤕', latin: 'škyt', meaning: { en: 'Ship', fr: 'Navire', ar: 'سفينة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Denotes a specific vessel (Egyptian origin: sktʸ).' } },
   { phoenician: '𐤔𐤔', latin: 'šeš', meaning: { en: 'Linen', fr: 'Lin', ar: 'كتان' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'High-quality Egyptian textile (Egyptian origin: šs).' } },
+  { phoenician: '𐤔𐤁𐤕', latin: 'šbt', meaning: { en: 'Sabbath - day of rest', fr: 'Sabbat - jour de repos', ar: 'سبت' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤔𐤃', latin: 'šd', meaning: { en: 'Breast', fr: 'Sein', ar: 'ثدي' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤔𐤏𐤓', latin: 'šʿr', meaning: { en: 'Barley', fr: 'Orge', ar: 'شعير' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

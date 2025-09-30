@@ -29,4 +29,10 @@ export const resh: GlossaryEntry[] = [
   { phoenician: '𐤓𐤔𐤐𐤍', latin: 'ršpn', meaning: { en: 'Ruspina (Monastir, Tunisia)', fr: 'Ruspina (Monastir, Tunisie)', ar: 'روسبينا (المنستير، تونس)' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤓𐤑𐤄', latin: 'rṣh', meaning: { en: 'To be pleased with', fr: 'Être satisfait de', ar: 'يرضى بـ' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤓𐤒', latin: 'rq', meaning: { en: 'Empty', fr: 'Vide', ar: 'فارغ' }, grammar: { pos: 'Adjective' } },
+  { phoenician: '𐤓𐤄𐤁', latin: 'rhb', meaning: { en: 'Wide', fr: 'Large', ar: 'واسع' }, grammar: { pos: 'Adjective' } },
+  { phoenician: '𐤓𐤀𐤄', latin: 'rʾh', meaning: { en: 'Lung', fr: 'Poumon', ar: 'رئة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Essential for respiration' } },
+  { phoenician: '𐤓𐤓', latin: 'rr', meaning: { en: 'To drip, semen, flow', fr: 'Goutter, sperme, couler', ar: 'يقطر, مني, يتدفق' }, grammar: { pos: 'Verb', stem: 'G-stem', notes: 'connected with sexuality.' } },
+  { phoenician: '𐤓𐤆', latin: 'rz', meaning: { en: 'Run', fr: 'Courir', ar: 'يجري' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤓𐤇', latin: 'rḥ', meaning: { en: 'Smell', fr: 'Sentir', ar: 'يشم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤓𐤍', latin: 'rn', meaning: { en: 'Sing', fr: 'Chanter', ar: 'يغني' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
 ];

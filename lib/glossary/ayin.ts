@@ -45,4 +45,7 @@ export const ayin: GlossaryEntry[] = [
   { phoenician: '𐤏𐤓𐤐', latin: 'ʿrp', meaning: { en: 'Neck', fr: 'Cou', ar: 'عنق' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤏𐤔𐤓', latin: 'ʿšr', meaning: { en: 'Ten', fr: 'Dix', ar: 'عشرة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤏𐤔𐤒', latin: 'ʿšq', meaning: { en: 'To oppress', fr: 'Opprimer', ar: 'يظلم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤏𐤓𐤒', latin: 'ʿrq', meaning: { en: 'Artery/Blood Vessel', fr: 'Artère/Vaisseau sanguin', ar: 'عرق' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤏𐤑𐤌', latin: 'ʿṣm', meaning: { en: 'Buttocks', fr: 'Fesses', ar: 'مؤخّرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤏𐤔𐤕𐤓𐤕', latin: 'ʻštrt', meaning: { en: 'Venus (associated with Astarte)', fr: 'Vénus (associée à Astarté)', ar: 'الزهرة (مرتبط بعشتروت)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' }, category: 'theonym' },
 ];

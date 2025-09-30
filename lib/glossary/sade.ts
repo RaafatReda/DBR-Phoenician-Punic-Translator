@@ -26,4 +26,9 @@ export const sade: GlossaryEntry[] = [
   { phoenician: '𐤑𐤌𐤓', latin: 'ṣmr', meaning: { en: 'Wool', fr: 'Laine', ar: 'صوف' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤑𐤐𐤓', latin: 'ṣpr', meaning: { en: 'Bird', fr: 'Oiseau', ar: 'طائر' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤑𐤐𐤅𐤍', latin: 'ṣpwn', meaning: { en: 'North', fr: 'Nord', ar: 'شمال' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤑𐤐𐤓', latin: 'ṣpr', meaning: { en: 'Sparrow', fr: 'Moineau', ar: 'عصفور' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤑𐤐𐤓', latin: 'ṣpr', meaning: { en: 'Fowl', fr: 'Volaille', ar: 'دواجن' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤑𐤉𐤑', latin: 'ṣīṣ', meaning: { en: 'Flower', fr: 'Fleur', ar: 'زهرة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤑𐤃', latin: 'ṣd', meaning: { en: 'Game (birds)', fr: 'Gibier (oiseaux)', ar: 'طريدة (طيور)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤑𐤓', latin: 'ṣr', meaning: { en: 'Small', fr: 'Petit', ar: 'صغير' }, grammar: { pos: 'Adjective' } },
 ];

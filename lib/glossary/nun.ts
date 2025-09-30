@@ -42,4 +42,6 @@ export const nun: GlossaryEntry[] = [
   { phoenician: '𐤍𐤔𐤒', latin: 'nšq', meaning: { en: 'To kiss', fr: 'Embrasser', ar: 'يقبل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤍𐤐𐤊', latin: 'npk', meaning: { en: 'Turquoise', fr: 'Turquoise', ar: 'فيروز' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Valuable gemstone mined in Sinai (Egyptian origin: mfkꜣ.t).' } },
   { phoenician: '𐤍𐤕𐤓', latin: 'ntr', meaning: { en: 'Natron', fr: 'Natron', ar: 'نطرون' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Used in mummification, purification, and as a salt (Egyptian origin: nṯr).' } },
+  { phoenician: '𐤍𐤅𐤍', latin: 'nūn', meaning: { en: 'Fish', fr: 'Poisson', ar: 'سمك' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤍𐤉𐤑', latin: 'nēṣ', meaning: { en: 'Hawk', fr: 'Faucon', ar: 'صقر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

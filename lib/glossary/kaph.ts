@@ -1,4 +1,3 @@
-
 import type { GlossaryEntry } from '../../types';
 
 export const kaph: GlossaryEntry[] = [
@@ -38,4 +37,6 @@ export const kaph: GlossaryEntry[] = [
   { phoenician: '𐤊𐤕𐤁', latin: 'ktb', meaning: { en: 'To write', fr: 'Écrire', ar: 'يكتب' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤊𐤕𐤍', latin: 'ktn', meaning: { en: 'Tunic, coat', fr: 'Tunique, manteau', ar: 'قميص، معطف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤊𐤕𐤐', latin: 'ktp', meaning: { en: 'Shoulder', fr: 'Épaule', ar: 'كتف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤊𐤋𐤉𐤕', latin: 'klyt', meaning: { en: 'Kidney', fr: 'Rein', ar: 'كلية' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤊𐤅𐤔', latin: 'kūš', meaning: { en: 'Owl', fr: 'Chouette', ar: 'بومة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

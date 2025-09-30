@@ -28,4 +28,7 @@ export const zayin: GlossaryEntry[] = [
   { phoenician: '𐤆𐤓𐤏', latin: "zrʿ", meaning: { en: 'Seed, offspring; to sow', fr: 'Graine, descendance; semer', ar: 'بذرة، نسل؛ يزرع' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤆𐤓𐤒', latin: 'zrq', meaning: { en: 'To sprinkle', fr: 'Asperger', ar: 'يرش' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤆𐤕', latin: 'dzēt', meaning: { en: 'Olive', fr: 'Olive', ar: 'زيتون' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤆𐤉𐤕', latin: 'zyt', meaning: { en: 'Olive', fr: 'Olive', ar: 'زيتون' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤆𐤉𐤆', latin: 'zīz', meaning: { en: 'Flower, blossom', fr: 'Fleur, floraison', ar: 'زهرة, برعم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤆𐤓', latin: 'zr', meaning: { en: 'Seed', fr: 'Graine', ar: 'بذرة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

@@ -12,4 +12,5 @@ export const waw: GlossaryEntry[] = [
   { phoenician: '𐤅𐤓𐤃', latin: 'wrd', meaning: { en: 'Rose', fr: 'Rose', ar: 'ورد' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'A likely loanword from Aramaic or Persian.' } },
   { phoenician: '𐤅𐤈𐤓', latin: 'wtr', meaning: { en: 'Cord, string', fr: 'Corde, fil', ar: 'وتر، خيط' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Cognate with Arabic watar.' } },
   { phoenician: '𐤅𐤌', latin: 'wm', meaning: { en: 'Wāw-soldier', fr: 'Soldat Wāw', ar: 'جندي واو' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(Type of Egyptian soldier).' } },
+  { phoenician: '𐤅𐤓𐤉𐤃', latin: 'wryd', meaning: { en: 'Vein', fr: 'Veine', ar: 'وريد' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

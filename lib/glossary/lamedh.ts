@@ -34,4 +34,10 @@ export const lamedh: GlossaryEntry[] = [
   { phoenician: '𐤋𐤒𐤔', latin: 'lqš', meaning: { en: 'Late rain', fr: 'Pluie tardive', ar: 'مطر متأخر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤋𐤔𐤍', latin: 'lšn', meaning: { en: 'Tongue, language', fr: 'Langue', ar: 'لسان، لغة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤋𐤔𐤌', latin: 'lšm', meaning: { en: 'Feldspar or amazonite', fr: 'Feldspath ou amazonite', ar: 'فلدسبار أو أمازونيت' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Imported gemstone.' } },
+  { phoenician: '𐤋𐤁𐤀', latin: 'lbʼ', meaning: { en: 'Lion (alternative term)', fr: 'Lion (terme alternatif)', ar: 'أسد' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤋𐤐', latin: 'lp', meaning: { en: 'Leaf', fr: 'Feuille', ar: 'ورقة شجر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤋𐤐', latin: 'lp', meaning: { en: 'Tree', fr: 'Arbre', ar: 'شجرة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤋𐤐𐤍', latin: 'lpn', meaning: { en: 'Fall', fr: 'Tomber', ar: 'يسقط' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤋𐤐𐤋', latin: 'lpl', meaning: { en: 'Do', fr: 'Faire', ar: 'يفعل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤋𐤊', latin: 'lk', meaning: { en: 'All', fr: 'Tout', ar: 'كل' }, grammar: { pos: 'Adjective' } },
 ];

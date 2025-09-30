@@ -44,4 +44,7 @@ export const yodh: GlossaryEntry[] = [
   { phoenician: '𐤉𐤔𐤁', latin: 'yšb', meaning: { en: 'To sit, dwell', fr: 'S\'asseoir, habiter', ar: 'يجلس، يسكن' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤔𐤍', latin: 'yšn', meaning: { en: 'To sleep', fr: 'Dormir', ar: 'ينام' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤓', latin: 'yr', meaning: { en: 'Nile river', fr: 'Le Nil', ar: 'نهر النيل' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(Direct borrowing of Egyptian jrw).' } },
+  { phoenician: '𐤉𐤏𐤋', latin: 'yaʻēl', meaning: { en: 'Ibex', fr: 'Ibex', ar: 'وعل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤉𐤍𐤕', latin: 'yūn', meaning: { en: 'Dove', fr: 'Colombe', ar: 'حمامة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'Latin also `yūnot`.' } },
+  { phoenician: '𐤉𐤌', latin: 'ym', meaning: { en: 'Day', fr: 'Jour', ar: 'يوم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

@@ -63,4 +63,9 @@ export const mem: GlossaryEntry[] = [
   { phoenician: '𐤌𐤔𐤐𐤇𐤄', latin: 'mšpḥh', meaning: { en: 'Family, clan', fr: 'Famille, clan', ar: 'عائلة، عشيرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤌𐤔𐤐𐤈', latin: 'mšpṭ', meaning: { en: 'Judgment', fr: 'Jugement', ar: 'حكم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤌𐤐𐤊', latin: 'mfk', meaning: { en: 'Turquoise', fr: 'Turquoise', ar: 'فيروز' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Context: Trade item.' } },
+  { phoenician: '𐤌𐤇', latin: 'mḥ', meaning: { en: 'Brain', fr: 'Cerveau', ar: 'مخ' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤌𐤏𐤉', latin: 'mʿy', meaning: { en: 'Intestine', fr: 'Intestin', ar: 'أمعاء' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤌𐤓𐤕', latin: 'mrt', meaning: { en: 'Gallbladder/Bile', fr: 'Vésicule biliaire/Bile', ar: 'مرارة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤌𐤀𐤃𐤉𐤌', latin: 'mʼdm', meaning: { en: 'Mars (likely associated with the root for "red")', fr: 'Mars (probablement associé à la racine pour "rouge")', ar: 'المريخ (مرتبط بجذر "أحمر")' }, grammar: { pos: 'Noun', gender: 'm', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤌𐤕', latin: 'mt', meaning: { en: 'To die', fr: 'Mourir', ar: 'يموت' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
 ];

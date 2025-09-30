@@ -64,4 +64,5 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤉𐤓', latin: 'ḥyr', meaning: { en: 'Warrior', fr: 'Guerrier', ar: 'محارب' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(Possibly a title for Egyptian-style unit).' } },
   { phoenician: '𐤇𐤕𐤌', latin: 'ḥtm', meaning: { en: 'Seal or signet ring', fr: 'Sceau ou chevalière', ar: 'ختم أو خاتم توقيع' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Administrative/legal tool.' } },
   { phoenician: '𐤇𐤕𐤌𐤕', latin: 'ḥtmt', meaning: { en: 'Seal', fr: 'Sceau', ar: 'ختم' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'General term.' } },
+  { phoenician: '𐤇𐤉𐤕', latin: 'ḥyt', meaning: { en: 'Animal, beast', fr: 'Animal, bête', ar: 'حيوان, وحش' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

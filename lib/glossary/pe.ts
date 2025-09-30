@@ -40,4 +40,6 @@ export const pe: GlossaryEntry[] = [
   { phoenician: '𐤐𐤕𐤉', latin: 'pty', meaning: { en: 'Simpleton', fr: 'Simple d\'esprit', ar: 'ساذج' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤐𐤓', latin: 'prʿ', meaning: { en: 'Pharaoh', fr: 'Pharaon', ar: 'فرعون' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(Refers to Egyptian king).' } },
   { phoenician: '𐤐𐤉𐤓', latin: 'pyr', meaning: { en: 'Headwrap', fr: 'Coiffe', ar: 'غطاء رأس' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(Clothing borrowed from Egypt).' } },
+  { phoenician: '𐤐𐤓𐤔', latin: 'prš', meaning: { en: 'Horse', fr: 'Cheval', ar: 'فرس' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤐𐤓', latin: 'pr', meaning: { en: 'Fruit', fr: 'Fruit', ar: 'فاكهة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

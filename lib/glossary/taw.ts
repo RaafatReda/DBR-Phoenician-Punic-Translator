@@ -35,4 +35,6 @@ export const taw: GlossaryEntry[] = [
   { phoenician: '𐤕𐤁𐤕', latin: 'tbt', meaning: { en: 'Box', fr: 'Boîte', ar: 'صندوق' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: '(From Egyptian db.t).' } },
   { phoenician: '𐤕𐤇𐤎', latin: 'tḥs', meaning: { en: 'Egyptian leather', fr: 'Cuir égyptien', ar: 'جلد مصري' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: '(An imported Egyptian material).' } },
   { phoenician: '𐤕𐤕', latin: 'tt', meaning: { en: 'Jar', fr: 'Jarre', ar: 'جرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: '(From Egyptian db.t or tb.t).' } },
+  { phoenician: '𐤕𐤁𐤋', latin: 'tbl', meaning: { en: 'World, universe', fr: 'Monde, univers', ar: 'عالم, كون' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤕𐤐𐤇', latin: 'tpḥ', meaning: { en: 'Apple', fr: 'Pomme', ar: 'تفاح' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
 ];

@@ -37,4 +37,6 @@ export const he: GlossaryEntry[] = [
   { phoenician: '𐤄𐤓𐤓', latin: 'hrr', meaning: { en: 'To be pregnant, conceive', fr: 'Être enceinte, concevoir', ar: 'تكون حاملاً، تحبل' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤄𐤓𐤎', latin: 'hrs', meaning: { en: 'To demolish, destroy', fr: 'Démolir, détruire', ar: 'يهدم، يدمر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤄𐤕𐤋', latin: 'htl', meaning: { en: 'To mock', fr: 'Se moquer', ar: 'يسخر' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
+  { phoenician: '𐤄𐤓', latin: 'hr', meaning: { en: 'Grain', fr: 'Grain', ar: 'حبوب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
+  { phoenician: '𐤄𐤓𐤁', latin: 'hrb', meaning: { en: 'Herbs', fr: 'Herbes', ar: 'أعشاب' }, grammar: { pos: 'Noun', gender: 'm', number: 'p' } },
 ];
