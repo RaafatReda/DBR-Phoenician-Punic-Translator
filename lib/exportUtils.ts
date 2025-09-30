@@ -209,7 +209,7 @@ export const generateGrammarHtmlForPdf = (
         <title>${escapeHtml(pdfTitle)}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Cinzel:wght@700&family=Handlee&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Cinzel:wght@700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
         <style>
           @font-face {
             font-family: 'Punic LDR';
@@ -218,10 +218,11 @@ export const generateGrammarHtmlForPdf = (
             font-style: normal;
           }
           body {
-            font-family: 'Handlee', cursive;
+            font-family: 'Merriweather', serif;
             margin: 20px;
-            color: #3E2723;
-            background-color: #FBF0D9;
+            color: #000000;
+            background-color: #ffffff;
+            line-height: 1.6;
           }
           html[lang="ar"] body {
             font-family: 'Cairo', sans-serif;
@@ -230,14 +231,12 @@ export const generateGrammarHtmlForPdf = (
             body { 
               -webkit-print-color-adjust: exact; 
               print-color-adjust: exact; 
-              background-color: #ffffff;
-              color: #000000;
             }
           }
           h1 {
             text-align: center;
-            color: #5D4037;
-            border-bottom: 2px solid #EADCBF;
+            color: #000000;
+            border-bottom: 2px solid #ccc;
             padding-bottom: 10px;
             font-family: 'Cinzel', serif;
           }
@@ -253,73 +252,72 @@ export const generateGrammarHtmlForPdf = (
           .level-title {
             font-size: 2em;
             font-family: 'Cinzel', serif;
-            color: #5D4037;
+            color: #000000;
             text-align: center;
-            border-bottom: 2px solid #5D4037;
+            border-bottom: 1px solid #000000;
             padding-bottom: 10px;
             margin-bottom: 20px;
           }
           .module-section {
             margin-bottom: 20px;
             padding: 15px;
-            border: 1px solid #EADCBF;
+            border: 1px solid #eee;
             border-radius: 8px;
-            background-color: #FAF5E9;
+            background-color: #ffffff;
             page-break-inside: avoid;
           }
           .module-title {
             font-size: 1.5em;
-            color: #606C38;
+            color: #333333;
             font-family: 'Cinzel', serif;
             margin-top: 0;
+            margin-bottom: 1rem;
           }
 
           .prose h3 {
-            color: #606C38;
+            color: #333333;
             font-family: 'Cinzel', serif;
             margin-bottom: 0.75em;
             margin-top: 1.25em;
             font-size: 1.25rem;
             font-weight: 600;
-            border-bottom: 1px solid #EADCBF;
+            border-bottom: 1px solid #eaeaea;
             padding-bottom: 0.4em;
           }
           .prose p {
             margin-bottom: 1em;
-            line-height: 1.7;
-            color: #795548;
+            color: #000000;
           }
           .prose ul {
-            list-style-type: '✧ ';
+            list-style-type: '• ';
             padding-inline-start: 1.5em;
             margin-bottom: 1em;
-            color: #795548;
+            color: #000000;
           }
           .prose li {
             margin-bottom: 0.5em;
             padding-left: 0.5em;
           }
           .prose code {
-            background-color: #EADCBF;
+            background-color: #f2eafc !important;
             padding: 0.2em 0.5em;
             border-radius: 6px;
             font-family: 'Noto Sans Phoenician', serif;
             font-size: 1.2em;
-            color: #5D4037;
-            border: 1px solid #D7C8A9;
+            color: #6A0DAD !important;
+            border: 1px solid #e0d0f0;
           }
            .prose code.punic {
             font-family: 'Punic LDR', serif;
             font-size: 1.4em;
           }
           .prose strong {
-            color: #3E2723;
-            font-weight: 600;
+            color: #000000;
+            font-weight: 700;
           }
           .prose a {
-            color: #606C38;
+            color: #6A0DAD !important;
             text-decoration: underline;
-            text-decoration-style: dotted;
           }
         </style>
     </head>
