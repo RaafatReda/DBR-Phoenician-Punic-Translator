@@ -4,11 +4,22 @@ import { UILang } from '../lib/i18n';
 import CloseIcon from './icons/CloseIcon';
 import DialectSelector from './DialectSelector';
 import { alphabetData } from '../lib/alphabetData';
+import GrammarModule from './GrammarModule';
 
 interface LessonsPageProps {
   onClose: () => void;
   t: (key: string) => string;
   uiLang: UILang;
+}
+
+interface GrammarModuleData {
+    moduleTitleKey: string;
+    moduleContentKey: string;
+}
+
+interface GrammarLevelData {
+    levelTitleKey: string;
+    modules: GrammarModuleData[];
 }
 
 const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
@@ -24,11 +35,6 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
                 ? 'bg-[color:var(--color-primary)] text-[color:var(--keyboard-active-button-text)]'
                 : 'text-[color:var(--color-text-muted)] hover:bg-white/10'
         }`;
-        
-    const getGrammarContent = () => {
-        const key = selectedDialect === PhoenicianDialect.PUNIC ? 'grammarContentPunicHtml' : 'grammarContentPhoenicianHtml';
-        return t(key);
-    };
 
     const renderAlphabet = () => (
         <div className="animate-text-glow-fade-in" style={{animationDuration: '0.5s'}}>
@@ -45,11 +51,34 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
         </div>
     );
 
-    const renderGrammar = () => (
-        <div className="prose max-w-none animate-text-glow-fade-in" style={{animationDuration: '0.5s'}} dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
-             <div dangerouslySetInnerHTML={{ __html: getGrammarContent() }} />
-        </div>
-    );
+    const renderGrammar = () => {
+        const grammarKey = selectedDialect === PhoenicianDialect.PUNIC ? 'grammarPunicLevels' : 'grammarPhoenicianLevels';
+        let levels: GrammarLevelData[] = [];
+        try {
+            levels = JSON.parse(t(grammarKey));
+        } catch (e) {
+            console.error("Failed to parse grammar levels JSON:", e);
+            return <p>Error loading grammar lessons.</p>;
+        }
+
+        return (
+             <div className="animate-text-glow-fade-in" style={{animationDuration: '0.5s'}}>
+                {levels.map((level, levelIndex) => (
+                    <div key={levelIndex} className="mb-8">
+                        <h2 className="text-2xl font-bold text-center text-[color:var(--color-primary)] mb-6 border-b-2 border-[color:var(--color-primary)]/30 pb-2 [font-family:var(--font-serif)]">{t(level.levelTitleKey)}</h2>
+                        {level.modules.map((module, moduleIndex) => (
+                            <GrammarModule
+                                key={moduleIndex}
+                                title={t(module.moduleTitleKey)}
+                                content={t(module.moduleContentKey)}
+                                uiLang={uiLang}
+                            />
+                        ))}
+                    </div>
+                ))}
+            </div>
+        );
+    };
 
     return (
         <div
