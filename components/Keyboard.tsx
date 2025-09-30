@@ -115,7 +115,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ isOpen, sourceLang, dialect, onKeyP
     if (key === 'SHIFT') flexGrow = 1.5;
     if (key === 'BACKSPACE') flexGrow = 1.5;
     
-    const isPhoenicianScriptKey = (layoutName === 'phoenician' || layoutName === 'punic') && !showSymbols && !isControl;
+    const isPhoenicianScriptKey = (layoutName === 'phoenician' || layoutName === 'punic') && !showSymbols && !isShifted && !isControl;
     const fontClass = layoutName === 'punic' ? '[font-family:var(--font-punic)] text-3xl' : '[font-family:var(--font-phoenician)] text-2xl';
 
     return (
