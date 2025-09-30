@@ -455,7 +455,12 @@ const CameraExperience: React.FC<CameraExperienceProps> = ({ isOpen, onClose, di
                 {isRecognizing && <div className="ar-recognizing-indicator"></div>}
 
                 <div className={`camera-settings-panel ${isSettingsOpen ? 'open' : ''}`}>
-                    <h3 className="text-lg font-bold text-center mb-2">{t('advancedSettings')}</h3>
+                    <div className="relative text-center">
+                        <h3 className="text-lg font-bold">{t('advancedSettings')}</h3>
+                        <button onClick={() => setIsSettingsOpen(false)} className="absolute top-1/2 -translate-y-1/2 right-0 p-1 rounded-full hover:bg-white/10 text-gray-300 hover:text-white transition-colors" aria-label={t('close')}>
+                            <CloseIcon className="w-5 h-5"/>
+                        </button>
+                    </div>
                     
                     {capabilities?.zoom && <div className="camera-slider-container">
                         <label className="camera-slider-label"><FocusIcon className="w-5 h-5"/>{t('zoom')}</label>

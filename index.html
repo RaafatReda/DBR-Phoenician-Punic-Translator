@@ -232,6 +232,34 @@
         transition: background-color 0.3s ease, border-color 0.3s ease;
       }
 
+      /* Compact Language Selector for new UI */
+      .lang-select {
+        background: transparent;
+        border: none;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 600; /* font-semibold */
+        color: var(--color-text);
+        padding: 0.5rem;
+        cursor: pointer;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%23a0aec0%22%3E%3Cpath%20d%3D%22M9.293%2012.95l.707.707L15.657%208l-1.414-1.414L10%2010.828%205.757%206.586%204.343%208z%22%2F%3E%3C%2Fsvg%3E');
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1.25em;
+        padding-right: 2rem;
+        transition: color 0.2s ease;
+      }
+      .lang-select:hover {
+        color: var(--color-primary);
+      }
+      html[dir="rtl"] .lang-select {
+        background-position: left 0.5rem center;
+        padding-right: 0.5rem;
+        padding-left: 2rem;
+      }
+      
       /* Keyboard Styles */
       .keyboard-panel { border-color: var(--color-border); }
       .keyboard-btn { background-color: var(--keyboard-key-bg); transition: background-color 0.15s ease-in-out, transform 0.1s ease; }
