@@ -5,6 +5,8 @@ import CloseIcon from './icons/CloseIcon';
 import DialectSelector from './DialectSelector';
 import { alphabetData } from '../lib/alphabetData';
 import GrammarModule from './GrammarModule';
+import PdfIcon from './icons/PdfIcon';
+import { generateGrammarHtmlForPdf } from '../lib/exportUtils';
 
 interface LessonsPageProps {
   onClose: () => void;
@@ -35,6 +37,29 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
                 ? 'bg-[color:var(--color-primary)] text-[color:var(--keyboard-active-button-text)]'
                 : 'text-[color:var(--color-text-muted)] hover:bg-white/10'
         }`;
+
+    const handleExportPdf = () => {
+        const grammarKey = selectedDialect === PhoenicianDialect.PUNIC ? 'grammarPunicLevels' : 'grammarPhoenicianLevels';
+        let levels: GrammarLevelData[] = [];
+        try {
+            levels = JSON.parse(t(grammarKey));
+        } catch (e) {
+            console.error("Failed to parse grammar levels JSON for PDF export:", e);
+            return;
+        }
+
+        const htmlContent = generateGrammarHtmlForPdf(levels, selectedDialect, uiLang, t);
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500); // Timeout to ensure content is loaded
+        }
+    };
+
 
     const renderAlphabet = () => (
         <div className="animate-text-glow-fade-in" style={{animationDuration: '0.5s'}}>
@@ -100,7 +125,7 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
                 </header>
 
                 <div className="p-4 flex-shrink-0 border-b border-[color:var(--color-border)] flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="w-full sm:w-64">
+                    <div className="w-full sm:w-64 flex justify-start">
                          <DialectSelector
                             selectedDialect={selectedDialect}
                             onDialectChange={setSelectedDialect}
@@ -114,6 +139,17 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
                         </button>
                         <button onClick={() => setActiveTab('grammar')} className={tabButtonClass(activeTab === 'grammar')} aria-pressed={activeTab === 'grammar'}>
                             {t('grammarTab')}
+                        </button>
+                    </div>
+                    <div className="w-full sm:w-64 flex justify-center sm:justify-end">
+                        <button
+                            onClick={handleExportPdf}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md bg-transparent border border-[color:var(--color-border)] text-[color:var(--color-primary)] hover:bg-white/10"
+                            aria-label={t('exportPdf')}
+                            title={t('exportPdf')}
+                        >
+                            <PdfIcon className="w-4 h-4" />
+                            <span>{t('exportPdf')}</span>
                         </button>
                     </div>
                 </div>

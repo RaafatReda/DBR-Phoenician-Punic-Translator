@@ -7,7 +7,7 @@ const escapeHtml = (unsafe: string | undefined): string => {
     return unsafe.replace(/[&<"']/g, m => ({ '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": '&#039;' }[m]!));
 };
 
-const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAA...`;
+const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAA...`;
 
 export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang): string => {
     const translationsHtml = translations.map(item => {
@@ -168,6 +168,169 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
         </body>
         </html>
     `;
+};
+
+interface GrammarModuleData {
+    moduleTitleKey: string;
+    moduleContentKey: string;
+}
+interface GrammarLevelData {
+    levelTitleKey: string;
+    modules: GrammarModuleData[];
+}
+
+export const generateGrammarHtmlForPdf = (
+  levels: GrammarLevelData[],
+  dialect: PhoenicianDialect,
+  uiLang: UILang,
+  t: (key: string) => string
+): string => {
+  const isPunic = dialect === PhoenicianDialect.PUNIC;
+  const dialectName = isPunic ? t('punic') : t('standardPhoenician');
+  const pdfTitle = `${t('lessonsHeader')} - ${dialectName}`;
+
+  const lessonsHtml = levels.map(level => `
+    <div class="level-section">
+      <h2 class="level-title">${escapeHtml(t(level.levelTitleKey))}</h2>
+      ${level.modules.map(module => `
+        <div class="module-section">
+          <h3 class="module-title">${escapeHtml(t(module.moduleTitleKey))}</h3>
+          <div class="prose">${t(module.moduleContentKey)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  return `
+    <!DOCTYPE html>
+    <html lang="${uiLang}" dir="${uiLang === 'ar' ? 'rtl' : 'ltr'}">
+    <head>
+        <meta charset="UTF-8">
+        <title>${escapeHtml(pdfTitle)}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Cinzel:wght@700&family=Handlee&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
+        <style>
+          @font-face {
+            font-family: 'Punic LDR';
+            src: url(data:font/truetype;charset=utf-8;base64,${PUNIC_FONT_BASE64}) format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+          body {
+            font-family: 'Handlee', cursive;
+            margin: 20px;
+            color: #3E2723;
+            background-color: #FBF0D9;
+          }
+          html[lang="ar"] body {
+            font-family: 'Cairo', sans-serif;
+          }
+          @media print {
+            body { 
+              -webkit-print-color-adjust: exact; 
+              print-color-adjust: exact; 
+              background-color: #ffffff;
+              color: #000000;
+            }
+          }
+          h1 {
+            text-align: center;
+            color: #5D4037;
+            border-bottom: 2px solid #EADCBF;
+            padding-bottom: 10px;
+            font-family: 'Cinzel', serif;
+          }
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+          }
+          .level-section {
+            margin-bottom: 40px;
+            page-break-before: auto;
+            page-break-inside: avoid;
+          }
+          .level-title {
+            font-size: 2em;
+            font-family: 'Cinzel', serif;
+            color: #5D4037;
+            text-align: center;
+            border-bottom: 2px solid #5D4037;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+          }
+          .module-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #EADCBF;
+            border-radius: 8px;
+            background-color: #FAF5E9;
+            page-break-inside: avoid;
+          }
+          .module-title {
+            font-size: 1.5em;
+            color: #606C38;
+            font-family: 'Cinzel', serif;
+            margin-top: 0;
+          }
+
+          .prose h3 {
+            color: #606C38;
+            font-family: 'Cinzel', serif;
+            margin-bottom: 0.75em;
+            margin-top: 1.25em;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-bottom: 1px solid #EADCBF;
+            padding-bottom: 0.4em;
+          }
+          .prose p {
+            margin-bottom: 1em;
+            line-height: 1.7;
+            color: #795548;
+          }
+          .prose ul {
+            list-style-type: '✧ ';
+            padding-inline-start: 1.5em;
+            margin-bottom: 1em;
+            color: #795548;
+          }
+          .prose li {
+            margin-bottom: 0.5em;
+            padding-left: 0.5em;
+          }
+          .prose code {
+            background-color: #EADCBF;
+            padding: 0.2em 0.5em;
+            border-radius: 6px;
+            font-family: 'Noto Sans Phoenician', serif;
+            font-size: 1.2em;
+            color: #5D4037;
+            border: 1px solid #D7C8A9;
+          }
+           .prose code.punic {
+            font-family: 'Punic LDR', serif;
+            font-size: 1.4em;
+          }
+          .prose strong {
+            color: #3E2723;
+            font-weight: 600;
+          }
+          .prose a {
+            color: #606C38;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+          }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>${escapeHtml(pdfTitle)}</h1>
+            ${lessonsHtml}
+        </div>
+    </body>
+    </html>
+  `;
 };
 
 export const generateGlossaryHtmlForPdf = (
