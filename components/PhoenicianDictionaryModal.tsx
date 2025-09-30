@@ -90,6 +90,9 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
   const langButtonClass = (lang: GlossaryLang) => 
     `px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${glossaryLang === lang ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`;
 
+  const categoryButtonClass = (category: GlossaryEntry['category'] | null) => 
+    `px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${selectedCategory === category ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`;
+
   const getSearchPlaceholder = (): string => {
     if (glossaryLang === 'fr') return t('dictionarySearch_fr');
     if (glossaryLang === 'ar') return t('dictionarySearch_ar');
@@ -132,52 +135,54 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
         </header>
 
         <div className="p-4 flex-shrink-0 border-b border-[color:var(--color-border)] space-y-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder={getSearchPlaceholder()}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[color:var(--color-bg-end)] text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-muted)] rounded-lg py-2.5 pl-10 pr-4 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)]"
-              autoFocus
-              dir={glossaryLang === 'ar' ? 'rtl' : 'ltr'}
-            />
-            <div className={`absolute top-1/2 -translate-y-1/2 text-[color:var(--color-text-muted)] pointer-events-none ${currentUiLang === 'ar' ? 'right-3' : 'left-3'}`}>
-              <SearchIcon className="w-5 h-5" />
-            </div>
-          </div>
-          
-           <div className="flex justify-between items-center gap-4 flex-wrap">
-                <div className="flex items-center gap-2">
-                    <button onClick={() => setGlossaryLang('en')} className={langButtonClass('en')} aria-pressed={glossaryLang === 'en'}>{t('english')}</button>
-                    <button onClick={() => setGlossaryLang('fr')} className={langButtonClass('fr')} aria-pressed={glossaryLang === 'fr'}>{t('french')}</button>
-                    <button onClick={() => setGlossaryLang('ar')} className={`${langButtonClass('ar')} text-base`} aria-pressed={glossaryLang === 'ar'}>{t('arabic')}</button>
-                </div>
-                 <div className="flex items-center gap-2">
-                    <button onClick={() => handleCategorySelect('theonym')} className={`${langButtonClass('en')} ${selectedCategory === 'theonym' ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`} aria-pressed={selectedCategory === 'theonym'}>{t('theonyms')}</button>
-                    <button onClick={() => handleCategorySelect('personal_name')} className={`${langButtonClass('en')} ${selectedCategory === 'personal_name' ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`} aria-pressed={selectedCategory === 'personal_name'}>{t('personalNames')}</button>
-                    <button onClick={() => handleCategorySelect('location')} className={`${langButtonClass('en')} ${selectedCategory === 'location' ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`} aria-pressed={selectedCategory === 'location'}>{t('locationNames')}</button>
-                 </div>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="relative w-full sm:w-auto flex-grow">
+                  <input
+                      type="text"
+                      placeholder={getSearchPlaceholder()}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full bg-[color:var(--color-bg-end)] text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-muted)] rounded-lg py-2.5 pl-10 pr-4 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)]"
+                      autoFocus
+                      dir={glossaryLang === 'ar' ? 'rtl' : 'ltr'}
+                  />
+                  <div className={`absolute top-1/2 -translate-y-1/2 text-[color:var(--color-text-muted)] pointer-events-none ${currentUiLang === 'ar' ? 'right-3' : 'left-3'}`}>
+                      <SearchIcon className="w-5 h-5" />
+                  </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                  <button onClick={() => handleCategorySelect('theonym')} className={categoryButtonClass('theonym')} aria-pressed={selectedCategory === 'theonym'}>{t('theonyms')}</button>
+                  <button onClick={() => handleCategorySelect('personal_name')} className={categoryButtonClass('personal_name')} aria-pressed={selectedCategory === 'personal_name'}>{t('personalNames')}</button>
+                  <button onClick={() => handleCategorySelect('location')} className={categoryButtonClass('location')} aria-pressed={selectedCategory === 'location'}>{t('locationNames')}</button>
+              </div>
           </div>
 
-          <div className="flex flex-wrap gap-1 justify-center">
-            <button
-              onClick={handleClearFilters}
-              className={`px-3 py-1 text-sm rounded-md font-semibold transition-colors ${!selectedLetter && !selectedCategory ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
-              aria-pressed={!selectedLetter && !selectedCategory}
-            >
-              {t('dictionaryAll')}
-            </button>
-            {phoenicianAlphabet.map(letter => (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+                <button onClick={() => setGlossaryLang('en')} className={langButtonClass('en')} aria-pressed={glossaryLang === 'en'}>{t('english')}</button>
+                <button onClick={() => setGlossaryLang('fr')} className={langButtonClass('fr')} aria-pressed={glossaryLang === 'fr'}>{t('french')}</button>
+                <button onClick={() => setGlossaryLang('ar')} className={`${langButtonClass('ar')} text-base`} aria-pressed={glossaryLang === 'ar'}>{t('arabic')}</button>
+            </div>
+
+            <div className="flex flex-wrap gap-1 justify-center">
               <button
-                key={letter}
-                onClick={() => handleLetterSelect(letter)}
-                className={`px-3 py-1 rounded-md ${scriptFontClass} ${scriptMode === PhoenicianDialect.PUNIC ? 'text-xl' : 'text-lg'} transition-colors ${selectedLetter === letter ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
-                aria-pressed={selectedLetter === letter}
+                onClick={handleClearFilters}
+                className={`px-3 py-1 text-sm rounded-md font-semibold transition-colors ${!selectedLetter && !selectedCategory ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
+                aria-pressed={!selectedLetter && !selectedCategory}
               >
-                {letter}
+                {t('dictionaryAll')}
               </button>
-            ))}
+              {phoenicianAlphabet.map(letter => (
+                <button
+                  key={letter}
+                  onClick={() => handleLetterSelect(letter)}
+                  className={`px-3 py-1 rounded-md ${scriptFontClass} ${scriptMode === PhoenicianDialect.PUNIC ? 'text-xl' : 'text-lg'} transition-colors ${selectedLetter === letter ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
+                  aria-pressed={selectedLetter === letter}
+                >
+                  {letter}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

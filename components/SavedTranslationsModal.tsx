@@ -1,4 +1,3 @@
-
 import React, { useState, ChangeEvent } from 'react';
 import { SavedTranslation, PhoenicianDialect, Language } from '../types';
 import TrashIcon from './icons/TrashIcon';
@@ -7,7 +6,7 @@ import NoteIcon from './icons/NoteIcon';
 import PdfIcon from './icons/PdfIcon';
 import ImageIcon from './icons/ImageIcon';
 import { getFlagForLanguage } from '../lib/languageUtils';
-import { generatePrintableHtml, generateSvgDataUrl } from '../lib/exportUtils';
+import { generatePrintableHtml } from '../lib/exportUtils';
 import { UILang } from '../lib/i18n';
 
 
@@ -85,41 +84,51 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
     }
   };
   
-  const handleExportImage = (format: 'png' | 'jpeg') => {
+  const handleExportImage = async (format: 'png' | 'jpeg') => {
     const selected = getSelectedTranslations();
     if (selected.length === 0) return;
 
-    const svgDataUrl = generateSvgDataUrl(selected, theme, uiLang);
+    const exportContainer = document.createElement('div');
+    exportContainer.style.position = 'absolute';
+    exportContainer.style.left = '-9999px';
+    exportContainer.style.width = '800px';
 
-    const image = new Image();
-    image.onload = () => {
-      const canvas = document.createElement('canvas');
-      const scale = 2; // For higher resolution
-      canvas.width = image.width * scale;
-      canvas.height = image.height * scale;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        if (format === 'jpeg') {
-            let bgColor = '#ffffff'; // light default
-            if (theme === 'dark') {
-              bgColor = '#111827';
-            } else if (theme === 'papyrus') {
-              bgColor = '#FBF0D9';
-            } else if (theme === 'purple-glassy') {
-              bgColor = '#1E0F4C';
-            } else if (theme === 'glassmorphism') {
-              bgColor = '#0A1931';
-            }
-            ctx.fillStyle = bgColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const htmlContent = generatePrintableHtml(selected, uiLang);
+    const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    const styleMatch = htmlContent.match(/<style[^>]*>([\s\S]*)<\/style>/i);
+
+    if (bodyMatch && styleMatch) {
+        const style = document.createElement('style');
+        style.innerHTML = styleMatch[1];
+        exportContainer.appendChild(style);
+        exportContainer.innerHTML += bodyMatch[1];
+    } else {
+        alert("Error preparing content for export.");
+        return;
+    }
+
+    document.body.appendChild(exportContainer);
+
+    try {
+        let bgColor = '#ffffff';
+        if (theme === 'dark') {
+            bgColor = '#111827';
+        } else if (theme === 'papyrus') {
+            bgColor = '#FBF0D9';
+        } else if (theme === 'purple-glassy') {
+            bgColor = '#1E0F4C';
+        } else if (theme === 'glassmorphism') {
+            bgColor = '#0A1931';
         }
-        
-        ctx.scale(scale, scale);
-        ctx.drawImage(image, 0, 0);
+
+        const canvas = await window.html2canvas(exportContainer, {
+            useCORS: true,
+            backgroundColor: format === 'png' ? null : bgColor,
+            scale: 2,
+        });
 
         const mimeType = `image/${format}`;
-        const dataUrl = canvas.toDataURL(mimeType);
-
+        const dataUrl = canvas.toDataURL(mimeType, 0.95);
         const link = document.createElement('a');
         link.href = dataUrl;
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -127,12 +136,12 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      }
-    };
-    image.onerror = () => {
-        alert("Sorry, there was an error exporting the image.");
+    } catch (err) {
+        console.error("Export failed:", err);
+        alert("Sorry, the export failed. There might be an issue with rendering the image. Please try again.");
+    } finally {
+        document.body.removeChild(exportContainer);
     }
-    image.src = svgDataUrl;
   };
   
   const isAllSelected = selectedIds.size > 0 && selectedIds.size === translations.length;

@@ -40,8 +40,8 @@ import { phoenicianDictionary } from './lib/phoenicianDictionary';
 import { transliterationMap } from './lib/phoenicianTransliteration';
 import PhoenicianDictionaryModal from './components/PhoenicianDictionaryModal';
 import { translations, UILang } from './lib/i18n';
-import LayoutEditIcon from './components/icons/LayoutEditIcon';
-import GroupEditCanvas from './components/GroupEditCanvas';
+import ExportIcon from './components/icons/LayoutEditIcon';
+import ExportEditor from './components/GroupEditCanvas';
 import CognateComparisonToggle from './components/CognateComparisonToggle';
 import CognateDisplay from './components/CognateDisplay';
 import CameraExperience from './components/CameraExperience';
@@ -55,6 +55,7 @@ import DictionaryIcon from './components/icons/DictionaryIcon';
 import NewspaperIcon from './components/icons/NewspaperIcon';
 import ManualIcon from './components/icons/ManualIcon';
 import DatabaseIcon from './components/icons/DatabaseIcon';
+import CopticScriptDisplay from './components/CopticScriptDisplay';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -901,7 +902,7 @@ const App: React.FC = () => {
                                 </button>
                                 {hasPhoenicianResult && (
                                     <button onClick={() => setIsGroupEditMode(true)} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={t('layoutEditTitle')} title={t('layoutEditTitle')}>
-                                        <LayoutEditIcon className="w-5 h-5" />
+                                        <ExportIcon className="w-5 h-5" />
                                     </button>
                                 )}
                                 <button onClick={handleCopyText} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={isCopied ? t('copySuccess') : t('copyTitle')} title={isCopied ? t('copySuccess') : t('copyTitle')}>
@@ -934,8 +935,8 @@ const App: React.FC = () => {
                                 targetLang={targetLang}
                             />
                         ) : isGroupEditMode && typeof translationResult === 'object' && translationResult.grammar ? (
-                            <div className="h-full absolute inset-2">
-                                <GroupEditCanvas
+                            <div className="h-full absolute inset-0">
+                                <ExportEditor
                                     translationResult={translationResult}
                                     dialect={phoenicianDialect}
                                     onExit={() => setIsGroupEditMode(false)}
@@ -980,6 +981,15 @@ const App: React.FC = () => {
               </div>
               
               {actionButton}
+
+              {!isComparisonMode && typeof translationResult === 'object' && translationResult.phoenician && (
+                  <CopticScriptDisplay 
+                      result={translationResult}
+                      mode={transliterationMode}
+                      dialect={phoenicianDialect}
+                      t={t}
+                  />
+              )}
 
               {hasPhoenicianResult && !isLoading && isCognateComparisonOn && typeof translationResult === 'object' && (translationResult.hebrewCognate || translationResult.arabicCognate || translationResult.aramaicCognate) && (
                 <CognateDisplay
