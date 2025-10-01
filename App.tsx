@@ -713,7 +713,11 @@ const App: React.FC = () => {
   };
   
   const handleSpeakPronunciation = (text: string) => {
-    speak(text, 'en-US');
+    if (isSpeaking) {
+      cancel();
+    }
+    // Use an Arabic voice for more authentic phonetics
+    speak(text, 'ar-SA');
   };
 
   const handleDictionaryWordSelect = (word: string) => {
@@ -763,7 +767,7 @@ const App: React.FC = () => {
   const currentActionText = () => {
     if (appMode === 'translator') return t('translate');
     if (appMode === 'comparison') return t('compareVariants');
-    if (appMode === 'pronunciation') return t('reconstructPronunciation');
+    if (appMode === 'pronunciation') return t('suggestPronunciation');
     return t('translate');
   };
 

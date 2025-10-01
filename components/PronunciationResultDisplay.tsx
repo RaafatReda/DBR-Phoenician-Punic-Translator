@@ -2,6 +2,7 @@ import React from 'react';
 import { PronunciationResult } from '../types';
 import Loader from './Loader';
 import SpeakerIcon from './icons/SpeakerIcon';
+import SpeakerWaveIcon from './icons/SpeakerWaveIcon';
 
 interface PronunciationResultDisplayProps {
   result: PronunciationResult | null;
@@ -13,13 +14,13 @@ interface PronunciationResultDisplayProps {
 }
 
 const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({ result, isLoading, error, isSpeaking, onSpeak, t }) => {
-  const ResultCard: React.FC<{ titleKey: string; children: React.ReactNode; hasAction?: boolean; onAction?: () => void; actionDisabled?: boolean; }> = 
-  ({ titleKey, children, hasAction, onAction, actionDisabled }) => (
+  const ResultCard: React.FC<{ titleKey: string; children: React.ReactNode; hasAction?: boolean; onAction?: () => void; actionDisabled?: boolean; actionLabelKey?: string; }> = 
+  ({ titleKey, children, hasAction, onAction, actionDisabled, actionLabelKey }) => (
     <div className="bg-black/20 p-4 rounded-lg">
       <div className="flex justify-between items-center mb-2">
         <h4 className="text-sm font-bold uppercase tracking-wider text-[color:var(--color-secondary)]">{t(titleKey)}</h4>
-        {hasAction && onAction && (
-          <button onClick={onAction} disabled={actionDisabled} className="p-2 -m-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 disabled:opacity-50" aria-label={t('speakPronunciation')}>
+        {hasAction && onAction && actionLabelKey && (
+          <button onClick={onAction} disabled={actionDisabled} className="p-2 -m-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 disabled:opacity-50" aria-label={t(actionLabelKey)}>
             <SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking} />
           </button>
         )}
@@ -30,40 +31,67 @@ const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({
 
   return (
     <div className="w-full max-w-3xl mt-6">
-      <div className="glass-panel rounded-[var(--border-radius)] p-6 min-h-[15rem] flex items-center justify-center">
-        {isLoading ? (
-          <div className="flex items-center text-[color:var(--color-primary)]">
-            <Loader className="w-6 h-6 mr-3" />
-            <span>{t('reconstructing')}...</span>
+      {isLoading || error || result ? (
+        <>
+          <div className="flex items-center justify-center gap-2 mb-4">
+              <SpeakerWaveIcon className="w-6 h-6 text-[color:var(--color-secondary)]" />
+              <h3 className="text-xl font-semibold text-[color:var(--color-text-muted)]">{t('pronunciationSuggestion')}</h3>
           </div>
-        ) : error ? (
-          <div className="text-center text-red-400">
-            <p className="font-semibold">{t('dailyWordError')}</p>
-            <p className="text-sm">{error}</p>
+          <div className="glass-panel rounded-[var(--border-radius)] p-6 min-h-[15rem] flex items-center justify-center">
+            {isLoading ? (
+              <div className="flex items-center text-[color:var(--color-primary)]">
+                <Loader className="w-6 h-6 mr-3" />
+                <span>{t('reconstructing')}...</span>
+              </div>
+            ) : error ? (
+              <div className="text-center text-red-400">
+                <p className="font-semibold">{t('dailyWordError')}</p>
+                <p className="text-sm">{error}</p>
+              </div>
+            ) : result && (
+              <div className="w-full space-y-4 animate-text-glow-fade-in" style={{ animationDuration: '0.5s' }}>
+                <ResultCard titleKey="transliteration">
+                  <p className="italic">{result.transliteration}</p>
+                </ResultCard>
+                <ResultCard titleKey="ipa">
+                  <p className="font-mono">[{result.ipa}]</p>
+                </ResultCard>
+                <ResultCard titleKey="wordByWordReading">
+                  <div className="flex flex-wrap gap-2" dir="rtl">
+                    {result.tts_word_by_word.map((word, index) => (
+                      <button 
+                          key={index}
+                          onClick={() => onSpeak(word)}
+                          className="px-3 py-1 bg-white/5 text-[color:var(--color-text)] rounded-md hover:bg-white/10 transition-colors text-xl"
+                          aria-label={`${t('speakPronunciation')} ${word}`}
+                          disabled={isSpeaking}
+                      >
+                          {word}
+                      </button>
+                    ))}
+                  </div>
+                </ResultCard>
+                <ResultCard 
+                  titleKey="fullSentenceReading" 
+                  hasAction={true} 
+                  onAction={() => onSpeak(result.tts_full_sentence)}
+                  actionDisabled={isSpeaking}
+                  actionLabelKey="speakFullSentence"
+                >
+                  <p dir="rtl" className="text-xl">{result.tts_full_sentence}</p>
+                </ResultCard>
+                <ResultCard titleKey="linguisticNotes">
+                  <p className="text-base text-gray-400">{result.note}</p>
+                </ResultCard>
+              </div>
+            )}
           </div>
-        ) : result ? (
-          <div className="w-full space-y-4 animate-text-glow-fade-in" style={{ animationDuration: '0.5s' }}>
-            <ResultCard titleKey="latinTransliterationLabel">
-              <p className="italic">{result.latinTransliteration}</p>
-            </ResultCard>
-            <ResultCard titleKey="ipaReconstructionLabel">
-              <p className="font-mono">[{result.ipaReconstruction}]</p>
-            </ResultCard>
-            <ResultCard 
-              titleKey="ttsFriendlyLabel" 
-              hasAction={true} 
-              onAction={() => onSpeak(result.ttsFriendly)}
-              actionDisabled={isSpeaking}
-            >
-              <p className="font-semibold">{result.ttsFriendly}</p>
-            </ResultCard>
-          </div>
-        ) : (
-          <div className="text-center text-[color:var(--color-text-muted)]">
+        </>
+      ) : (
+        <div className="w-full min-h-[15rem] flex items-center justify-center text-center text-[color:var(--color-text-muted)]">
             <p>{t('reconstructorPlaceholder')}</p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

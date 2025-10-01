@@ -121,7 +121,9 @@ export interface AIAssistantResponse {
 }
 
 export interface PronunciationResult {
-  latinTransliteration: string;
-  ipaReconstruction: string;
-  ttsFriendly: string;
+  transliteration: string;
+  ipa: string;
+  tts_word_by_word: string[];
+  tts_full_sentence: string;
+  note: string;
 }

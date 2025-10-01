@@ -574,30 +574,62 @@ export const reconstructPronunciation = async (
   text: string,
   dialect: PhoenicianDialect
 ): Promise<PronunciationResult> => {
-    const systemInstruction = `You are an expert historical linguist specializing in the phonology of ancient Semitic languages, particularly Phoenician and its Punic dialect. Your task is to reconstruct the pronunciation of a given text. You MUST respond in a valid JSON format adhering to the provided schema.
-    
+    const systemInstruction = `You are an expert historical linguist specializing in the phonology of ancient Semitic languages, particularly Phoenician and its Punic dialect. Your task is to reconstruct the pronunciation of a given text into a speakable Arabic phonetic form. You MUST respond in a valid JSON format adhering to the provided schema.
+
 **Dialect Consideration:**
 - If the dialect is 'Standard Phoenician', reconstruct based on early first millennium BCE phonology.
-- If the dialect is 'Punic', reconstruct based on later, North African phonology (c. 3rd-1st century BCE). This includes known sound changes like the weakening of guttural consonants (ayin 𐤏, heth 𐤇) and the shift of 'p' (𐤐) to 'f'.
+- If the dialect is 'Punic', reconstruct based on later, North African phonology (c. 3rd-1st century BCE). This includes sound changes like the weakening of gutturals and the shift of 'p' to 'f'.
 
-**Output Fields:**
-1.  **latinTransliteration**: Provide a strict, academic transliteration. Follow this mapping precisely:
-    𐤀 = ʾ, 𐤁 = b, 𐤂 = g, 𐤃 = d, 𐤄 = h, 𐤅 = w, 𐤆 = z, 𐤇 = ḥ, 𐤈 = ṭ, 𐤉 = y, 𐤊 = k, 𐤋 = l, 𐤌 = m, 𐤍 = n, 𐤎 = s, 𐤏 = ʿ, 𐤐 = p, 𐤑 = ṣ, 𐤒 = q, 𐤓 = r, 𐤔 = š, 𐤕 = t.
+**Phonetic Mapping to Arabic:**
+You MUST map each Phoenician letter to its closest Arabic phoneme for TTS purposes, following this guide:
+- 𐤀 (Aleph): أ (hamza, especially at word start)
+- 𐤁 (Bet): ب
+- 𐤂 (Gimel): غ (a heavy G sound)
+- 𐤃 (Dalet): د
+- 𐤄 (He): هـ
+- 𐤅 (Waw): و
+- 𐤆 (Zayin): ز
+- 𐤇 (Het): ح (guttural H)
+- 𐤈 (Tet): ط (emphatic T)
+- 𐤉 (Yod): ي
+- 𐤊 (Kaph): ك
+- 𐤋 (Lamed): ل
+- 𐤌 (Mem): م
+- 𐤍 (Nun): ن
+- 𐤎 (Samekh): س
+- 𐤏 (Ayin): ع (guttural Ayin)
+- 𐤐 (Pe): پ (use a P sound, as Arabic lacks it) or ف in Punic context. The TTS might pronounce پ as B, which is acceptable.
+- 𐤑 (Tsade): ص (emphatic S)
+- 𐤒 (Qoph): ق (deep Q)
+- 𐤓 (Resh): ر
+- 𐤔 (Shin): ش
+- 𐤕 (Taw): ت
 
-2.  **ipaReconstruction**: Provide an approximate phonetic reconstruction using the International Phonetic Alphabet (IPA). Infer vowels based on comparative Semitics (e.g., Hebrew, Arabic). Use standard IPA symbols. For Punic, reflect the aforementioned sound changes (e.g., use [f] for 𐤐).
+You must infer vowels based on comparative Semitics (e.g., Hebrew, Arabic) to create pronounceable Arabic words for the TTS fields.
 
-3.  **ttsFriendly**: Create a simplified, vocalized spelling using only basic Latin characters (a-z). This version is intended for a standard text-to-speech (TTS) engine to pronounce. It should be intuitive. For example, for '𐤌𐤋𐤊' (mlk, "king"), a good TTS-friendly form would be "milk" or "melek". For '𐤒𐤓𐤕𐤇𐤃𐤔𐤕' (qrt-ḥdšt, "Carthage"), a good form would be "Qart-hadasht".`;
+**Output Fields (JSON):**
+1.  **transliteration**: A strict, academic Latin transliteration.
+2.  **ipa**: An approximate phonetic reconstruction using the International Phonetic Alphabet (IPA).
+3.  **tts_word_by_word**: An array of strings. Each string is a single word from the input, reconstructed into a vocalized, speakable form using ARABIC characters for an Arabic TTS engine.
+4.  **tts_full_sentence**: A single string containing the full reconstructed sentence, also in vocalized ARABIC characters for an Arabic TTS engine.
+5.  **note**: A brief note comparing the word(s) to cognates in Hebrew, Arabic, or Aramaic if relevant.`;
     
-    const prompt = `Reconstruct the pronunciation of the following ${dialect} text: "${text}"`;
+    const prompt = `Reconstruct the pronunciation of the following ${dialect} text, providing output suitable for an Arabic TTS engine: "${text}"`;
 
     const schema = {
         type: Type.OBJECT,
         properties: {
-            latinTransliteration: { type: Type.STRING, description: "Academic Latin transliteration." },
-            ipaReconstruction: { type: Type.STRING, description: "Approximate IPA reconstruction." },
-            ttsFriendly: { type: Type.STRING, description: "Vocalized, TTS-friendly Latin spelling." }
+            transliteration: { type: Type.STRING, description: "Academic Latin transliteration." },
+            ipa: { type: Type.STRING, description: "Approximate IPA reconstruction." },
+            tts_word_by_word: {
+                type: Type.ARRAY,
+                description: "An array of vocalized Arabic words for word-by-word TTS playback.",
+                items: { type: Type.STRING }
+            },
+            tts_full_sentence: { type: Type.STRING, description: "The full sentence in vocalized Arabic for TTS playback." },
+            note: { type: Type.STRING, description: "Comparative linguistic notes on cognates." }
         },
-        required: ["latinTransliteration", "ipaReconstruction", "ttsFriendly"]
+        required: ["transliteration", "ipa", "tts_word_by_word", "tts_full_sentence", "note"]
     };
 
     try {
