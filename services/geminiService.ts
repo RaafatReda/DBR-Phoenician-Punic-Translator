@@ -572,15 +572,18 @@ If you cannot identify any objects, return an empty array []. Respond ONLY with 
 
 export const reconstructPronunciation = async (
   text: string,
-  dialect: PhoenicianDialect
+  dialect: PhoenicianDialect,
+  uiLang: UILang
 ): Promise<PronunciationResult> => {
-    const systemInstruction = `You are an expert historical linguist specializing in the phonology of ancient Semitic languages, particularly Phoenician and its Punic dialect. Your task is to reconstruct the pronunciation of a given text into a speakable Arabic phonetic form. You MUST respond in a valid JSON format adhering to the provided schema.
+    const languageName = getLanguageName(uiLang);
+
+    const systemInstruction = `You are an expert historical linguist specializing in the phonology of ancient Semitic languages, particularly Phoenician and its Punic dialect. Your task is to reconstruct the pronunciation of a given text. You MUST respond in a valid JSON format adhering to the provided schema.
 
 **Dialect Consideration:**
 - If the dialect is 'Standard Phoenician', reconstruct based on early first millennium BCE phonology.
 - If the dialect is 'Punic', reconstruct based on later, North African phonology (c. 3rd-1st century BCE). This includes sound changes like the weakening of gutturals and the shift of 'p' to 'f'.
 
-**Phonetic Mapping to Arabic:**
+**Phonetic Mapping for TTS:**
 You MUST map each Phoenician letter to its closest Arabic phoneme for TTS purposes, following this guide:
 - 𐤀 (Aleph): أ (hamza, especially at word start)
 - 𐤁 (Bet): ب
@@ -605,14 +608,22 @@ You MUST map each Phoenician letter to its closest Arabic phoneme for TTS purpos
 - 𐤔 (Shin): ش
 - 𐤕 (Taw): ت
 
-You must infer vowels based on comparative Semitics (e.g., Hebrew, Arabic) to create pronounceable Arabic words for the TTS fields.
+**Crucial Pronunciation Rules for TTS Output (tts in word_pronunciations, tts_full_sentence):**
+- **Vocalization based on IPA:** Your vocalized Arabic TTS output MUST be a direct, phonetic rendering of your reconstructed IPA string. Use Arabic vowel marks (harakat: Fatha, Kasra, Damma) to create a fluid, natural, and realistic pronunciation. The goal is to make an Arabic TTS engine *sound* like it's speaking Phoenician.
+- **No Arabic Grammar Endings (I'rāb):** You MUST NOT use Arabic grammatical case endings. This means NO tanwīn ( ◌ً , ◌ٍ , ◌ٌ ) and NO final short vowels (ـُ , ـِ , ـَ) for grammatical cases. The pronunciation must be syllabic, not based on Classical Arabic grammar.
+- **Mandatory Sukun:** Every single word in the TTS fields MUST end with a Sukun ( ْ ) unless the word naturally ends in a long vowel sound (ا, و, ي). This is critical to prevent the TTS engine from adding its own final vowel.
+- **Follow these examples EXACTLY:**
+  - \`𐤇𐤓𐤑\` → TTS must be \`حَرَصْ\` (ḥa-raṣ), NOT \`حَرَصٌ\`.
+  - \`𐤁𐤕𐤍\` → TTS must be \`بَتَنْ\` (ba-tan), NOT \`بَتَنٌ\`.
+  - \`𐤀𐤋𐤌\` → TTS must be \`أَلَمْ\` (ʾa-lam), NOT \`أَلَمٌ\`.
+- The goal is a neutral, syllabic reading that avoids Arabic inflectional endings entirely.
 
 **Output Fields (JSON):**
 1.  **transliteration**: A strict, academic Latin transliteration.
 2.  **ipa**: An approximate phonetic reconstruction using the International Phonetic Alphabet (IPA).
-3.  **tts_word_by_word**: An array of strings. Each string is a single word from the input, reconstructed into a vocalized, speakable form using ARABIC characters for an Arabic TTS engine.
+3.  **word_pronunciations**: An array of objects. Each object MUST contain two keys: 'phoenician' (the original word from the input) and 'tts' (the vocalized ARABIC string for that word, following all pronunciation rules).
 4.  **tts_full_sentence**: A single string containing the full reconstructed sentence, also in vocalized ARABIC characters for an Arabic TTS engine.
-5.  **note**: A brief note comparing the word(s) to cognates in Hebrew, Arabic, or Aramaic if relevant.`;
+5.  **note**: A brief note comparing the word(s) to cognates in Hebrew, Arabic, or Aramaic if relevant. This note MUST be written in ${languageName}.`;
     
     const prompt = `Reconstruct the pronunciation of the following ${dialect} text, providing output suitable for an Arabic TTS engine: "${text}"`;
 
@@ -621,15 +632,22 @@ You must infer vowels based on comparative Semitics (e.g., Hebrew, Arabic) to cr
         properties: {
             transliteration: { type: Type.STRING, description: "Academic Latin transliteration." },
             ipa: { type: Type.STRING, description: "Approximate IPA reconstruction." },
-            tts_word_by_word: {
+            word_pronunciations: {
                 type: Type.ARRAY,
-                description: "An array of vocalized Arabic words for word-by-word TTS playback.",
-                items: { type: Type.STRING }
+                description: "An array of objects, each pairing an original Phoenician word with its vocalized Arabic TTS string.",
+                items: {
+                    type: Type.OBJECT,
+                    properties: {
+                        phoenician: { type: Type.STRING, description: "A single word from the input text, in Phoenician script." },
+                        tts: { type: Type.STRING, description: "The vocalized Arabic TTS rendering for this single word, following all phonological rules." }
+                    },
+                    required: ["phoenician", "tts"]
+                }
             },
             tts_full_sentence: { type: Type.STRING, description: "The full sentence in vocalized Arabic for TTS playback." },
-            note: { type: Type.STRING, description: "Comparative linguistic notes on cognates." }
+            note: { type: Type.STRING, description: `Comparative linguistic notes on cognates, written in ${languageName}.` }
         },
-        required: ["transliteration", "ipa", "tts_word_by_word", "tts_full_sentence", "note"]
+        required: ["transliteration", "ipa", "word_pronunciations", "tts_full_sentence", "note"]
     };
 
     try {

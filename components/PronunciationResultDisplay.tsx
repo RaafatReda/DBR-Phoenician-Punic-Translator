@@ -1,5 +1,5 @@
 import React from 'react';
-import { PronunciationResult } from '../types';
+import { PronunciationResult, PhoenicianDialect } from '../types';
 import Loader from './Loader';
 import SpeakerIcon from './icons/SpeakerIcon';
 import SpeakerWaveIcon from './icons/SpeakerWaveIcon';
@@ -11,9 +11,13 @@ interface PronunciationResultDisplayProps {
   isSpeaking: boolean;
   onSpeak: (text: string) => void;
   t: (key: string) => string;
+  dialect: PhoenicianDialect;
 }
 
-const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({ result, isLoading, error, isSpeaking, onSpeak, t }) => {
+const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({ result, isLoading, error, isSpeaking, onSpeak, t, dialect }) => {
+  const isPunic = dialect === PhoenicianDialect.PUNIC;
+  const fontClass = isPunic ? '[font-family:var(--font-punic)] text-3xl' : '[font-family:var(--font-phoenician)] text-2xl';
+
   const ResultCard: React.FC<{ titleKey: string; children: React.ReactNode; hasAction?: boolean; onAction?: () => void; actionDisabled?: boolean; actionLabelKey?: string; }> = 
   ({ titleKey, children, hasAction, onAction, actionDisabled, actionLabelKey }) => (
     <div className="bg-black/20 p-4 rounded-lg">
@@ -58,15 +62,15 @@ const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({
                 </ResultCard>
                 <ResultCard titleKey="wordByWordReading">
                   <div className="flex flex-wrap gap-2" dir="rtl">
-                    {result.tts_word_by_word.map((word, index) => (
+                    {result.word_pronunciations.map((item, index) => (
                       <button 
                           key={index}
-                          onClick={() => onSpeak(word)}
-                          className="px-3 py-1 bg-white/5 text-[color:var(--color-text)] rounded-md hover:bg-white/10 transition-colors text-xl"
-                          aria-label={`${t('speakPronunciation')} ${word}`}
+                          onClick={() => onSpeak(item.tts)}
+                          className={`px-3 py-1 bg-white/5 text-[color:var(--color-text)] rounded-md hover:bg-white/10 transition-colors ${fontClass}`}
+                          aria-label={`${t('speakPronunciation')} ${item.phoenician}`}
                           disabled={isSpeaking}
                       >
-                          {word}
+                          {item.phoenician}
                       </button>
                     ))}
                   </div>

@@ -480,7 +480,7 @@ const App: React.FC = () => {
     setIsReconstructing(true);
     setPronunciationError(null);
     try {
-      const result = await reconstructPronunciation(pronunciationInput, phoenicianDialect);
+      const result = await reconstructPronunciation(pronunciationInput, phoenicianDialect, uiLang);
       setPronunciationResult(result);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('unknownError');
@@ -489,7 +489,7 @@ const App: React.FC = () => {
     } finally {
       setIsReconstructing(false);
     }
-  }, [pronunciationInput, phoenicianDialect, isReconstructing, t]);
+  }, [pronunciationInput, phoenicianDialect, isReconstructing, t, uiLang]);
 
   useEffect(() => {
     if (!pronunciationInput.trim()) {
@@ -1170,6 +1170,7 @@ const App: React.FC = () => {
                     isSpeaking={isSpeaking}
                     onSpeak={handleSpeakPronunciation}
                     t={t}
+                    dialect={phoenicianDialect}
                 />
              </>
           )}

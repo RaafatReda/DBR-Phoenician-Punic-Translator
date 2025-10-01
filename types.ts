@@ -120,10 +120,15 @@ export interface AIAssistantResponse {
   explanation: string;
 }
 
+export interface WordPronunciation {
+  phoenician: string;
+  tts: string;
+}
+
 export interface PronunciationResult {
   transliteration: string;
   ipa: string;
-  tts_word_by_word: string[];
+  word_pronunciations: WordPronunciation[];
   tts_full_sentence: string;
   note: string;
 }
