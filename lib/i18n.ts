@@ -342,7 +342,11 @@ export const translations: Record<UILang, Record<string, string>> = {
     suggestedArabic: 'Suggested Arabic Pronunciation',
     punicDifferencesTitle: 'Differences between Phoenician and Punic',
     punicDifferences1: 'Punic tends to lengthen vowels (e.g., `mlk` is read "malīk" instead of "melek").',
-    punicDifferences2: 'Some sounds were influenced by Latin and Berber (e.g., "ṣ" sometimes became closer to "s").'
+    punicDifferences2: 'Some sounds were influenced by Latin and Berber (e.g., "ṣ" sometimes became closer to "s").',
+    voiceSelection: 'Voice Selection',
+    male: 'Male',
+    female: 'Female',
+    editPronunciation: 'Edit Pronunciation'
   },
   // ADD FRENCH TRANSLATIONS
   fr: {
@@ -687,7 +691,11 @@ export const translations: Record<UILang, Record<string, string>> = {
     suggestedArabic: 'Prononciation Arabe Suggérée',
     punicDifferencesTitle: 'Différences entre le Phénicien et le Punique',
     punicDifferences1: 'Le punique a tendance à allonger les voyelles (par ex., `mlk` se lit "malīk" au lieu de "melek").',
-    punicDifferences2: 'Certains sons ont été influencés par le latin et le berbère (par ex., "ṣ" est parfois devenu plus proche de "s").'
+    punicDifferences2: 'Certains sons ont été influencés par le latin et le berbère (par ex., "ṣ" est parfois devenu plus proche de "s").',
+    voiceSelection: 'Sélection de la Voix',
+    male: 'Masculin',
+    female: 'Féminin',
+    editPronunciation: 'Modifier la Prononciation'
   },
   // ADD ARABIC TRANSLATIONS
   ar: {
@@ -1032,6 +1040,10 @@ export const translations: Record<UILang, Record<string, string>> = {
     suggestedArabic: 'النطق المقترح بالعربية',
     punicDifferencesTitle: 'الاختلاف بين الفينيقية والبونيقية',
     punicDifferences1: 'البونيقية تميل لإطالة الحركات (مثلاً `mlk` يُقرأ "malīk" بدل "melek").',
-    punicDifferences2: 'بعض الأصوات تأثرت باللاتينية والبربرية (مثلاً "ṣ" صارت أقرب لـ "س" أحياناً).'
+    punicDifferences2: 'بعض الأصوات تأثرت باللاتينية والبربرية (مثلاً "ص" صارت أقرب لـ "س" أحياناً).',
+    voiceSelection: 'اختيار الصوت',
+    male: 'ذكر',
+    female: 'أنثى',
+    editPronunciation: 'تعديل النطق'
   }
 };
