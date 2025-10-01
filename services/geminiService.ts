@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject, AIAssistantResponse } from '../types';
+import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject, AIAssistantResponse, PronunciationResult } from '../types';
 import { UILang } from "../lib/i18n";
 
 // FIX: Initialize Gemini API client. The API key must be an environment variable.
@@ -567,5 +567,53 @@ If you cannot identify any objects, return an empty array []. Respond ONLY with 
     } catch (error) {
         console.error('Gemini API object recognition error:', error);
         throw new Error('Failed to analyze objects in the image.');
+    }
+};
+
+export const reconstructPronunciation = async (
+  text: string,
+  dialect: PhoenicianDialect
+): Promise<PronunciationResult> => {
+    const systemInstruction = `You are an expert historical linguist specializing in the phonology of ancient Semitic languages, particularly Phoenician and its Punic dialect. Your task is to reconstruct the pronunciation of a given text. You MUST respond in a valid JSON format adhering to the provided schema.
+    
+**Dialect Consideration:**
+- If the dialect is 'Standard Phoenician', reconstruct based on early first millennium BCE phonology.
+- If the dialect is 'Punic', reconstruct based on later, North African phonology (c. 3rd-1st century BCE). This includes known sound changes like the weakening of guttural consonants (ayin 𐤏, heth 𐤇) and the shift of 'p' (𐤐) to 'f'.
+
+**Output Fields:**
+1.  **latinTransliteration**: Provide a strict, academic transliteration. Follow this mapping precisely:
+    𐤀 = ʾ, 𐤁 = b, 𐤂 = g, 𐤃 = d, 𐤄 = h, 𐤅 = w, 𐤆 = z, 𐤇 = ḥ, 𐤈 = ṭ, 𐤉 = y, 𐤊 = k, 𐤋 = l, 𐤌 = m, 𐤍 = n, 𐤎 = s, 𐤏 = ʿ, 𐤐 = p, 𐤑 = ṣ, 𐤒 = q, 𐤓 = r, 𐤔 = š, 𐤕 = t.
+
+2.  **ipaReconstruction**: Provide an approximate phonetic reconstruction using the International Phonetic Alphabet (IPA). Infer vowels based on comparative Semitics (e.g., Hebrew, Arabic). Use standard IPA symbols. For Punic, reflect the aforementioned sound changes (e.g., use [f] for 𐤐).
+
+3.  **ttsFriendly**: Create a simplified, vocalized spelling using only basic Latin characters (a-z). This version is intended for a standard text-to-speech (TTS) engine to pronounce. It should be intuitive. For example, for '𐤌𐤋𐤊' (mlk, "king"), a good TTS-friendly form would be "milk" or "melek". For '𐤒𐤓𐤕𐤇𐤃𐤔𐤕' (qrt-ḥdšt, "Carthage"), a good form would be "Qart-hadasht".`;
+    
+    const prompt = `Reconstruct the pronunciation of the following ${dialect} text: "${text}"`;
+
+    const schema = {
+        type: Type.OBJECT,
+        properties: {
+            latinTransliteration: { type: Type.STRING, description: "Academic Latin transliteration." },
+            ipaReconstruction: { type: Type.STRING, description: "Approximate IPA reconstruction." },
+            ttsFriendly: { type: Type.STRING, description: "Vocalized, TTS-friendly Latin spelling." }
+        },
+        required: ["latinTransliteration", "ipaReconstruction", "ttsFriendly"]
+    };
+
+    try {
+        const response = await ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                systemInstruction,
+                responseMimeType: "application/json",
+                responseSchema: schema,
+            },
+        });
+        const jsonText = response.text.trim();
+        return JSON.parse(jsonText) as PronunciationResult;
+    } catch (error) {
+        console.error('Gemini API pronunciation reconstruction error:', error);
+        throw new Error('Failed to reconstruct pronunciation. The AI service may be temporarily unavailable.');
     }
 };

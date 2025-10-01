@@ -1,13 +1,13 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo, ChangeEvent, KeyboardEvent } from 'react';
-import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse } from './types';
-import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage } from './services/geminiService';
+import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse, PronunciationResult } from './types';
+import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage, reconstructPronunciation } from './services/geminiService';
 import DialectSelector from './components/DialectSelector';
 import TextArea from './components/TextArea';
 import Loader from './components/Loader';
 import SavedTranslationsModal from './components/SavedTranslationsModal';
 import BookmarkIcon from './components/icons/BookmarkIcon';
 import MicrophoneIcon from './components/icons/MicrophoneIcon';
-import ComparisonModeToggle from './components/ComparisonModeToggle';
+import ModeSelector from './components/ModeSelector';
 import ComparisonResultCard from './components/ComparisonResultCard';
 import TransliterationSelector from './components/TransliterationSelector';
 import GrammarHelperToggle from './components/GrammarHelperToggle';
@@ -56,6 +56,7 @@ import NewspaperIcon from './components/icons/NewspaperIcon';
 import ManualIcon from './components/icons/ManualIcon';
 import DatabaseIcon from './components/icons/DatabaseIcon';
 import CopticScriptDisplay from './components/CopticScriptDisplay';
+import PronunciationResultDisplay from './components/PronunciationResultDisplay';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -139,8 +140,10 @@ declare global {
 
 type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 type FontSize = 'small' | 'medium' | 'large';
+type AppMode = 'translator' | 'comparison' | 'pronunciation';
 
 const App: React.FC = () => {
+  const [appMode, setAppMode] = useState<AppMode>('translator');
   const [sourceLang, setSourceLang] = useState<Language>(Language.ENGLISH);
   const [targetLang, setTargetLang] = useState<Language>(Language.PHOENICIAN);
   const [phoenicianDialect, setPhoenicianDialect] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
@@ -158,9 +161,7 @@ const App: React.FC = () => {
   const speechRecognition = useRef<SpeechRecognition | null>(null);
   const { speak, cancel, isSpeaking, supported: isTtsSupported } = useSpeechSynthesis();
 
-  const [isComparisonMode, setIsComparisonMode] = useState<boolean>(false);
   const [comparisonResults, setComparisonResults] = useState<Record<string, TransliterationOutput> | null>(null);
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
   const [transliterationMode, setTransliterationMode] = useState<TransliterationMode>(TransliterationMode.PHOENician);
   const [isGrammarHelperOn, setIsGrammarHelperOn] = useState<boolean>(false);
   const [isCognateComparisonOn, setIsCognateComparisonOn] = useState<boolean>(false);
@@ -185,13 +186,19 @@ const App: React.FC = () => {
   const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
   const [isAiEditingMode, setIsAiEditingMode] = useState<boolean>(false);
   const [isLessonsPageOpen, setIsLessonsPageOpen] = useState<boolean>(false);
+  
+  // New states for Pronunciation Reconstructor
+  const [pronunciationInput, setPronunciationInput] = useState<string>('');
+  const [pronunciationResult, setPronunciationResult] = useState<PronunciationResult | null>(null);
+  const [isReconstructing, setIsReconstructing] = useState<boolean>(false);
+  const [pronunciationError, setPronunciationError] = useState<string | null>(null);
 
   const t = useCallback((key: keyof typeof translations.en) => {
     return translations[uiLang]?.[key] || translations.en[key];
   }, [uiLang]);
 
   const sourceTextAreaRef = useRef<HTMLDivElement>(null);
-  const comparisonTextAreaRef = useRef<HTMLDivElement>(null);
+  const pronunciationTextAreaRef = useRef<HTMLDivElement>(null);
   
   const availableLanguages = useMemo(() => [
     Language.ENGLISH, 
@@ -291,11 +298,11 @@ const App: React.FC = () => {
     if (isKeyboardOpen) {
         // Delay scrolling to allow keyboard animation and layout shift to complete
         setTimeout(() => {
-            const activeRef = isComparisonMode ? comparisonTextAreaRef : sourceTextAreaRef;
+            const activeRef = appMode === 'pronunciation' ? pronunciationTextAreaRef : sourceTextAreaRef;
             activeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
     }
-  }, [isKeyboardOpen, isComparisonMode]);
+  }, [isKeyboardOpen, appMode]);
 
   useEffect(() => {
     if (!sourceText.trim()) {
@@ -437,7 +444,7 @@ const App: React.FC = () => {
     }
 
     try {
-      if (isComparisonMode) {
+      if (appMode === 'comparison') {
         const results = await comparePhoenicianDialects(textToTranslate, effectiveDialect);
         setComparisonResults(results);
         setTranslationResult('');
@@ -454,7 +461,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [sourceLang, targetLang, phoenicianDialect, isComparisonMode, isLoading, t, isCognateComparisonOn]);
+  }, [sourceLang, targetLang, phoenicianDialect, appMode, isLoading, t, isCognateComparisonOn]);
   
   useEffect(() => {
     if (!sourceText.trim()) {
@@ -466,8 +473,37 @@ const App: React.FC = () => {
     }
   }, [sourceText]);
 
+  const handleReconstruct = useCallback(async () => {
+    if (!pronunciationInput.trim() || isReconstructing) {
+      return;
+    }
+    setIsReconstructing(true);
+    setPronunciationError(null);
+    try {
+      const result = await reconstructPronunciation(pronunciationInput, phoenicianDialect);
+      setPronunciationResult(result);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : t('unknownError');
+      setPronunciationError(errorMessage);
+      setPronunciationResult(null);
+    } finally {
+      setIsReconstructing(false);
+    }
+  }, [pronunciationInput, phoenicianDialect, isReconstructing, t]);
+
+  useEffect(() => {
+    if (!pronunciationInput.trim()) {
+        setPronunciationResult(null);
+        setPronunciationError(null);
+    }
+  }, [pronunciationInput]);
+
   const handleSourceTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setSourceText(e.target.value);
+  };
+
+  const handlePronunciationInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setPronunciationInput(e.target.value);
   };
 
   const handleSourceKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -550,19 +586,31 @@ const App: React.FC = () => {
   };
   
   const handleKeyboardKeyPress = (key: string) => {
-    setSourceText(prev => prev + key);
+    if (appMode === 'pronunciation') {
+      setPronunciationInput(prev => prev + key);
+    } else {
+      setSourceText(prev => prev + key);
+    }
   };
 
   const handleKeyboardBackspace = () => {
-    setSourceText(prev => prev.slice(0, -1));
+    if (appMode === 'pronunciation') {
+      setPronunciationInput(prev => prev.slice(0, -1));
+    } else {
+      setSourceText(prev => prev.slice(0, -1));
+    }
   };
   
   const handleHandwritingRecognized = (text: string) => {
-    setSourceText(prev => prev + text);
+    if (appMode === 'pronunciation') {
+      setPronunciationInput(prev => prev + text);
+    } else {
+      setSourceText(prev => prev + text);
+    }
     setIsHandwritingCanvasOpen(false);
   };
   
-  const isPhoenicianFamilySelected = sourceLang === Language.PHOENICIAN || targetLang === Language.PHOENICIAN || sourceLang === Language.PUNIC || targetLang === Language.PUNIC;
+  const isPhoenicianFamilySelected = sourceLang === Language.PHOENICIAN || targetLang === Language.PHOENICIAN || sourceLang === Language.PUNIC || targetLang === Language.PUNIC || appMode === 'comparison' || appMode === 'pronunciation';
   
   const currentTranslatedTextString = useMemo(() => {
     if (typeof translationResult === 'string') {
@@ -663,12 +711,24 @@ const App: React.FC = () => {
       speak(textToSpeak, langCode);
     }
   };
+  
+  const handleSpeakPronunciation = (text: string) => {
+    speak(text, 'en-US');
+  };
 
   const handleDictionaryWordSelect = (word: string) => {
-    setSourceText(prev => (prev ? `${prev.trim()} ${word}` : word).trim());
+    if (appMode === 'pronunciation') {
+      setPronunciationInput(prev => (prev ? `${prev.trim()} ${word}` : word).trim());
+    } else {
+      setSourceText(prev => (prev ? `${prev.trim()} ${word}` : word).trim());
+    }
     setIsDictionaryOpen(false);
     setTimeout(() => {
+      if (appMode === 'pronunciation') {
+        pronunciationTextAreaRef.current?.querySelector('textarea')?.focus();
+      } else {
         sourceTextAreaRef.current?.querySelector('textarea')?.focus();
+      }
     }, 0);
   };
   
@@ -680,15 +740,14 @@ const App: React.FC = () => {
   const isMicDisabled = !isSpeechRecognitionSupported || sourceLang === Language.PHOENICIAN || sourceLang === Language.PUNIC;
   const micButtonTitle = isListening ? t('micStop') : isMicDisabled ? t('micNotAvailable') : t('micStart');
     
-  const hasPhoenicianResult = !isComparisonMode && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC) && typeof translationResult === 'object' && translationResult.phoenician;
+  const hasPhoenicianResult = appMode === 'translator' && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC) && typeof translationResult === 'object' && translationResult.phoenician;
   
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
   const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && transliterationMode === TransliterationMode.PHOENician && typeof translationResult === 'object' && !!translationResult.grammar;
 
-  const showPhoenicianControls = (!isComparisonMode && isPhoenicianFamilySelected) || isComparisonMode;
-  const targetLangIsPhoenicianFamily = !isComparisonMode && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC);
+  const showPhoenicianControls = appMode !== 'translator' || isPhoenicianFamilySelected;
+  const targetLangIsPhoenicianFamily = appMode === 'translator' && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC);
 
-  const isPunicTranslation = !isComparisonMode && (targetLang === Language.PUNIC || (targetLang === Language.PHOENICIAN && phoenicianDialect === PhoenicianDialect.PUNIC));
+  const isPunicTranslation = appMode === 'translator' && (targetLang === Language.PUNIC || (targetLang === Language.PHOENICIAN && phoenicianDialect === PhoenicianDialect.PUNIC));
   const resultFontClass = isPunicTranslation ? '[font-family:var(--font-punic)]' : '[font-family:var(--font-phoenician)]';
 
   const isPhoenicianSource = sourceLang === Language.PHOENICIAN || sourceLang === Language.PUNIC;
@@ -697,25 +756,41 @@ const App: React.FC = () => {
     ? (isPunicInput ? '[font-family:var(--font-punic)] text-2xl' : '[font-family:var(--font-phoenician)] text-xl') 
     : '';
 
-  const comparisonInputFontClass = phoenicianDialect === PhoenicianDialect.PUNIC 
+  const commonInputFontClass = phoenicianDialect === PhoenicianDialect.PUNIC 
     ? '[font-family:var(--font-punic)] text-2xl' 
     : '[font-family:var(--font-phoenician)] text-xl';
+  
+  const currentActionText = () => {
+    if (appMode === 'translator') return t('translate');
+    if (appMode === 'comparison') return t('compareVariants');
+    if (appMode === 'pronunciation') return t('reconstructPronunciation');
+    return t('translate');
+  };
+
+  const currentLoadingText = () => {
+    if (appMode === 'translator') return t('translating');
+    if (appMode === 'comparison') return t('comparing');
+    if (appMode === 'pronunciation') return t('reconstructing');
+    return t('translating');
+  };
+  
+  const isActionDisabled = () => {
+    if (appMode === 'translator' || appMode === 'comparison') return isLoading || !sourceText.trim();
+    if (appMode === 'pronunciation') return isReconstructing || !pronunciationInput.trim();
+    return true;
+  }
   
   const actionButton = (
     <div className="w-full max-w-5xl mt-8 flex justify-center">
       <button
-        onClick={() => handleTranslate(sourceText)}
-        disabled={isLoading || !sourceText.trim()}
+        onClick={appMode === 'pronunciation' ? handleReconstruct : () => handleTranslate(sourceText)}
+        disabled={isActionDisabled()}
         className="flex items-center justify-center w-full max-w-xs px-6 py-3.5 text-lg font-semibold text-[color:var(--color-text-on-primary)] bg-[color:var(--color-primary)] rounded-[var(--border-radius)] shadow-[var(--shadow-md)] hover:shadow-[0_0_20px_var(--color-glow)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none focus:outline-none transition-all duration-200"
       >
-        {isLoading ? <Loader className="w-6 h-6 mr-2" /> : null}
-        {isLoading
-          ? isComparisonMode
-            ? t('comparing')
-            : t('translating')
-          : isComparisonMode
-          ? t('compareVariants')
-          : t('translate')}
+        {(isLoading || isReconstructing) ? <Loader className="w-6 h-6 mr-2" /> : null}
+        {(isLoading || isReconstructing)
+          ? currentLoadingText()
+          : currentActionText()}
       </button>
     </div>
   );
@@ -766,10 +841,10 @@ const App: React.FC = () => {
 
         <main className="w-full flex-grow flex flex-col items-center">
           <div className="w-full max-w-5xl flex flex-col items-center mb-8 space-y-6">
-            <ComparisonModeToggle
-              isComparisonMode={isComparisonMode}
-              onToggle={() => setIsComparisonMode(prev => !prev)}
-              isDisabled={isLoading}
+            <ModeSelector
+              currentMode={appMode}
+              onModeChange={setAppMode}
+              isDisabled={isLoading || isReconstructing}
               t={t}
             />
             <div className="flex items-center justify-center flex-wrap gap-x-6 gap-y-4">
@@ -801,7 +876,7 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {!isComparisonMode ? (
+          {appMode === 'translator' && (
             <>
               {(sourceLang === Language.PHOENICIAN || targetLang === Language.PHOENICIAN) && (
                   <div className="w-full max-w-xs mx-auto mb-8">
@@ -982,7 +1057,7 @@ const App: React.FC = () => {
               
               {actionButton}
 
-              {!isComparisonMode && typeof translationResult === 'object' && translationResult.phoenician && (
+              {appMode === 'translator' && typeof translationResult === 'object' && translationResult.phoenician && (
                   <CopticScriptDisplay 
                       result={translationResult}
                       mode={transliterationMode}
@@ -1000,7 +1075,9 @@ const App: React.FC = () => {
 
               <DailyPhoenicianWord t={t} uiLang={uiLang} />
             </>
-          ) : (
+          )}
+
+          {appMode === 'comparison' && (
             <>
               <div className="w-full max-w-3xl flex flex-col items-center mb-6">
                 <div className="w-full max-w-xs mx-auto mb-4">
@@ -1011,14 +1088,14 @@ const App: React.FC = () => {
                     t={t}
                   />
                 </div>
-                <div ref={comparisonTextAreaRef} className="w-full relative">
+                <div ref={sourceTextAreaRef} className="w-full relative">
                   <div className="w-full min-h-[15rem] glass-panel rounded-[var(--border-radius)] flex items-stretch">
                     <TextArea
                       id="comparison-source-text"
                       value={sourceText}
                       onChange={handleSourceTextChange}
                       placeholder={`${t('enterTextPlaceholder')} ${t(phoenicianDialect === PhoenicianDialect.PUNIC ? 'punic' : 'standardPhoenician')}... ${getFlagForLanguage(Language.PHOENICIAN)}`}
-                      className={comparisonInputFontClass}
+                      className={commonInputFontClass}
                       dir="rtl"
                     />
                   </div>
@@ -1054,9 +1131,48 @@ const App: React.FC = () => {
               )}
             </>
           )}
+          
+          {appMode === 'pronunciation' && (
+             <>
+                <div className="w-full max-w-3xl flex flex-col items-center mb-6">
+                    <div className="w-full max-w-xs mx-auto mb-4">
+                      <DialectSelector
+                        selectedDialect={phoenicianDialect}
+                        onDialectChange={setPhoenicianDialect}
+                        isDisabled={isReconstructing}
+                        t={t}
+                      />
+                    </div>
+                    <div ref={pronunciationTextAreaRef} className="w-full relative">
+                      <div className="w-full min-h-[15rem] glass-panel rounded-[var(--border-radius)] flex items-stretch">
+                        <TextArea
+                          id="pronunciation-source-text"
+                          value={pronunciationInput}
+                          onChange={handlePronunciationInputChange}
+                          placeholder={t('reconstructorPlaceholder')}
+                          className={commonInputFontClass}
+                          dir="rtl"
+                        />
+                      </div>
+                    </div>
+                </div>
+                
+                {actionButton}
+
+                <PronunciationResultDisplay 
+                    result={pronunciationResult}
+                    isLoading={isReconstructing}
+                    error={pronunciationError}
+                    isSpeaking={isSpeaking}
+                    onSpeak={handleSpeakPronunciation}
+                    t={t}
+                />
+             </>
+          )}
+
 
           <div className="w-full max-w-5xl mt-8">
-            {error && (
+            {error && appMode !== 'pronunciation' && (
               <div className="text-center p-3 glass-panel text-red-400 border border-red-400/50 rounded-lg">
                 {error}
               </div>
@@ -1111,12 +1227,12 @@ const App: React.FC = () => {
       {isChatOpen && <ChatModal onClose={() => setIsChatOpen(false)} t={t} uiLang={uiLang} />}
       <Keyboard
         isOpen={isKeyboardOpen}
-        sourceLang={sourceLang}
-        dialect={isPhoenicianFamilySelected ? phoenicianDialect : undefined}
+        sourceLang={(appMode === 'translator') ? sourceLang : Language.PHOENICIAN}
+        dialect={phoenicianDialect}
         onKeyPress={handleKeyboardKeyPress}
         onBackspace={handleKeyboardBackspace}
         onClose={() => setIsKeyboardOpen(false)}
-        onEnter={() => handleTranslate(sourceText)}
+        onEnter={appMode === 'pronunciation' ? handleReconstruct : () => handleTranslate(sourceText)}
         t={t}
       />
       <HandwritingCanvas

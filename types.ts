@@ -119,3 +119,9 @@ export interface AIAssistantResponse {
   improvedTranslation: TransliterationOutput;
   explanation: string;
 }
+
+export interface PronunciationResult {
+  latinTransliteration: string;
+  ipaReconstruction: string;
+  ttsFriendly: string;
+}
