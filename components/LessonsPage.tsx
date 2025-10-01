@@ -24,6 +24,31 @@ interface GrammarLevelData {
     modules: GrammarModuleData[];
 }
 
+const pronunciationTableData = [
+    { char: '𐤀', name: 'ʾAleph', translit: 'ʾ', ipa: 'ʔ, ʔa', arabic: 'أ (همزة قطع)' },
+    { char: '𐤁', name: 'Bet', translit: 'b', ipa: 'b', arabic: 'ب' },
+    { char: '𐤂', name: 'Gimel', translit: 'g', ipa: 'ɡ', arabic: 'جيم مصرية / غ' },
+    { char: '𐤃', name: 'Dalet', translit: 'd', ipa: 'd', arabic: 'د' },
+    { char: '𐤄', name: 'He', translit: 'h', ipa: 'h', arabic: 'هـ' },
+    { char: '𐤅', name: 'Waw', translit: 'w', ipa: 'w, u, o', arabic: 'و' },
+    { char: '𐤆', name: 'Zayin', translit: 'z', ipa: 'z', arabic: 'ز' },
+    { char: '𐤇', name: 'Ḥet', translit: 'ḥ', ipa: 'ħ', arabic: 'ح (عميقة)' },
+    { char: '𐤈', name: 'Ṭet', translit: 'ṭ', ipa: 'tˤ', arabic: 'ط (مفخمة)' },
+    { char: '𐤉', name: 'Yod', translit: 'y', ipa: 'j, i', arabic: 'ي' },
+    { char: '𐤊', name: 'Kaph', translit: 'k', ipa: 'k', arabic: 'ك' },
+    { char: '𐤋', name: 'Lamed', translit: 'l', ipa: 'l', arabic: 'ل' },
+    { char: '𐤌', name: 'Mem', translit: 'm', ipa: 'm', arabic: 'م' },
+    { char: '𐤍', name: 'Nun', translit: 'n', ipa: 'n', arabic: 'ن' },
+    { char: '𐤎', name: 'Samekh', translit: 's', ipa: 's', arabic: 'س' },
+    { char: '𐤏', name: 'ʿAyin', translit: 'ʿ', ipa: 'ʕ', arabic: 'ع' },
+    { char: '𐤐', name: 'Pe', translit: 'p', ipa: 'p', arabic: 'پ (أو فاء في البونيقية)' },
+    { char: '𐤑', name: 'Ṣade', translit: 'ṣ', ipa: 'sˤ', arabic: 'ص' },
+    { char: '𐤒', name: 'Qoph', translit: 'q', ipa: 'q', arabic: 'ق (عميقة)' },
+    { char: '𐤓', name: 'Resh', translit: 'r', ipa: 'r', arabic: 'ر' },
+    { char: '𐤔', name: 'Shin', translit: 'š', ipa: 'ʃ', arabic: 'ش' },
+    { char: '𐤕', name: 'Taw', translit: 't', ipa: 't', arabic: 'ت' },
+  ];
+
 const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
     const [selectedDialect, setSelectedDialect] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
     const [activeTab, setActiveTab] = useState<'alphabet' | 'grammar'>('alphabet');
@@ -72,6 +97,37 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
                         <div className="text-sm text-[color:var(--color-text-muted)] capitalize">{t(letter.meaningKey)}</div>
                     </div>
                 ))}
+            </div>
+            <div className="prose max-w-none mt-12" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
+                <h3>{t('pronunciationGuideTitle')}</h3>
+                <p>{t('pronunciationGuideIntro')}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{t('phoenicianLetter')}</th>
+                            <th>{t('letterName')}</th>
+                            <th>{t('latinTransliteration')}</th>
+                            <th>{t('ipaPronunciation')}</th>
+                            <th>{t('suggestedArabic')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pronunciationTableData.map(item => (
+                            <tr key={item.char}>
+                                <td className={`${fontClass} text-2xl text-center`}>{item.char}</td>
+                                <td>{item.name}</td>
+                                <td className="text-center"><code>{item.translit}</code></td>
+                                <td className="text-center"><code>{item.ipa}</code></td>
+                                <td dir="rtl">{item.arabic}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <h3>{t('punicDifferencesTitle')}</h3>
+                <ul>
+                  <li dangerouslySetInnerHTML={{ __html: t('punicDifferences1') }} />
+                  <li dangerouslySetInnerHTML={{ __html: t('punicDifferences2') }} />
+                </ul>
             </div>
         </div>
     );

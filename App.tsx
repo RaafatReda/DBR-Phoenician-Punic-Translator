@@ -57,6 +57,7 @@ import ManualIcon from './components/icons/ManualIcon';
 import DatabaseIcon from './components/icons/DatabaseIcon';
 import CopticScriptDisplay from './components/CopticScriptDisplay';
 import PronunciationResultDisplay from './components/PronunciationResultDisplay';
+import PronunciationTutorModal from './components/PronunciationTutorModal';
 
 
 // FIX: Add type definitions for the Web Speech API. This is necessary because the
@@ -141,6 +142,7 @@ declare global {
 type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 type FontSize = 'small' | 'medium' | 'large';
 type AppMode = 'translator' | 'comparison' | 'pronunciation';
+type TtsGender = 'male' | 'female';
 
 const App: React.FC = () => {
   const [appMode, setAppMode] = useState<AppMode>('translator');
@@ -192,6 +194,12 @@ const App: React.FC = () => {
   const [pronunciationResult, setPronunciationResult] = useState<PronunciationResult | null>(null);
   const [isReconstructing, setIsReconstructing] = useState<boolean>(false);
   const [pronunciationError, setPronunciationError] = useState<string | null>(null);
+  const [isTutorOpen, setIsTutorOpen] = useState<boolean>(false);
+  const [ttsGender, setTtsGender] = useState<TtsGender>('female');
+
+  // State for integrated TTS
+  const [pronunciationForTTS, setPronunciationForTTS] = useState<PronunciationResult | null>(null);
+  const [isFetchingTTS, setIsFetchingTTS] = useState<boolean>(false);
 
   const t = useCallback((key: keyof typeof translations.en) => {
     return translations[uiLang]?.[key] || translations.en[key];
@@ -464,12 +472,34 @@ const App: React.FC = () => {
   }, [sourceLang, targetLang, phoenicianDialect, appMode, isLoading, t, isCognateComparisonOn]);
   
   useEffect(() => {
+    if (typeof translationResult === 'object' && translationResult.phoenician) {
+        const fetchTTS = async () => {
+            setIsFetchingTTS(true);
+            setPronunciationForTTS(null);
+            try {
+                const p = await reconstructPronunciation(translationResult.phoenician, phoenicianDialect, uiLang);
+                setPronunciationForTTS(p);
+            } catch (e) {
+                console.error("Failed to fetch pronunciation for TTS", e);
+                setPronunciationForTTS(null); // Clear on error
+            } finally {
+                setIsFetchingTTS(false);
+            }
+        };
+        fetchTTS();
+    } else {
+        setPronunciationForTTS(null);
+    }
+  }, [translationResult, phoenicianDialect, uiLang]);
+
+  useEffect(() => {
     if (!sourceText.trim()) {
         setTranslationResult('');
         setComparisonResults(null);
         setError(null);
         setSelectedGrammarToken(null);
         setIsGroupEditMode(false);
+        setPronunciationForTTS(null);
     }
   }, [sourceText]);
 
@@ -691,24 +721,13 @@ const App: React.FC = () => {
       cancel();
       return;
     }
-    if (!translationResult) return;
-  
-    let textToSpeak = '';
-    let langCode = '';
   
     const isTargetPhoenicianFamily = targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC;
   
-    if (typeof translationResult === 'object' && 'phoenician' in translationResult && isTargetPhoenicianFamily) {
-      textToSpeak = translationResult.latin; // Read the Latin transliteration
-      // Use Hebrew as a phonetic proxy for a Semitic language. Ar-SA is another option.
-      langCode = 'he-IL'; 
+    if (isTargetPhoenicianFamily && pronunciationForTTS) {
+        speak(pronunciationForTTS.tts_full_sentence, 'ar-SA', ttsGender);
     } else if (typeof translationResult === 'string') {
-      textToSpeak = translationResult;
-      langCode = getLangCodeForTTS(targetLang);
-    }
-  
-    if (textToSpeak && langCode) {
-      speak(textToSpeak, langCode);
+        speak(translationResult, getLangCodeForTTS(targetLang), ttsGender);
     }
   };
   
@@ -716,8 +735,8 @@ const App: React.FC = () => {
     if (isSpeaking) {
       cancel();
     }
-    // Use an Arabic voice for more authentic phonetics
-    speak(text, 'ar-SA');
+    // Use an Arabic voice for more authentic phonetics, with gender selection
+    speak(text, 'ar-SA', ttsGender);
   };
 
   const handleDictionaryWordSelect = (word: string) => {
@@ -798,6 +817,19 @@ const App: React.FC = () => {
       </button>
     </div>
   );
+
+  const speakerButton = (
+    <button 
+        onClick={handleSpeak} 
+        disabled={!isTtsSupported || (targetLangIsPhoenicianFamily && (!pronunciationForTTS || isFetchingTTS))}
+        className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:text-gray-600 disabled:cursor-not-allowed" 
+        aria-label={isSpeaking ? t('stopSpeaking') : t('speakTranslation')} 
+        title={isTtsSupported ? (isSpeaking ? t('stopSpeaking') : t('speakTranslation')) : t('ttsNotSupported')}
+    >
+        {isFetchingTTS ? <Loader className="w-5 h-5" /> : <SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking} />}
+    </button>
+);
+
 
   return (
     <>
@@ -976,9 +1008,7 @@ const App: React.FC = () => {
                                         <SparklesIcon className="w-5 h-5" />
                                     </button>
                                 )}
-                                <button onClick={handleSpeak} disabled={!isTtsSupported} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110 disabled:text-gray-600 disabled:cursor-not-allowed" aria-label={isSpeaking ? t('stopSpeaking') : t('speakTranslation')} title={isTtsSupported ? (isSpeaking ? t('stopSpeaking') : t('speakTranslation')) : t('ttsNotSupported')}>
-                                    <SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking} />
-                                </button>
+                                {speakerButton}
                                 {hasPhoenicianResult && (
                                     <button onClick={() => setIsGroupEditMode(true)} className="p-2 rounded-full text-[color:var(--color-primary)] hover:bg-white/10 focus:outline-none transition-all duration-200 hover:scale-110" aria-label={t('layoutEditTitle')} title={t('layoutEditTitle')}>
                                         <ExportIcon className="w-5 h-5" />
@@ -1169,8 +1199,12 @@ const App: React.FC = () => {
                     error={pronunciationError}
                     isSpeaking={isSpeaking}
                     onSpeak={handleSpeakPronunciation}
+                    onDiscuss={() => setIsTutorOpen(true)}
                     t={t}
                     dialect={phoenicianDialect}
+                    ttsGender={ttsGender}
+                    onTtsGenderChange={setTtsGender}
+                    onUpdatePronunciation={setPronunciationResult}
                 />
              </>
           )}
@@ -1224,6 +1258,21 @@ const App: React.FC = () => {
        {isLessonsPageOpen && (
         <LessonsPage
             onClose={() => setIsLessonsPageOpen(false)}
+            t={t}
+            uiLang={uiLang}
+        />
+      )}
+      {isTutorOpen && pronunciationResult && (
+        <PronunciationTutorModal
+            isOpen={isTutorOpen}
+            onClose={() => setIsTutorOpen(false)}
+            originalWord={pronunciationInput}
+            pronunciationResult={pronunciationResult}
+            onUpdatePronunciation={(newResult) => {
+                setPronunciationResult(newResult);
+                setIsTutorOpen(false);
+            }}
+            dialect={phoenicianDialect}
             t={t}
             uiLang={uiLang}
         />

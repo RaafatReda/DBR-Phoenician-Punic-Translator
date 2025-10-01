@@ -667,3 +667,46 @@ You MUST map each Phoenician letter to its closest Arabic phoneme for TTS purpos
         throw new Error('Failed to reconstruct pronunciation. The AI service may be temporarily unavailable.');
     }
 };
+
+// FIX: Added 'discussPronunciation' function to handle chat interactions with the pronunciation tutor.
+// This resolves the 'module has no exported member' error in `components/PronunciationTutorModal.tsx`.
+export const discussPronunciation = async (
+  originalWord: string,
+  pronunciationResult: PronunciationResult,
+  userQuery: string,
+  dialect: PhoenicianDialect,
+  uiLang: UILang
+): Promise<string> => {
+    const languageName = getLanguageName(uiLang);
+
+    const systemInstruction = `You are an expert historical linguist specializing in Phoenician phonology and acting as a helpful tutor.
+The user has been given a reconstructed pronunciation for a word and now has a follow-up question.
+Your task is to answer the user's question clearly and concisely in ${languageName}.
+Base your answer on the provided context. Be encouraging and educational. Do not respond in JSON.`;
+    
+    const prompt = `Context:
+- Original Phoenician Text: "${originalWord}"
+- Dialect for Reconstruction: ${dialect}
+- Your Suggested Pronunciation:
+  - Latin Transliteration: "${pronunciationResult.transliteration}"
+  - IPA: "${pronunciationResult.ipa}"
+  - TTS for Arabic Engine: "${pronunciationResult.tts_full_sentence}"
+  - Linguistic Notes: "${pronunciationResult.note}"
+- User's Question: "${userQuery}"
+
+Please answer the user's question in ${languageName}.`;
+
+    try {
+        const response = await ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                systemInstruction,
+            },
+        });
+        return response.text.trim();
+    } catch (error) {
+        console.error('Gemini API pronunciation discussion error:', error);
+        throw new Error('Failed to get a response from the pronunciation tutor.');
+    }
+};

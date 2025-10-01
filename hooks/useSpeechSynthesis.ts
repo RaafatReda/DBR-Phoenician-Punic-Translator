@@ -14,7 +14,7 @@ export const useSpeechSynthesis = () => {
     }
   }, []);
 
-  const speak = useCallback((text: string, lang: string) => {
+  const speak = useCallback((text: string, lang: string, gender?: 'male' | 'female') => {
     const synth = synthRef.current;
     if (!synth || !supported) return;
 
@@ -30,11 +30,26 @@ export const useSpeechSynthesis = () => {
             
             // Find a suitable voice
             const voices = synth.getVoices();
-            const specificVoice = voices.find(voice => voice.lang === lang);
-            const langPrefix = lang.split('-')[0];
-            const genericVoice = voices.find(voice => voice.lang.startsWith(langPrefix));
+            let selectedVoice: SpeechSynthesisVoice | null = null;
+            const langVoices = voices.filter(v => v.lang.startsWith(lang.split('-')[0]));
             
-            utterThis.voice = specificVoice || genericVoice || null;
+            if (gender) {
+                if (gender === 'male') {
+                    // Heuristic for male voices based on common names in voice lists
+                    selectedVoice = langVoices.find(v => v.name.toLowerCase().includes('male') || v.name.includes('Maged') || v.name.includes('David') || v.name.includes('Google US English Male')) || null;
+                } else { // female
+                    selectedVoice = langVoices.find(v => v.name.toLowerCase().includes('female') || v.name.includes('Laila') || v.name.includes('Google US English Female')) || null;
+                }
+            }
+
+            // Fallback logic if gender-specific voice not found
+            if (!selectedVoice) {
+                const specificVoice = voices.find(voice => voice.lang === lang);
+                const genericVoice = langVoices[0]; // Get the first available for the language
+                selectedVoice = specificVoice || genericVoice || null;
+            }
+
+            utterThis.voice = selectedVoice;
 
             utterThis.onend = () => {
                 setIsSpeaking(false);
@@ -75,9 +90,12 @@ export const useSpeechSynthesis = () => {
   useEffect(() => {
     const synth = synthRef.current;
     if (synth) {
-      synth.onvoiceschanged = () => {
-        // Voices loaded, this is just to trigger the loading.
+      const loadVoices = () => {
+        // This is just to trigger the loading.
+        synth.getVoices();
       };
+      synth.onvoiceschanged = loadVoices;
+      loadVoices(); // Initial call
     }
   }, []);
 
