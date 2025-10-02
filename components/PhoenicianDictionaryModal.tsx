@@ -11,20 +11,24 @@ import Keyboard from './Keyboard';
 import KeyboardIcon from './icons/KeyboardIcon';
 import WordDetailModal from './WordDetailModal';
 
+type TtsGender = 'male' | 'female';
+
 interface PhoenicianDictionaryModalProps {
   onClose: () => void;
   onWordSelect: (word: string) => void;
   onSaveSentence: (details: PhoenicianWordDetails) => void;
   t: (key: string) => string;
-  speak: (text: string, lang: string, gender?: 'male' | 'female') => void;
+  speak: (text: string, lang: string, gender?: TtsGender) => void;
   isSpeaking: boolean;
+  ttsGender: TtsGender;
+  onTtsGenderChange: (gender: TtsGender) => void;
 }
 
 const phoenicianAlphabet = ['𐤀', '𐤁', '𐤂', '𐤃', '𐤄', '𐤅', '𐤆', '𐤇', '𐤈', '𐤉', '𐤊', '𐤋', '𐤌', '𐤍', '𐤎', '𐤏', '𐤐', '𐤑', '𐤒', '𐤓', '𐤔', '𐤕'];
 
 type GlossaryLang = 'en' | 'fr' | 'ar';
 
-const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking }) => {
+const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking, ttsGender, onTtsGenderChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<GlossaryEntry['category'] | null>(null);
@@ -258,6 +262,8 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
         speak={speak}
         isSpeaking={isSpeaking}
         dialect={scriptMode}
+        ttsGender={ttsGender}
+        onTtsGenderChange={onTtsGenderChange}
       />
     </>
   );

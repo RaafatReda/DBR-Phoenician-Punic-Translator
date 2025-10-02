@@ -1276,6 +1276,8 @@ const App: React.FC = () => {
             t={t}
             speak={speak}
             isSpeaking={isSpeaking}
+            ttsGender={ttsGender}
+            onTtsGenderChange={setTtsGender}
         />
       )}
       {isCameraExperienceOpen && (

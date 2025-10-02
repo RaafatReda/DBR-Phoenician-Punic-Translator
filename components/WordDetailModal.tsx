@@ -7,8 +7,11 @@ import CloseIcon from './icons/CloseIcon';
 import SpeakerIcon from './icons/SpeakerIcon';
 import RefreshIcon from './icons/RefreshIcon';
 import BookmarkIcon from './icons/BookmarkIcon';
+import VoiceSelector from './VoiceSelector';
 import ChatBubbleIcon from './icons/ChatBubbleIcon';
 import SentenceTutorModal from './SentenceTutorModal';
+
+type TtsGender = 'male' | 'female';
 
 interface WordDetailModalProps {
   entry: GlossaryEntry | null;
@@ -17,12 +20,14 @@ interface WordDetailModalProps {
   onUseWord: (word: string) => void;
   onSaveSentence: (details: PhoenicianWordDetails) => void;
   t: (key: string) => string;
-  speak: (text: string, lang: string, gender?: 'male' | 'female') => void;
+  speak: (text: string, lang: string, gender?: TtsGender) => void;
   isSpeaking: boolean;
   dialect: PhoenicianDialect;
+  ttsGender: TtsGender;
+  onTtsGenderChange: (gender: TtsGender) => void;
 }
 
-const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClose, onUseWord, onSaveSentence, t, speak, isSpeaking, dialect }) => {
+const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClose, onUseWord, onSaveSentence, t, speak, isSpeaking, dialect, ttsGender, onTtsGenderChange }) => {
   const [details, setDetails] = useState<PhoenicianWordDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,11 +46,10 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
         setDetails(null);
         setPronunciation(null);
         setSentencePronunciation(null);
+        setIsSaved(false);
         try {
-          // Fetch word details first, providing the specific meaning for context.
           const wordDetails = await getPhoenicianWordDetails(entry.phoenician, entry.meaning);
           
-          // Then, fetch pronunciations for the word and the new example sentence in parallel.
           const [wordPron, sentencePron] = await Promise.all([
              reconstructPronunciation(entry.phoenician, dialect, uiLang),
              reconstructPronunciation(wordDetails.exampleSentence.phoenician, dialect, uiLang)
@@ -67,13 +71,13 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   
   const handlePlayWord = () => {
     if (pronunciation && !isSpeaking) {
-      speak(pronunciation.tts_full_sentence, 'ar-SA');
+      speak(pronunciation.tts_full_sentence, 'ar-SA', ttsGender);
     }
   };
 
   const handlePlayExampleSentence = () => {
     if (sentencePronunciation && !isSpeaking) {
-      speak(sentencePronunciation.tts_full_sentence, 'ar-SA');
+      speak(sentencePronunciation.tts_full_sentence, 'ar-SA', ttsGender);
     }
   };
 
@@ -95,11 +99,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   const meaning = (entry.meaning as any)[uiLang] || entry.meaning.en;
 
   const exampleTranslation = 
-    details ? (
-      uiLang === 'fr' && details.exampleSentence.french ? details.exampleSentence.french :
-      uiLang === 'ar' && details.exampleSentence.arabic ? details.exampleSentence.arabic :
-      details.exampleSentence.english
-    ) : '';
+    details ? ((details.exampleSentence as any)[uiLang] || details.exampleSentence.english) : '';
 
   return (
     <>
@@ -123,7 +123,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                 {/* Word Section */}
                 <div className="flex items-center justify-center gap-3">
                     <p className={`text-[color:var(--color-primary)] ${fontClass}`} dir="rtl">{entry.phoenician}</p>
-                    <button onClick={handlePlayWord} disabled={isSpeaking} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-6 h-6" isSpeaking={isSpeaking} /></button>
+                    <button onClick={handlePlayWord} disabled={isSpeaking || !pronunciation} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-6 h-6" isSpeaking={isSpeaking} /></button>
                 </div>
                 
                 {/* Transcription Section */}
@@ -135,6 +135,11 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
 
                 <p className="text-lg capitalize font-semibold" dir={uiIsRtl ? 'rtl' : 'ltr'}>{meaning}</p>
                 
+                <div className="pt-2">
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-[color:var(--color-secondary)] mb-2">{t('voiceSelection')}</h4>
+                    <VoiceSelector selectedGender={ttsGender} onGenderChange={onTtsGenderChange} t={t} />
+                </div>
+
                 <hr className="border-[color:var(--color-border)] opacity-30 my-4" />
 
                 {/* Example Sentence Section */}
@@ -150,7 +155,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                                     {i < details.exampleSentence.phoenician.split(entry.phoenician).length - 1 && (
                                         <span className="relative">
                                             <span className="text-[color:var(--color-secondary)]">{entry.phoenician}</span>
-                                            <button onClick={handlePlayExampleSentence} disabled={isSpeaking} className="absolute -top-1 -right-4 p-1 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-4 h-4" isSpeaking={isSpeaking} /></button>
+                                            <button onClick={handlePlayExampleSentence} disabled={isSpeaking || !sentencePronunciation} className="absolute -top-1 -right-4 p-1 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-4 h-4" isSpeaking={isSpeaking} /></button>
                                         </span>
                                     )}
                                 </React.Fragment>
