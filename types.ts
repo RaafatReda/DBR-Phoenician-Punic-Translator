@@ -23,8 +23,8 @@ export enum PhoenicianDialect {
 }
 
 export enum TransliterationMode {
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-  PHOENician = 'Phoenician',
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
+  PHOENICIAN = 'Phoenician',
   LATIN = 'Latin',
   ARABIC = 'Arabic',
   BOTH = 'Both',

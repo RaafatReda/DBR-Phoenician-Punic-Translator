@@ -13,8 +13,8 @@ interface TransliterationSelectorProps {
 }
 
 const TransliterationSelector: React.FC<TransliterationSelectorProps> = ({ currentMode, onModeChange, isDisabled, t, dialect }) => {
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-  const modes = [TransliterationMode.PHOENician, TransliterationMode.LATIN, TransliterationMode.ARABIC, TransliterationMode.BOTH];
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
+  const modes = [TransliterationMode.PHOENICIAN, TransliterationMode.LATIN, TransliterationMode.ARABIC, TransliterationMode.BOTH];
   
   const cycleMode = () => {
     if (isDisabled) return;
@@ -23,17 +23,17 @@ const TransliterationSelector: React.FC<TransliterationSelectorProps> = ({ curre
     onModeChange(modes[nextIndex]);
   };
 
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
   const getButtonText = () => {
-      if (currentMode === TransliterationMode.PHOENician) {
+      if (currentMode === TransliterationMode.PHOENICIAN) {
           return dialect === PhoenicianDialect.PUNIC ? t('punic') : t('phoenician');
       }
       return t(currentMode.toLowerCase());
   };
 
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
   const nextModeRaw = modes[(modes.indexOf(currentMode) + 1) % modes.length];
-  const nextModeText = nextModeRaw === TransliterationMode.PHOENician
+  const nextModeText = nextModeRaw === TransliterationMode.PHOENICIAN
     ? (dialect === PhoenicianDialect.PUNIC ? t('punic') : t('phoenician'))
     : t(nextModeRaw.toLowerCase());
 

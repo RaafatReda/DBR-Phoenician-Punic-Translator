@@ -34,14 +34,14 @@ const ScriptDisplay: React.FC<ScriptDisplayProps> = ({ result, mode, dialect, t 
     );
   }
 
-  // FIX: Ensure `text` is a string. `result[key]` can be `GrammarToken[]`, which is not a valid ReactNode.
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
   // This checks the type and falls back to the phoenician string if it's not a string.
   const key = (mode.toLowerCase()) as keyof TransliterationOutput;
   const value = result[key];
   const text = typeof value === 'string' ? value || result.phoenician : result.phoenician;
   
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-  const isPhoenician = mode === TransliterationMode.PHOENician;
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
+  const isPhoenician = mode === TransliterationMode.PHOENICIAN;
   const isArabic = mode === TransliterationMode.ARABIC;
 
   let fontClass = 'text-2xl'; // Base size for Latin

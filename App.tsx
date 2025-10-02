@@ -164,7 +164,8 @@ const App: React.FC = () => {
   const { speak, cancel, isSpeaking, supported: isTtsSupported } = useSpeechSynthesis();
 
   const [comparisonResults, setComparisonResults] = useState<Record<string, TransliterationOutput> | null>(null);
-  const [transliterationMode, setTransliterationMode] = useState<TransliterationMode>(TransliterationMode.PHOENician);
+  // FIX: Corrected typo PHOENician to PHOENICIAN.
+  const [transliterationMode, setTransliterationMode] = useState<TransliterationMode>(TransliterationMode.PHOENICIAN);
   const [isGrammarHelperOn, setIsGrammarHelperOn] = useState<boolean>(false);
   const [isCognateComparisonOn, setIsCognateComparisonOn] = useState<boolean>(false);
   const [selectedGrammarToken, setSelectedGrammarToken] = useState<GrammarToken | null>(null);
@@ -791,7 +792,8 @@ const App: React.FC = () => {
     
   const hasPhoenicianResult = appMode === 'translator' && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC) && typeof translationResult === 'object' && translationResult.phoenician;
   
-  const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && transliterationMode === TransliterationMode.PHOENician && typeof translationResult === 'object' && !!translationResult.grammar;
+  // FIX: Corrected typo PHOENician to PHOENICIAN.
+  const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && transliterationMode === TransliterationMode.PHOENICIAN && typeof translationResult === 'object' && !!translationResult.grammar;
 
   const showPhoenicianControls = appMode !== 'translator' || isPhoenicianFamilySelected;
   const targetLangIsPhoenicianFamily = appMode === 'translator' && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC);
@@ -1105,7 +1107,8 @@ const App: React.FC = () => {
                                 </p>
                             </div>
                         ) : currentTranslatedTextString ? (
-                            <div className={`w-full h-full text-[color:var(--color-text)] overflow-y-auto flex justify-center items-center text-center ${transliterationMode === TransliterationMode.PHOENician ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : 'text-xl'}`} dir={targetLangIsPhoenicianFamily || targetLang === Language.ARABIC ? 'rtl' : 'ltr'}>
+                            // FIX: Corrected typo PHOENician to PHOENICIAN.
+                            <div className={`w-full h-full text-[color:var(--color-text)] overflow-y-auto flex justify-center items-center text-center ${transliterationMode === TransliterationMode.PHOENICIAN ? `${resultFontClass} ${isPunicTranslation ? 'text-3xl' : 'text-2xl'}` : 'text-xl'}`} dir={targetLangIsPhoenicianFamily || targetLang === Language.ARABIC ? 'rtl' : 'ltr'}>
                                 <p className="whitespace-pre-wrap">{currentTranslatedTextString}</p>
                             </div>
                         ) : (

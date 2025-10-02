@@ -28,8 +28,8 @@ const ComparisonResultCard: React.FC<ComparisonResultCardProps> = ({ dialect, re
   const value = result[key];
   const text = typeof value === 'string' ? value || result.phoenician : result.phoenician;
   
-  // FIX: Corrected typo in TransliterationMode enum from PHOENICIAN to PHOENician.
-  const isPhoenician = mode === TransliterationMode.PHOENician;
+  // FIX: Corrected typo in TransliterationMode enum from PHOENician to PHOENICIAN.
+  const isPhoenician = mode === TransliterationMode.PHOENICIAN;
   const isArabic = mode === TransliterationMode.ARABIC;
 
   let fontClass = 'text-xl';
