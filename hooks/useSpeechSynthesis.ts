@@ -14,7 +14,7 @@ export const useSpeechSynthesis = () => {
     }
   }, []);
 
-  const speak = useCallback((text: string, lang: string, gender?: 'male' | 'female') => {
+  const speak = useCallback((text: string, lang: string) => {
     const synth = synthRef.current;
     if (!synth || !supported) return;
 
@@ -36,22 +36,18 @@ export const useSpeechSynthesis = () => {
             const langVoices = voices.filter(v => v.lang.startsWith(langCode));
 
             if (langVoices.length > 0) {
-                if (gender) {
-                    const maleKeywords = ['male', 'man', 'homme', 'mann', 'mężczyzna', 'رجل', 'maged', 'david', 'zaki', 'diego', 'jorge'];
-                    const femaleKeywords = ['female', 'woman', 'femme', 'frau', 'kobieta', 'امرأة', 'laila', 'zira', 'monica', 'paulina'];
-                    const keywords = gender === 'male' ? maleKeywords : femaleKeywords;
-
-                    // 1. Try to find a gender-specific voice by positive match
-                    selectedVoice = langVoices.find(v => keywords.some(kw => v.name.toLowerCase().includes(kw))) || null;
-                    
-                    // 2. If not found, try to find one that DOESN'T match the opposite gender (negative match)
-                    if (!selectedVoice) {
-                         const oppositeKeywords = gender === 'male' ? femaleKeywords : maleKeywords;
-                         selectedVoice = langVoices.find(v => !oppositeKeywords.some(kw => v.name.toLowerCase().includes(kw))) || null;
-                    }
+                const femaleKeywords = ['female', 'woman', 'femme', 'frau', 'kobieta', 'امرأة', 'laila', 'zira', 'monica', 'paulina'];
+                const maleKeywords = ['male', 'man', 'homme', 'mann', 'mężczyzna', 'رجل', 'maged', 'david', 'zaki', 'diego', 'jorge'];
+                
+                // 1. Try to find a female voice by positive match
+                selectedVoice = langVoices.find(v => femaleKeywords.some(kw => v.name.toLowerCase().includes(kw))) || null;
+                
+                // 2. If not found, try to find one that DOESN'T match a male voice (negative match)
+                if (!selectedVoice) {
+                     selectedVoice = langVoices.find(v => !maleKeywords.some(kw => v.name.toLowerCase().includes(kw))) || null;
                 }
                 
-                // 3. Fallback to the first available voice for the language if gender search still fails or no gender was specified
+                // 3. Fallback to the first available voice for the language if gender search still fails
                 if (!selectedVoice) {
                     selectedVoice = langVoices.find(v => v.lang === lang) || langVoices[0];
                 }

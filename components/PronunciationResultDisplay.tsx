@@ -4,10 +4,7 @@ import Loader from './Loader';
 import SpeakerIcon from './icons/SpeakerIcon';
 import SpeakerWaveIcon from './icons/SpeakerWaveIcon';
 import SparklesIcon from './icons/SparklesIcon';
-import VoiceSelector from './VoiceSelector';
 import PencilIcon from './icons/PencilIcon';
-
-type TtsGender = 'male' | 'female';
 
 interface PronunciationResultDisplayProps {
   result: PronunciationResult | null;
@@ -18,14 +15,11 @@ interface PronunciationResultDisplayProps {
   onDiscuss: () => void;
   t: (key: string) => string;
   dialect: PhoenicianDialect;
-  ttsGender: TtsGender;
-  onTtsGenderChange: (gender: TtsGender) => void;
   onUpdatePronunciation: (result: PronunciationResult) => void;
 }
 
 const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({ 
-    result, isLoading, error, isSpeaking, onSpeak, onDiscuss, t, dialect,
-    ttsGender, onTtsGenderChange
+    result, isLoading, error, isSpeaking, onSpeak, onDiscuss, t, dialect
 }) => {
   const isPunic = dialect === PhoenicianDialect.PUNIC;
   const fontClass = isPunic ? '[font-family:var(--font-punic)] text-3xl' : '[font-family:var(--font-phoenician)] text-2xl';
@@ -73,11 +67,6 @@ const PronunciationResultDisplay: React.FC<PronunciationResultDisplayProps> = ({
                   <ResultCard titleKey="ipa">
                     <p className="font-mono">[{result.ipa}]</p>
                   </ResultCard>
-                  
-                   <div className="bg-black/20 p-4 rounded-lg">
-                      <h4 className="text-sm font-bold uppercase tracking-wider text-[color:var(--color-secondary)] mb-3">{t('voiceSelection')}</h4>
-                      <VoiceSelector selectedGender={ttsGender} onGenderChange={onTtsGenderChange} t={t} />
-                   </div>
 
                   <ResultCard titleKey="wordByWordReading">
                     <div className="flex flex-wrap gap-2" dir="rtl">

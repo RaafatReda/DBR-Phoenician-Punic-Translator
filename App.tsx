@@ -142,7 +142,6 @@ declare global {
 type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 type FontSize = 'small' | 'medium' | 'large';
 type AppMode = 'translator' | 'comparison' | 'pronunciation';
-type TtsGender = 'male' | 'female';
 
 const App: React.FC = () => {
   const [appMode, setAppMode] = useState<AppMode>('translator');
@@ -196,7 +195,6 @@ const App: React.FC = () => {
   const [isReconstructing, setIsReconstructing] = useState<boolean>(false);
   const [pronunciationError, setPronunciationError] = useState<string | null>(null);
   const [isTutorOpen, setIsTutorOpen] = useState<boolean>(false);
-  const [ttsGender, setTtsGender] = useState<TtsGender>('female');
 
   // State for integrated TTS
   const [pronunciationForTTS, setPronunciationForTTS] = useState<PronunciationResult | null>(null);
@@ -752,9 +750,9 @@ const App: React.FC = () => {
     const isTargetPhoenicianFamily = targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC;
   
     if (isTargetPhoenicianFamily && pronunciationForTTS) {
-        speak(pronunciationForTTS.tts_full_sentence, 'ar-SA', ttsGender);
+        speak(pronunciationForTTS.tts_full_sentence, 'ar-SA');
     } else if (typeof translationResult === 'string') {
-        speak(translationResult, getLangCodeForTTS(targetLang), ttsGender);
+        speak(translationResult, getLangCodeForTTS(targetLang));
     }
   };
   
@@ -763,7 +761,7 @@ const App: React.FC = () => {
       cancel();
     }
     // Use an Arabic voice for more authentic phonetics, with gender selection
-    speak(text, 'ar-SA', ttsGender);
+    speak(text, 'ar-SA');
   };
 
   const handleDictionaryWordSelect = (word: string) => {
@@ -1231,8 +1229,6 @@ const App: React.FC = () => {
                     onDiscuss={() => setIsTutorOpen(true)}
                     t={t}
                     dialect={phoenicianDialect}
-                    ttsGender={ttsGender}
-                    onTtsGenderChange={setTtsGender}
                     onUpdatePronunciation={setPronunciationResult}
                 />
              </>
@@ -1276,8 +1272,6 @@ const App: React.FC = () => {
             t={t}
             speak={speak}
             isSpeaking={isSpeaking}
-            ttsGender={ttsGender}
-            onTtsGenderChange={setTtsGender}
         />
       )}
       {isCameraExperienceOpen && (
