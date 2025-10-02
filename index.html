@@ -623,6 +623,72 @@
       html[data-theme="papyrus"] .prose tr:nth-child(even) {
         background-color: rgba(0,0,0,0.03);
       }
+
+      /* New Manual Modal Styles */
+      .manual-accordion-item {
+        background-color: var(--color-surface-solid);
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius);
+        margin-bottom: 1rem;
+        transition: box-shadow 0.2s ease;
+      }
+      .manual-accordion-item:hover {
+        box-shadow: 0 0 10px -2px var(--color-glow);
+      }
+      .manual-accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 1rem 1.5rem;
+        font-family: var(--font-serif);
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--color-secondary);
+        cursor: pointer;
+        background: transparent;
+        border: none;
+      }
+      html[dir="rtl"] .manual-accordion-header {
+        text-align: right;
+      }
+      .manual-accordion-header .manual-chevron {
+        transition: transform 0.3s ease;
+      }
+      .manual-accordion-header[aria-expanded="true"] .manual-chevron {
+        transform: rotate(180deg);
+      }
+      .manual-accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+      }
+      .manual-accordion-content.open {
+        max-height: 1000px; /* Adjust as needed */
+        transition: max-height 1s ease-in-out;
+      }
+      .manual-accordion-content-inner {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+        color: var(--color-text-muted);
+        line-height: 1.7;
+      }
+      .manual-accordion-content-inner ul {
+        list-style-type: '✧ ';
+        padding-inline-start: 1.5em;
+        margin-top: 0.5rem;
+      }
+      .manual-accordion-content-inner li {
+        padding-left: 0.5em;
+        margin-bottom: 0.75em;
+      }
+      .manual-accordion-content-inner strong {
+        color: var(--color-text);
+        font-weight: 600;
+      }
+      .manual-accordion-content-inner ul ul {
+        list-style-type: '- ';
+        margin-top: 0.5em;
+      }
     </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG4dGzcSTSpZSMzLfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
