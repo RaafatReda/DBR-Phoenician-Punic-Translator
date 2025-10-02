@@ -6,6 +6,7 @@ import { UILang } from '../lib/i18n';
 import CloseIcon from './icons/CloseIcon';
 import SendIcon from './icons/SendIcon';
 import Loader from './Loader';
+import SparklesIcon from './icons/SparklesIcon';
 
 interface PronunciationTutorModalProps {
   isOpen: boolean;
@@ -15,13 +16,17 @@ interface PronunciationTutorModalProps {
   dialect: PhoenicianDialect;
   t: (key: string) => string;
   uiLang: UILang;
+  onUpdatePronunciation: (result: PronunciationResult) => void;
 }
 
 interface TutorMessage {
     id: string;
     sender: 'user' | 'ai';
     text: string;
+    suggestions?: PronunciationResult[];
 }
+
+const suggestionRegex = /\[SUGGESTION\]([\s\S]*?)\[\/SUGGESTION\]/g;
 
 const PronunciationTutorModal: React.FC<PronunciationTutorModalProps> = ({
   isOpen,
@@ -30,7 +35,8 @@ const PronunciationTutorModal: React.FC<PronunciationTutorModalProps> = ({
   pronunciationResult,
   dialect,
   t,
-  uiLang
+  uiLang,
+  onUpdatePronunciation
 }) => {
     const [messages, setMessages] = useState<TutorMessage[]>([]);
     const [input, setInput] = useState('');
@@ -52,6 +58,11 @@ const PronunciationTutorModal: React.FC<PronunciationTutorModalProps> = ({
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
+    
+    const handleApplySuggestion = (suggestion: PronunciationResult) => {
+        onUpdatePronunciation(suggestion);
+        onClose();
+    };
 
     const sendMessage = async () => {
         if (!input.trim() || isAiThinking) return;
@@ -66,17 +77,30 @@ const PronunciationTutorModal: React.FC<PronunciationTutorModalProps> = ({
         setIsAiThinking(true);
 
         try {
-            const response = await discussPronunciation(
+            const rawResponse = await discussPronunciation(
                 originalWord,
                 pronunciationResult,
                 input,
                 dialect,
                 uiLang
             );
+
+            const suggestions: PronunciationResult[] = [];
+            const text = rawResponse.replace(suggestionRegex, (match, jsonString) => {
+                try {
+                    const suggestion = JSON.parse(jsonString.trim());
+                    suggestions.push(suggestion);
+                } catch (e) {
+                    console.error("Failed to parse AI suggestion:", e);
+                }
+                return ''; // Remove the block from the main text
+            }).trim();
+
             const aiResponse: TutorMessage = {
                 id: `ai-${Date.now()}`,
                 sender: 'ai',
-                text: response,
+                text,
+                suggestions: suggestions.length > 0 ? suggestions : undefined
             };
             setMessages(prev => [...prev, aiResponse]);
         } catch (error) {
@@ -117,7 +141,20 @@ const PronunciationTutorModal: React.FC<PronunciationTutorModalProps> = ({
                     {messages.map(msg => (
                         <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-xs md:max-w-md px-4 py-3 rounded-2xl ${msg.sender === 'user' ? 'bg-[color:var(--color-primary)] text-[color:var(--color-bg-start)] rounded-br-none' : 'bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)] rounded-bl-none'}`}>
-                                <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                                {msg.text && <p className="text-sm whitespace-pre-wrap">{msg.text}</p>}
+                                {msg.suggestions && msg.suggestions.length > 0 && (
+                                    <div className="mt-2 space-y-2">
+                                        <p className="text-xs font-bold text-cyan-400">{t('aiAssistantImproved')}</p>
+                                        {msg.suggestions.map((suggestion, index) => (
+                                            <div key={index} className="bg-black/20 p-2 rounded-md">
+                                                <p className="font-mono text-sm">[{suggestion.ipa}]</p>
+                                                <button onClick={() => handleApplySuggestion(suggestion)} className="mt-2 w-full text-xs font-semibold bg-green-500/20 text-green-300 py-1 px-2 rounded hover:bg-green-500/40">
+                                                    {t('aiAssistantApply')}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

@@ -35,14 +35,17 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
 
     useEffect(() => {
         if (isOpen) {
+            const introKey = uiLang === 'fr' ? `Je vois que vous regardez la phrase : "${wordDetails.exampleSentence.french}". Que souhaitez-vous savoir à ce sujet ?`
+                         : uiLang === 'ar' ? `أرى أنك تنظر إلى الجملة: "${wordDetails.exampleSentence.arabic}". ماذا تريد أن تعرف عنها؟`
+                         : `I see you're looking at the sentence: "${wordDetails.exampleSentence.english}". What would you like to know about it?`;
             setMessages([
-                { id: 'initial', sender: 'ai', text: `I see you're looking at the sentence: "${wordDetails.exampleSentence.english}". What would you like to know about it?` }
+                { id: 'initial', sender: 'ai', text: introKey }
             ]);
             setIsAiThinking(false);
             setInput('');
             setTimeout(() => inputRef.current?.focus(), 100);
         }
-    }, [isOpen, wordDetails, t]);
+    }, [isOpen, wordDetails, t, uiLang]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -83,6 +86,8 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
     };
 
     if (!isOpen) return null;
+    
+    const exampleSentence = (wordDetails.exampleSentence as any)[uiLang === 'en' ? 'english' : uiLang] || wordDetails.exampleSentence.english;
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-end sm:items-center z-[70] p-4" onClick={onClose}>
@@ -96,7 +101,7 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
                         <h2 className="text-xl font-semibold text-[color:var(--color-primary)]">
                            {t('aiAssistantHeader')}
                         </h2>
-                        <p className="text-xs text-[color:var(--color-text-muted)]">Explaining: "{wordDetails.exampleSentence.english}"</p>
+                        <p className="text-xs text-[color:var(--color-text-muted)] italic">"{exampleSentence}"</p>
                     </div>
                     <button onClick={onClose} className="text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] transition-colors p-1" aria-label={t('chatClose')}>
                         <CloseIcon className="w-6 h-6" />

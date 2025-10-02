@@ -691,15 +691,22 @@ const App: React.FC = () => {
 
   const handleSaveSentence = (wordDetails: PhoenicianWordDetails) => {
     const { exampleSentence } = wordDetails;
+    let sourceTextLang = 'english';
+    switch(uiLang) {
+        case 'fr': sourceTextLang = 'french'; break;
+        case 'ar': sourceTextLang = 'arabic'; break;
+        default: sourceTextLang = 'english';
+    }
+
     const newSave: SavedTranslation = {
       id: `${Date.now()}-example-${wordDetails.word}`,
-      sourceLang: Language.ENGLISH, // Assuming example is from English
+      sourceLang: Language.ENGLISH, // This is a simplification; source could be any UI lang
       targetLang: Language.PHOENICIAN,
-      sourceText: `Example for "${wordDetails.word}": ${exampleSentence.english}`,
+      sourceText: `Example for "${wordDetails.word}": ${exampleSentence[sourceTextLang as keyof typeof exampleSentence]}`,
       translatedText: {
         phoenician: exampleSentence.phoenician,
         latin: exampleSentence.latin,
-        arabic: exampleSentence.arabicTransliteration
+        arabic: exampleSentence.arabicTransliteration,
         // Grammar for example sentences is not available from this API call, so it's omitted.
       },
       dialect: phoenicianDialect,
@@ -1293,6 +1300,7 @@ const App: React.FC = () => {
             dialect={phoenicianDialect}
             t={t}
             uiLang={uiLang}
+            onUpdatePronunciation={setPronunciationResult}
         />
       )}
       <ChatFAB onOpen={() => setIsChatOpen(true)} t={t} />

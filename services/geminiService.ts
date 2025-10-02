@@ -668,8 +668,6 @@ You MUST map each Phoenician letter to its closest Arabic phoneme for TTS purpos
     }
 };
 
-// FIX: Added 'discussPronunciation' function to handle chat interactions with the pronunciation tutor.
-// This resolves the 'module has no exported member' error in `components/PronunciationTutorModal.tsx`.
 export const discussPronunciation = async (
   originalWord: string,
   pronunciationResult: PronunciationResult,
@@ -679,22 +677,25 @@ export const discussPronunciation = async (
 ): Promise<string> => {
     const languageName = getLanguageName(uiLang);
 
-    const systemInstruction = `You are an expert historical linguist specializing in Phoenician phonology and acting as a helpful tutor.
-The user has been given a reconstructed pronunciation for a word and now has a follow-up question.
-Your task is to answer the user's question clearly and concisely in ${languageName}.
-Base your answer on the provided context. Be encouraging and educational. Do not respond in JSON.`;
+    const systemInstruction = `You are an expert historical linguist specializing in Phoenician phonology, acting as a helpful tutor and editor.
+The user has a question or suggestion about a reconstructed pronunciation.
+Your task is to answer clearly in ${languageName}.
+If the user's suggestion is plausible, you MUST provide an alternative reconstruction. Format this alternative as a complete JSON object wrapped in special tags: [SUGGESTION]{"transliteration": "...", "ipa": "...", "word_pronunciations": [...], "tts_full_sentence": "...", "note": "..."}[/SUGGESTION].
+The JSON object MUST be a valid PronunciationResult.
+First, provide your textual explanation, and THEN, if applicable, provide the [SUGGESTION] block.
+If the user's idea is incorrect, explain why politely without providing a suggestion block.
+Do not respond in JSON yourself, only use the special block for suggestions.`;
     
     const prompt = `Context:
 - Original Phoenician Text: "${originalWord}"
 - Dialect for Reconstruction: ${dialect}
-- Your Suggested Pronunciation:
+- Your Current Suggested Pronunciation:
   - Latin Transliteration: "${pronunciationResult.transliteration}"
   - IPA: "${pronunciationResult.ipa}"
   - TTS for Arabic Engine: "${pronunciationResult.tts_full_sentence}"
-  - Linguistic Notes: "${pronunciationResult.note}"
-- User's Question: "${userQuery}"
+- User's Query: "${userQuery}"
 
-Please answer the user's question in ${languageName}.`;
+Please analyze the user's query. Provide an explanation in ${languageName}. If their idea leads to a valid alternative pronunciation, provide it inside a [SUGGESTION]{...}[/SUGGESTION] block after your explanation.`;
 
     try {
         const response = await ai.models.generateContent({

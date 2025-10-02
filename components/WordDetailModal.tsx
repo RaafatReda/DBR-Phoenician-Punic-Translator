@@ -72,7 +72,8 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
         speak(details.exampleSentence.arabic, 'ar-SA');
         break;
       case 'latin':
-        speak(details.exampleSentence.latin, 'en-US');
+        // Latin transliteration is best spoken by an English voice
+        speak(details.exampleSentence.english, 'en-US');
         break;
     }
   };
@@ -91,18 +92,27 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   const sentenceFontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-4xl' : '[font-family:var(--font-phoenician)] text-3xl';
   
   const uiIsRtl = uiLang === 'ar';
+  
+  const meaning = (entry.meaning as any)[uiLang] || entry.meaning.en;
 
   return (
     <>
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[60] p-4" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="word-detail-title">
-        <div className="glass-panel rounded-2xl shadow-2xl w-full max-w-sm flex flex-col animate-pop-in" onClick={(e) => e.stopPropagation()}>
+        <div className="glass-panel rounded-2xl shadow-2xl w-full max-w-md flex flex-col animate-pop-in" onClick={(e) => e.stopPropagation()}>
           <header className="flex justify-between items-center p-4">
+            <button onClick={() => { onUseWord(entry.phoenician); onClose(); }} className="px-4 py-2 text-sm font-semibold bg-white/10 rounded-lg hover:bg-white/20 text-[color:var(--color-primary)]" title={t('useThisWord')}>
+                {t('useThisWord')}
+            </button>
+            <div className="text-center">
+                <p id="word-detail-title" className={`text-[color:var(--color-primary)] ${fontClass}`} dir="rtl">{entry.phoenician}</p>
+                <p className="text-sm italic text-gray-400 -mt-1">{entry.latin}</p>
+            </div>
             <button onClick={onClose} className="p-2 -m-2 text-gray-400 hover:text-white" aria-label={t('close')}><CloseIcon className="w-6 h-6"/></button>
-            <p id="word-detail-title" className={`text-[color:var(--color-primary)] ${fontClass}`} dir="rtl">{entry.phoenician}</p>
           </header>
 
           <div className="px-6">
-            <hr className="border-[color:var(--color-border)] opacity-30" />
+             <p className="text-center text-lg capitalize font-semibold" dir={uiIsRtl ? 'rtl' : 'ltr'}>{meaning}</p>
+            <hr className="border-[color:var(--color-border)] opacity-30 mt-4" />
           </div>
 
           <main className="p-6 text-center min-h-[250px] flex flex-col items-center justify-center">
@@ -127,7 +137,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                     </div>
                     <div className="flex items-center gap-4">
                          <button onClick={() => handlePlayAudio('latin')} disabled={isSpeaking} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking && activeAudio === 'latin'} /></button>
-                        <p className="flex-grow text-center text-base italic text-gray-400" dir="ltr">{details.exampleSentence.latin}</p>
+                        <p className="flex-grow text-center text-base italic text-gray-400" dir="ltr">{details.exampleSentence.english}</p>
                     </div>
                 </div>
               </div>
