@@ -5,7 +5,6 @@ import BackspaceIcon from './icons/BackspaceIcon';
 import CloseIcon from './icons/CloseIcon';
 import ShiftIcon from './icons/ShiftIcon';
 import GlobeIcon from './icons/GlobeIcon';
-import EnterIcon from './icons/EnterIcon';
 import { Language, PhoenicianDialect } from '../types';
 
 interface KeyboardProps {
@@ -172,8 +171,8 @@ const Keyboard: React.FC<KeyboardProps> = ({ isOpen, sourceLang, dialect, onKeyP
             <Key value="SPACE" onClick={handleControlKeyPress} className="flex-grow-[7]">
                 {t('keySpace')}
             </Key>
-            <Key value="ENTER" onClick={handleControlKeyPress} className="flex-grow-[2.5]">
-                <EnterIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Key value="ENTER" onClick={handleControlKeyPress} className="flex-grow-[2.5] text-sm">
+                {t('enter')}
             </Key>
         </div>
       </div>

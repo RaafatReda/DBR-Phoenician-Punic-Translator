@@ -240,6 +240,7 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
         onClose={() => setIsKeyboardOpen(false)}
         onKeyPress={(key) => setSearchTerm(prev => prev + key)}
         onBackspace={() => setSearchTerm(prev => prev.slice(0, -1))}
+        onEnter={() => setIsKeyboardOpen(false)}
         dialect={scriptMode}
         sourceLang={Language.PHOENICIAN}
         t={t}
