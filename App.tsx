@@ -1134,7 +1134,13 @@ const App: React.FC = () => {
                 />
               )}
 
-              <DailyPhoenicianWord t={t} uiLang={uiLang} />
+              <DailyPhoenicianWord 
+                t={t} 
+                uiLang={uiLang} 
+                speak={speak}
+                isSpeaking={isSpeaking}
+                dialect={phoenicianDialect}
+              />
             </>
           )}
 

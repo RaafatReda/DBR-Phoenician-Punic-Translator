@@ -1,27 +1,35 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getPhoenicianWordDetails } from '../services/geminiService';
+import { getPhoenicianWordDetails, reconstructPronunciation } from '../services/geminiService';
 import { phoenicianDictionary } from '../lib/phoenicianDictionary';
-import { PhoenicianWordDetails } from '../types';
+import { PhoenicianWordDetails, PronunciationResult, PhoenicianDialect } from '../types';
 import Loader from './Loader';
 import CloseIcon from './icons/CloseIcon';
 import DiceIcon from './icons/DiceIcon';
 import { UILang } from '../lib/i18n';
+import SpeakerIcon from './icons/SpeakerIcon';
 
 interface DailyPhoenicianWordProps {
     t: (key: string) => string;
     uiLang: UILang;
+    speak: (text: string, lang: string) => void;
+    isSpeaking: boolean;
+    dialect: PhoenicianDialect;
 }
 
 interface CachedWord {
     details: PhoenicianWordDetails;
+    pronunciation: PronunciationResult;
+    sentencePronunciation: PronunciationResult;
     timestamp: number;
 }
 
-const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) => {
+const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang, speak, isSpeaking, dialect }) => {
     const [isVisible, setIsVisible] = useState<boolean>(() => {
         return sessionStorage.getItem('dailyWordClosed') !== 'true';
     });
     const [wordDetails, setWordDetails] = useState<PhoenicianWordDetails | null>(null);
+    const [pronunciation, setPronunciation] = useState<PronunciationResult | null>(null);
+    const [sentencePronunciation, setSentencePronunciation] = useState<PronunciationResult | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -29,16 +37,20 @@ const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) 
         setIsLoading(true);
         setError(null);
         setWordDetails(null);
+        setPronunciation(null);
+        setSentencePronunciation(null);
 
         const today = new Date().toDateString();
         if (!forceFresh) {
             try {
                 const cachedData = localStorage.getItem('dbr-daily-word');
                 if (cachedData) {
-                    const { details, timestamp }: CachedWord = JSON.parse(cachedData);
+                    const { details, pronunciation, sentencePronunciation, timestamp }: CachedWord = JSON.parse(cachedData);
                     const cacheDate = new Date(timestamp).toDateString();
                     if (cacheDate === today) {
                         setWordDetails(details);
+                        setPronunciation(pronunciation);
+                        setSentencePronunciation(sentencePronunciation);
                         setIsLoading(false);
                         return;
                     }
@@ -52,12 +64,22 @@ const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) 
         try {
             const randomIndex = Math.floor(Math.random() * phoenicianDictionary.length);
             const word = phoenicianDictionary[randomIndex];
+            
             const details = await getPhoenicianWordDetails(word);
             setWordDetails(details);
+            
+            const [wordPron, sentencePron] = await Promise.all([
+                reconstructPronunciation(details.word, dialect, uiLang),
+                reconstructPronunciation(details.exampleSentence.phoenician, dialect, uiLang)
+            ]);
+            setPronunciation(wordPron);
+            setSentencePronunciation(sentencePron);
 
             try {
-                const cacheEntry: CachedWord = { details, timestamp: Date.now() };
-                localStorage.setItem('dbr-daily-word', JSON.stringify(cacheEntry));
+                 if (wordPron && sentencePron) {
+                    const cacheEntry: CachedWord = { details, pronunciation: wordPron, sentencePronunciation: sentencePron, timestamp: Date.now() };
+                    localStorage.setItem('dbr-daily-word', JSON.stringify(cacheEntry));
+                }
             } catch (e) {
                 console.error("Failed to save daily word to cache", e);
             }
@@ -68,7 +90,7 @@ const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) 
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [dialect, uiLang]);
 
     useEffect(() => {
         if (isVisible) {
@@ -83,6 +105,18 @@ const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) 
     const handleClose = () => {
         setIsVisible(false);
         sessionStorage.setItem('dailyWordClosed', 'true');
+    };
+
+    const handlePlayWord = () => {
+        if (pronunciation && !isSpeaking) {
+            speak(pronunciation.tts_full_sentence, 'ar-SA');
+        }
+    };
+
+    const handlePlaySentence = () => {
+        if (sentencePronunciation && !isSpeaking) {
+            speak(sentencePronunciation.tts_full_sentence, 'ar-SA');
+        }
     };
 
     if (!isVisible) {
@@ -143,13 +177,22 @@ const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) 
                 {wordDetails && !isLoading && (
                     <div className="text-center">
                         <div className="mb-4">
-                            <div className="flex justify-center items-baseline gap-8">
+                            <div className="flex justify-center items-center gap-4">
                                 <div>
                                     <p className="text-xs text-center text-[color:var(--color-text-muted)] uppercase">{t('phoenician')}</p>
                                     <p className="[font-family:var(--font-phoenician)] text-6xl text-[color:var(--color-primary)]" dir="rtl">
                                         {wordDetails.word}
                                     </p>
                                 </div>
+                                 <button 
+                                    onClick={handlePlayWord}
+                                    disabled={isLoading || isSpeaking || !pronunciation}
+                                    className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50 self-center"
+                                    title={t('speakPronunciation')}
+                                    aria-label={t('speakPronunciation')}
+                                >
+                                    <SpeakerIcon className="w-8 h-8" isSpeaking={isSpeaking} />
+                                </button>
                                 <div>
                                     <p className="text-xs text-center text-[color:var(--color-text-muted)] uppercase">{t('punic')}</p>
                                     <p className="[font-family:var(--font-punic)] text-7xl text-[color:var(--color-primary)]" dir="rtl">
@@ -185,19 +228,29 @@ const DailyPhoenicianWord: React.FC<DailyPhoenicianWordProps> = ({ t, uiLang }) 
                         
                         <div className="border-t border-[color:var(--color-border)] pt-4">
                             <p className="text-sm text-[color:var(--color-text-muted)] mb-2 uppercase" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{t('dailyWordUsage')}</p>
-                            <div className="flex justify-center items-center gap-8 text-center flex-wrap" dir="rtl">
-                                <div>
+                            <div className="flex justify-center items-center gap-4 text-center flex-wrap">
+                               <div dir="rtl">
                                     <p className="text-xs text-[color:var(--color-text-muted)]">{t('phoenician')}</p>
                                     <p className="[font-family:var(--font-phoenician)] text-3xl">
                                         {wordDetails.exampleSentence.phoenician}
                                     </p>
                                 </div>
-                                <div>
+                                <div className="w-4"></div>
+                                <div dir="rtl">
                                     <p className="text-xs text-[color:var(--color-text-muted)]">{t('punic')}</p>
                                     <p className="[font-family:var(--font-punic)] text-4xl">
                                         {wordDetails.exampleSentence.phoenician}
                                     </p>
                                 </div>
+                                <button 
+                                    onClick={handlePlaySentence}
+                                    disabled={isLoading || isSpeaking || !sentencePronunciation}
+                                    className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"
+                                    title={t('speakFullSentence')}
+                                    aria-label={t('speakFullSentence')}
+                                >
+                                    <SpeakerIcon className="w-6 h-6" isSpeaking={isSpeaking} />
+                                </button>
                             </div>
                             
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 mt-2 items-start">
