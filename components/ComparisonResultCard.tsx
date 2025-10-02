@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect } from 'react';
 import { TransliterationOutput, TransliterationMode, GrammarToken, PhoenicianDialect } from '../types';
 import GrammarHighlightedText from './GrammarHighlightedText';

@@ -13,7 +13,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ suggestions, onSelect, lang
   }
 
   // FIX: Replaced reference to non-existent 'Language.COPTIC' with 'Language.PHOENICIAN'.
-  const isPhoenician = lang === Language.PHOENICIAN;
+  const isPhoenician = lang === Language.PHOENICIAN || lang === Language.PUNIC;
   const isArabic = lang === Language.ARABIC;
 
   const fontClass = isPhoenician ? '[font-family:var(--font-phoenician)] text-lg' : 'text-base';

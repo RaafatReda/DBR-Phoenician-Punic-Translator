@@ -710,3 +710,39 @@ Please answer the user's question in ${languageName}.`;
         throw new Error('Failed to get a response from the pronunciation tutor.');
     }
 };
+
+export const explainSentenceInTutor = async (
+  context: PhoenicianWordDetails,
+  userQuery: string,
+  uiLang: UILang
+): Promise<string> => {
+    const languageName = getLanguageName(uiLang);
+
+    const systemInstruction = `You are an expert AI language tutor specializing in Phoenician grammar and syntax.
+The user is asking a question about a specific Phoenician word and its example sentence.
+Your task is to provide a clear, concise, and helpful explanation in ${languageName}.
+Base your answer on the provided context. Be encouraging and educational. Do not respond in JSON.`;
+    
+    const prompt = `Context:
+- Word in Focus: "${context.word}" (${context.latinTransliteration})
+- Meaning: "${context.englishMeaning}"
+- Example Sentence (Phoenician): "${context.exampleSentence.phoenician}"
+- Example Sentence (English Translation): "${context.exampleSentence.english}"
+- User's Question: "${userQuery}"
+
+Please answer the user's question about the sentence or the word's usage in ${languageName}.`;
+
+    try {
+        const response = await ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                systemInstruction,
+            },
+        });
+        return response.text.trim();
+    } catch (error) {
+        console.error('Gemini API sentence explanation error:', error);
+        throw new Error('Failed to get a response from the AI tutor.');
+    }
+};

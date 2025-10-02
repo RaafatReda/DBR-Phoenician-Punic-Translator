@@ -35,7 +35,6 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤋𐤋', latin: 'dll', meaning: { en: 'To be low, impoverished', fr: 'Être bas, appauvri', ar: 'يكون وضيعًا، يفتقر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤋𐤒', latin: 'dlq', meaning: { en: 'To pursue, burn', fr: 'Poursuivre, brûler', ar: 'يطارد، يحترق' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤋𐤕', latin: 'dlt', meaning: { en: 'Door', fr: 'Porte', ar: 'باب' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
-  // FIX: Added missing entry for '𐤃𐤌' (dm), which was causing a type error.
   { phoenician: '𐤃𐤌', latin: 'dm', meaning: { en: 'Blood', fr: 'Sang', ar: 'دم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤌𐤄', latin: 'dmh', meaning: { en: 'To be like', fr: 'Être comme', ar: 'يشبه' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤌𐤌', latin: 'dmm', meaning: { en: 'To be silent', fr: 'Être silencieux', ar: 'يصمت' }, grammar: { pos: 'Verb', stem: 'G-stem' } },

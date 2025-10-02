@@ -3,24 +3,28 @@ import { phoenicianGlossary } from '../lib/phoenicianGlossary';
 import CloseIcon from './icons/CloseIcon';
 import SearchIcon from './icons/SearchIcon';
 import { UILang } from '../lib/i18n';
-import { PhoenicianDialect, GlossaryEntry, Language } from '../types';
+import { PhoenicianDialect, GlossaryEntry, Language, PhoenicianWordDetails } from '../types';
 import ScriptModeToggle from './ScriptModeToggle';
 import { generateGlossaryHtmlForPdf } from '../lib/exportUtils';
 import PdfIcon from './icons/PdfIcon';
 import Keyboard from './Keyboard';
 import KeyboardIcon from './icons/KeyboardIcon';
+import WordDetailModal from './WordDetailModal';
 
 interface PhoenicianDictionaryModalProps {
   onClose: () => void;
   onWordSelect: (word: string) => void;
+  onSaveSentence: (details: PhoenicianWordDetails) => void;
   t: (key: string) => string;
+  speak: (text: string, lang: string, gender?: 'male' | 'female') => void;
+  isSpeaking: boolean;
 }
 
 const phoenicianAlphabet = ['𐤀', '𐤁', '𐤂', '𐤃', '𐤄', '𐤅', '𐤆', '𐤇', '𐤈', '𐤉', '𐤊', '𐤋', '𐤌', '𐤍', '𐤎', '𐤏', '𐤐', '𐤑', '𐤒', '𐤓', '𐤔', '𐤕'];
 
 type GlossaryLang = 'en' | 'fr' | 'ar';
 
-const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, t }) => {
+const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<GlossaryEntry['category'] | null>(null);
@@ -28,6 +32,7 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
   const [scriptMode, setScriptMode] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
+  const [selectedEntry, setSelectedEntry] = useState<GlossaryEntry | null>(null);
   
   const currentUiLang: UILang = (localStorage.getItem('dbr-translator-lang') as UILang) || 'en';
 
@@ -70,10 +75,8 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
     listRef.current?.scrollTo(0, 0);
   };
 
-
-  const handleWordClick = (word: string) => {
-    onWordSelect(word);
-    onClose();
+  const handleEntryClick = (entry: GlossaryEntry) => {
+    setSelectedEntry(entry);
   };
   
   const handleExportPdf = () => {
@@ -213,7 +216,7 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
                 {filteredDictionary.map((entry, index) => (
                   <li key={`${entry.phoenician}-${index}`}>
                     <button
-                      onClick={() => handleWordClick(entry.phoenician)}
+                      onClick={() => handleEntryClick(entry)}
                       className="w-full text-left p-4 hover:bg-[color:var(--color-primary)]/10 transition-colors flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
                     >
                       <div className="w-full sm:w-1/3 flex items-baseline gap-4" dir="rtl">
@@ -244,6 +247,17 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
         dialect={scriptMode}
         sourceLang={Language.PHOENICIAN}
         t={t}
+      />
+      <WordDetailModal
+        entry={selectedEntry}
+        isOpen={!!selectedEntry}
+        onClose={() => setSelectedEntry(null)}
+        onUseWord={onWordSelect}
+        onSaveSentence={onSaveSentence}
+        t={t}
+        speak={speak}
+        isSpeaking={isSpeaking}
+        dialect={scriptMode}
       />
     </>
   );

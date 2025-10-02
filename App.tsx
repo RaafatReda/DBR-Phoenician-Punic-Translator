@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo, ChangeEvent, KeyboardEvent } from 'react';
-import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse, PronunciationResult } from './types';
+import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse, PronunciationResult, PhoenicianWordDetails } from './types';
 import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage, reconstructPronunciation } from './services/geminiService';
 import DialectSelector from './components/DialectSelector';
 import TextArea from './components/TextArea';
@@ -689,6 +689,25 @@ const App: React.FC = () => {
     setSavedTranslations(prev => [newTranslation, ...prev]);
   };
 
+  const handleSaveSentence = (wordDetails: PhoenicianWordDetails) => {
+    const { exampleSentence } = wordDetails;
+    const newSave: SavedTranslation = {
+      id: `${Date.now()}-example-${wordDetails.word}`,
+      sourceLang: Language.ENGLISH, // Assuming example is from English
+      targetLang: Language.PHOENICIAN,
+      sourceText: `Example for "${wordDetails.word}": ${exampleSentence.english}`,
+      translatedText: {
+        phoenician: exampleSentence.phoenician,
+        latin: exampleSentence.latin,
+        arabic: exampleSentence.arabicTransliteration
+        // Grammar for example sentences is not available from this API call, so it's omitted.
+      },
+      dialect: phoenicianDialect,
+      notes: `Saved from glossary example.`
+    };
+    setSavedTranslations(prev => [newSave, ...prev]);
+  };
+
   const handleDeleteTranslation = (id: string) => {
     setSavedTranslations(prev => prev.filter(t => t.id !== id));
   };
@@ -1243,7 +1262,10 @@ const App: React.FC = () => {
         <PhoenicianDictionaryModal
             onClose={() => setIsDictionaryOpen(false)}
             onWordSelect={handleDictionaryWordSelect}
+            onSaveSentence={handleSaveSentence}
             t={t}
+            speak={speak}
+            isSpeaking={isSpeaking}
         />
       )}
       {isCameraExperienceOpen && (
@@ -1268,10 +1290,6 @@ const App: React.FC = () => {
             onClose={() => setIsTutorOpen(false)}
             originalWord={pronunciationInput}
             pronunciationResult={pronunciationResult}
-            onUpdatePronunciation={(newResult) => {
-                setPronunciationResult(newResult);
-                setIsTutorOpen(false);
-            }}
             dialect={phoenicianDialect}
             t={t}
             uiLang={uiLang}
