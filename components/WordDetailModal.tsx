@@ -42,13 +42,13 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
         setPronunciation(null);
         setSentencePronunciation(null);
         try {
-          // Fetch word details and pronunciations in parallel
-          const [wordDetails, wordPron, sentencePron] = await Promise.all([
-             getPhoenicianWordDetails(entry.phoenician),
+          // Fetch word details first, providing the specific meaning for context.
+          const wordDetails = await getPhoenicianWordDetails(entry.phoenician, entry.meaning);
+          
+          // Then, fetch pronunciations for the word and the new example sentence in parallel.
+          const [wordPron, sentencePron] = await Promise.all([
              reconstructPronunciation(entry.phoenician, dialect, uiLang),
-             getPhoenicianWordDetails(entry.phoenician).then(details => 
-                reconstructPronunciation(details.exampleSentence.phoenician, dialect, uiLang)
-             )
+             reconstructPronunciation(wordDetails.exampleSentence.phoenician, dialect, uiLang)
           ]);
 
           setDetails(wordDetails);
@@ -71,15 +71,9 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
     }
   };
 
-  const handlePlayWordInSentence = () => {
-    if (entry && sentencePronunciation && !isSpeaking) {
-        const wordInSentence = sentencePronunciation.word_pronunciations.find(p => p.phoenician === entry.phoenician);
-        if (wordInSentence) {
-            speak(wordInSentence.tts, 'ar-SA');
-        } else {
-            // Fallback to the main word pronunciation if not found in sentence (unlikely)
-            handlePlayWord();
-        }
+  const handlePlayExampleSentence = () => {
+    if (sentencePronunciation && !isSpeaking) {
+      speak(sentencePronunciation.tts_full_sentence, 'ar-SA');
     }
   };
 
@@ -99,6 +93,13 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   const uiIsRtl = uiLang === 'ar';
   
   const meaning = (entry.meaning as any)[uiLang] || entry.meaning.en;
+
+  const exampleTranslation = 
+    details ? (
+      uiLang === 'fr' && details.exampleSentence.french ? details.exampleSentence.french :
+      uiLang === 'ar' && details.exampleSentence.arabic ? details.exampleSentence.arabic :
+      details.exampleSentence.english
+    ) : '';
 
   return (
     <>
@@ -149,7 +150,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                                     {i < details.exampleSentence.phoenician.split(entry.phoenician).length - 1 && (
                                         <span className="relative">
                                             <span className="text-[color:var(--color-secondary)]">{entry.phoenician}</span>
-                                            <button onClick={handlePlayWordInSentence} disabled={isSpeaking} className="absolute -top-1 -right-4 p-1 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-4 h-4" isSpeaking={isSpeaking} /></button>
+                                            <button onClick={handlePlayExampleSentence} disabled={isSpeaking} className="absolute -top-1 -right-4 p-1 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-4 h-4" isSpeaking={isSpeaking} /></button>
                                         </span>
                                     )}
                                 </React.Fragment>
@@ -166,7 +167,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                          <strong>Arabic:</strong> {details.exampleSentence.arabicTransliteration}
                     </p>
                     <p className="text-base text-center text-gray-300 pt-2" dir={uiIsRtl ? 'rtl' : 'ltr'}>
-                        <em>&ldquo;{(details.exampleSentence as any)[uiLang] || details.exampleSentence.english}&rdquo;</em>
+                        <em>&ldquo;{exampleTranslation}&rdquo;</em>
                     </p>
                 </div>
 

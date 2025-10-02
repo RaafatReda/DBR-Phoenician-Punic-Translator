@@ -221,15 +221,30 @@ For each dialect, provide the text in Phoenician script, a Latin transliteration
     }
 };
 
-export const getPhoenicianWordDetails = async (word: string): Promise<PhoenicianWordDetails> => {
-    const systemInstruction = `You are a linguist specializing in Phoenician. For a given Phoenician word, provide its details in a specific JSON format.
+// FIX: Made the `meaning` parameter optional to support calls without a predefined meaning, as needed by the DailyPhoenicianWord component.
+export const getPhoenicianWordDetails = async (
+  word: string, 
+  meaning?: { en: string; fr: string; ar: string }
+): Promise<PhoenicianWordDetails> => {
+    const systemInstruction = `You are a linguist specializing in Phoenician. For a given Phoenician word ${meaning ? 'with a specific meaning' : ''}, provide its details in a specific JSON format.
 ${transliterationSystemInstruction}
 - The Phoenician text must use Unicode characters from the Phoenician block (U+10900–U+1091F).
-- Provide the word's meaning in English, French, and Arabic.
-- The example sentence should be simple and clearly demonstrate the word's usage. Provide a Latin transliteration, an Arabic transliteration, and translations of the example sentence in English, French, and Arabic.
+${meaning ? `- You MUST use the exact meanings provided for the word in English, French, and Arabic. Do not change them.` : '- You must provide the most common and appropriate meanings in English, French, and Arabic.'}
+- The example sentence MUST be simple and clearly demonstrate the word's usage ${meaning ? `according to the provided specific meaning.` : `according to its most common meaning.`}
+- Provide a Latin transliteration, an Arabic transliteration, and translations of the example sentence in English, French, and Arabic.
 - All fields are mandatory.`;
     
-    const prompt = `Provide details for the Phoenician word: "${word}"`;
+    const prompt = meaning 
+        ? `Provide details for the Phoenician word: "${word}"
+The specific meaning to use is:
+- English: "${meaning.en}"
+- French: "${meaning.fr}"
+- Arabic: "${meaning.ar}"
+
+Generate an example sentence that uses the word "${word}" with this EXACT meaning.`
+        : `Provide details for the Phoenician word: "${word}".
+
+Generate an example sentence that uses the word "${word}" with its most common meaning.`;
 
     const wordDetailsSchema = {
         type: Type.OBJECT,
@@ -237,13 +252,13 @@ ${transliterationSystemInstruction}
             word: { type: Type.STRING, description: "The original Phoenician word provided." },
             latinTransliteration: { type: Type.STRING, description: "A scholarly Latin-based transliteration of the word." },
             arabicTransliteration: { type: Type.STRING, description: "An Arabic-based transliteration of the word." },
-            englishMeaning: { type: Type.STRING, description: "The English meaning or translation of the word." },
-            frenchMeaning: { type: Type.STRING, description: "The French meaning or translation of the word." },
-            arabicMeaning: { type: Type.STRING, description: "The Arabic meaning or translation of the word." },
+            englishMeaning: { type: Type.STRING, description: `The English meaning of the word. ${meaning ? `Must be exactly: "${meaning.en}"` : "The most common English meaning."}` },
+            frenchMeaning: { type: Type.STRING, description: `The French meaning of the word. ${meaning ? `Must be exactly: "${meaning.fr}"` : "The most common French meaning."}` },
+            arabicMeaning: { type: Type.STRING, description: `The Arabic meaning of the word. ${meaning ? `Must be exactly: "${meaning.ar}"` : "The most common Arabic meaning."}` },
             exampleSentence: {
                 type: Type.OBJECT,
                 properties: {
-                    phoenician: { type: Type.STRING, description: "An example sentence in Phoenician script using the word." },
+                    phoenician: { type: Type.STRING, description: `An example sentence in Phoenician script using the word "${word}"${meaning ? ' with the specified meaning' : ''}.` },
                     latin: { type: Type.STRING, description: "A Latin-based transliteration of the example sentence." },
                     arabicTransliteration: { type: Type.STRING, description: "An Arabic-based transliteration of the example sentence." },
                     arabic: { type: Type.STRING, description: "The Arabic translation of the example sentence." },
