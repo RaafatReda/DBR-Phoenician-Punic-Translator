@@ -16,7 +16,7 @@ const CognateDisplay: React.FC<CognateDisplayProps> = ({ result, t }) => {
       <div className="papyrus-display rounded-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         {result.hebrewCognate && (
           <div className="text-center">
-            <h4 className="text-sm font-semibold text-[color:var(--color-text-muted)] uppercase tracking-wider mb-2">{t('hebrewCognate')} 🇮🇱</h4>
+            <h4 className="text-sm font-semibold text-[color:var(--color-text-muted)] uppercase tracking-wider mb-2">{t('hebrewCognate')} ✡️</h4>
             <p lang="he" dir="rtl" className="text-2xl text-[color:var(--color-text)]" style={{ fontFamily: "'Noto Sans Hebrew', sans-serif" }}>
               {result.hebrewCognate.script}
             </p>

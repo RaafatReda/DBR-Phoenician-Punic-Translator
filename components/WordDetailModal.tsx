@@ -27,9 +27,9 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pronunciation, setPronunciation] = useState<PronunciationResult | null>(null);
+  const [sentencePronunciation, setSentencePronunciation] = useState<PronunciationResult | null>(null);
   const [isTutorOpen, setIsTutorOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [activeAudio, setActiveAudio] = useState<'phoenician' | 'arabic' | 'latin' | null>(null);
 
   const uiLang = (localStorage.getItem('dbr-translator-lang') as UILang) || 'en';
 
@@ -40,11 +40,21 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
         setError(null);
         setDetails(null);
         setPronunciation(null);
+        setSentencePronunciation(null);
         try {
-          const wordDetails = await getPhoenicianWordDetails(entry.phoenician);
+          // Fetch word details and pronunciations in parallel
+          const [wordDetails, wordPron, sentencePron] = await Promise.all([
+             getPhoenicianWordDetails(entry.phoenician),
+             reconstructPronunciation(entry.phoenician, dialect, uiLang),
+             getPhoenicianWordDetails(entry.phoenician).then(details => 
+                reconstructPronunciation(details.exampleSentence.phoenician, dialect, uiLang)
+             )
+          ]);
+
           setDetails(wordDetails);
-          const pron = await reconstructPronunciation(wordDetails.exampleSentence.phoenician, dialect, uiLang);
-          setPronunciation(pron);
+          setPronunciation(wordPron);
+          setSentencePronunciation(sentencePron);
+
         } catch (err) {
           setError(err instanceof Error ? err.message : t('unknownError'));
         } finally {
@@ -54,27 +64,22 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
       fetchDetails();
     }
   }, [entry, isOpen, t, dialect, uiLang]);
-
-  useEffect(() => {
-    if (!isSpeaking) {
-      setActiveAudio(null);
+  
+  const handlePlayWord = () => {
+    if (pronunciation && !isSpeaking) {
+      speak(pronunciation.tts_full_sentence, 'ar-SA');
     }
-  }, [isSpeaking]);
+  };
 
-  const handlePlayAudio = (type: 'phoenician' | 'arabic' | 'latin') => {
-    if (!details || isSpeaking) return;
-    setActiveAudio(type);
-    switch (type) {
-      case 'phoenician':
-        if (pronunciation) speak(pronunciation.tts_full_sentence, 'ar-SA');
-        break;
-      case 'arabic':
-        speak(details.exampleSentence.arabic, 'ar-SA');
-        break;
-      case 'latin':
-        // Latin transliteration is best spoken by an English voice
-        speak(details.exampleSentence.english, 'en-US');
-        break;
+  const handlePlayWordInSentence = () => {
+    if (entry && sentencePronunciation && !isSpeaking) {
+        const wordInSentence = sentencePronunciation.word_pronunciations.find(p => p.phoenician === entry.phoenician);
+        if (wordInSentence) {
+            speak(wordInSentence.tts, 'ar-SA');
+        } else {
+            // Fallback to the main word pronunciation if not found in sentence (unlikely)
+            handlePlayWord();
+        }
     }
   };
 
@@ -89,7 +94,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   if (!isOpen || !entry) return null;
 
   const fontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-5xl' : '[font-family:var(--font-phoenician)] text-4xl';
-  const sentenceFontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-4xl' : '[font-family:var(--font-phoenician)] text-3xl';
+  const sentenceFontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-3xl' : '[font-family:var(--font-phoenician)] text-2xl';
   
   const uiIsRtl = uiLang === 'ar';
   
@@ -98,68 +103,88 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   return (
     <>
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[60] p-4" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="word-detail-title">
-        <div className="glass-panel rounded-2xl shadow-2xl w-full max-w-md flex flex-col animate-pop-in" onClick={(e) => e.stopPropagation()}>
-          <header className="flex justify-between items-center p-4">
-            <button onClick={() => { onUseWord(entry.phoenician); onClose(); }} className="px-4 py-2 text-sm font-semibold bg-white/10 rounded-lg hover:bg-white/20 text-[color:var(--color-primary)]" title={t('useThisWord')}>
+        <div className="glass-panel rounded-2xl shadow-2xl w-full max-w-lg flex flex-col animate-pop-in" onClick={(e) => e.stopPropagation()}>
+          
+          <header className="flex justify-between items-start p-4 border-b border-[color:var(--color-border)]">
+              <button onClick={() => { onUseWord(entry.phoenician); onClose(); }} className="px-3 py-1.5 text-xs font-semibold bg-white/10 rounded-lg hover:bg-white/20 text-[color:var(--color-primary)]" title={t('useThisWord')}>
                 {t('useThisWord')}
-            </button>
-            <div className="text-center">
-                <p id="word-detail-title" className={`text-[color:var(--color-primary)] ${fontClass}`} dir="rtl">{entry.phoenician}</p>
-                <p className="text-sm italic text-gray-400 -mt-1">{entry.latin}</p>
-            </div>
-            <button onClick={onClose} className="p-2 -m-2 text-gray-400 hover:text-white" aria-label={t('close')}><CloseIcon className="w-6 h-6"/></button>
+              </button>
+              <h2 id="word-detail-title" className="sr-only">{entry.phoenician}</h2>
+              <button onClick={onClose} className="p-2 -m-2 text-gray-400 hover:text-white" aria-label={t('close')}><CloseIcon className="w-6 h-6"/></button>
           </header>
 
-          <div className="px-6">
-             <p className="text-center text-lg capitalize font-semibold" dir={uiIsRtl ? 'rtl' : 'ltr'}>{meaning}</p>
-            <hr className="border-[color:var(--color-border)] opacity-30 mt-4" />
-          </div>
-
-          <main className="p-6 text-center min-h-[250px] flex flex-col items-center justify-center">
+          <main className="p-6 text-center min-h-[350px] flex flex-col items-center justify-center">
             {isLoading ? <Loader className="w-8 h-8 text-[color:var(--color-primary)]" /> :
              error ? <p className="text-red-400">{error}</p> :
-             details && (
+             details && pronunciation && (
               <div className="w-full space-y-4">
-                <div>
-                  <h3 className="text-sm font-semibold uppercase text-[color:var(--color-text-muted)] tracking-wider" dir={uiIsRtl ? 'rtl' : 'ltr'}>
-                    {t('dailyWordUsage')}
-                  </h3>
+                
+                {/* Word Section */}
+                <div className="flex items-center justify-center gap-3">
+                    <p className={`text-[color:var(--color-primary)] ${fontClass}`} dir="rtl">{entry.phoenician}</p>
+                    <button onClick={handlePlayWord} disabled={isSpeaking} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-6 h-6" isSpeaking={isSpeaking} /></button>
                 </div>
                 
-                <div className="space-y-3">
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => handlePlayAudio('phoenician')} disabled={!pronunciation || isSpeaking} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking && activeAudio === 'phoenician'} /></button>
-                        <p className={`flex-grow text-center text-white ${sentenceFontClass}`} dir="rtl">{details.exampleSentence.phoenician}</p>
-                    </div>
-                     <div className="flex items-center gap-4">
-                        <button onClick={() => handlePlayAudio('arabic')} disabled={isSpeaking} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking && activeAudio === 'arabic'} /></button>
-                        <p className="flex-grow text-center text-lg text-gray-300" dir="rtl">{details.exampleSentence.arabic}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                         <button onClick={() => handlePlayAudio('latin')} disabled={isSpeaking} className="p-2 rounded-full hover:bg-white/10 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-5 h-5" isSpeaking={isSpeaking && activeAudio === 'latin'} /></button>
-                        <p className="flex-grow text-center text-base italic text-gray-400" dir="ltr">{details.exampleSentence.english}</p>
-                    </div>
+                {/* Transcription Section */}
+                <div className="text-sm text-gray-400 grid grid-cols-3 gap-2">
+                    <div className="font-mono">[{pronunciation.ipa}]</div>
+                    <div className="italic">{entry.latin}</div>
+                    <div dir="rtl">{(pronunciation.word_pronunciations[0] || {}).tts}</div>
                 </div>
+
+                <p className="text-lg capitalize font-semibold" dir={uiIsRtl ? 'rtl' : 'ltr'}>{meaning}</p>
+                
+                <hr className="border-[color:var(--color-border)] opacity-30 my-4" />
+
+                {/* Example Sentence Section */}
+                <div className="w-full text-left space-y-2">
+                    <h3 className="text-sm font-semibold uppercase text-[color:var(--color-text-muted)] tracking-wider mb-3 text-center" dir={uiIsRtl ? 'rtl' : 'ltr'}>
+                        {t('dailyWordUsage')}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                        <p className={`flex-grow text-center text-white ${sentenceFontClass}`} dir="rtl">
+                            {details.exampleSentence.phoenician.split(entry.phoenician).map((part, i) => 
+                                <React.Fragment key={i}>
+                                    {part}
+                                    {i < details.exampleSentence.phoenician.split(entry.phoenician).length - 1 && (
+                                        <span className="relative">
+                                            <span className="text-[color:var(--color-secondary)]">{entry.phoenician}</span>
+                                            <button onClick={handlePlayWordInSentence} disabled={isSpeaking} className="absolute -top-1 -right-4 p-1 text-[color:var(--color-secondary)] disabled:opacity-50"><SpeakerIcon className="w-4 h-4" isSpeaking={isSpeaking} /></button>
+                                        </span>
+                                    )}
+                                </React.Fragment>
+                            )}
+                        </p>
+                    </div>
+                     <p className="text-sm text-center text-gray-400" dir="ltr">
+                         <strong>IPA:</strong> <span className="font-mono">[{sentencePronunciation?.ipa}]</span>
+                    </p>
+                     <p className="text-sm text-center text-gray-400" dir="ltr">
+                         <strong>Latin:</strong> <span className="italic">{details.exampleSentence.latin}</span>
+                    </p>
+                     <p className="text-sm text-center text-gray-400" dir="rtl">
+                         <strong>Arabic:</strong> {details.exampleSentence.arabicTransliteration}
+                    </p>
+                    <p className="text-base text-center text-gray-300 pt-2" dir={uiIsRtl ? 'rtl' : 'ltr'}>
+                        <em>&ldquo;{(details.exampleSentence as any)[uiLang] || details.exampleSentence.english}&rdquo;</em>
+                    </p>
+                </div>
+
               </div>
             )}
           </main>
 
-          <footer className="p-4 pt-2 flex flex-col space-y-3">
-              <div className="px-2">
-                <div className="w-full h-1.5 bg-[color:var(--color-primary)] rounded-full opacity-75"></div>
-              </div>
-              <div className="flex items-center gap-2">
-                  <button onClick={() => setIsTutorOpen(true)} disabled={!details} className="flex-1 flex items-center justify-center p-3 bg-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50" title={t('askAi')}>
-                      <ChatBubbleIcon className="w-6 h-6"/>
-                  </button>
-                   <button onClick={handleSave} disabled={!details} className="flex-1 flex items-center justify-center p-3 bg-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50 min-w-[120px] gap-2">
-                      <BookmarkIcon className="w-6 h-6" isFilled={isSaved}/>
-                      <span className="text-sm font-semibold">{isSaved ? t('saveSuccess') : t('saveTitle')}</span>
-                  </button>
-                   <button onClick={() => handlePlayAudio('phoenician')} disabled={!pronunciation || isSpeaking} className="flex-1 flex items-center justify-center p-3 bg-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50" title={t('repeat')}>
-                      <RefreshIcon className="w-6 h-6"/>
-                  </button>
-              </div>
+          <footer className="p-4 pt-2 flex items-center justify-center gap-2">
+                <button onClick={() => setIsTutorOpen(true)} disabled={!details} className="flex-1 flex items-center justify-center p-3 bg-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50" title={t('askAi')}>
+                    <ChatBubbleIcon className="w-6 h-6"/>
+                </button>
+                <button onClick={handleSave} disabled={!details} className="flex-1 flex items-center justify-center p-3 bg-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50 min-w-[120px] gap-2">
+                    <BookmarkIcon className="w-6 h-6" isFilled={isSaved}/>
+                    <span className="text-sm font-semibold">{isSaved ? t('saveSuccess') : t('saveTitle')}</span>
+                </button>
+                <button onClick={handlePlayWord} disabled={!pronunciation || isSpeaking} className="flex-1 flex items-center justify-center p-3 bg-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50" title={t('repeat')}>
+                    <RefreshIcon className="w-6 h-6"/>
+                </button>
           </footer>
         </div>
       </div>

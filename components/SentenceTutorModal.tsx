@@ -35,22 +35,25 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
 
     useEffect(() => {
         if (isOpen) {
-            const introKey = uiLang === 'fr' ? `Je vois que vous regardez la phrase : "${wordDetails.exampleSentence.french}". Que souhaitez-vous savoir à ce sujet ?`
-                         : uiLang === 'ar' ? `أرى أنك تنظر إلى الجملة: "${wordDetails.exampleSentence.arabic}". ماذا تريد أن تعرف عنها؟`
-                         : `I see you're looking at the sentence: "${wordDetails.exampleSentence.english}". What would you like to know about it?`;
+            const exampleSentence = (wordDetails.exampleSentence as any)[uiLang] || wordDetails.exampleSentence.english;
+            const introText = 
+                uiLang === 'fr' ? `Je vois que vous regardez la phrase : "${exampleSentence}". Que souhaitez-vous savoir à ce sujet ?`
+              : uiLang === 'ar' ? `أرى أنك تنظر إلى الجملة: "${exampleSentence}". ماذا تريد أن تعرف عنها؟`
+              : `I see you're looking at the sentence: "${exampleSentence}". What would you like to know about it?`;
+            
             setMessages([
-                { id: 'initial', sender: 'ai', text: introKey }
+                { id: 'initial', sender: 'ai', text: introText }
             ]);
             setIsAiThinking(false);
             setInput('');
             setTimeout(() => inputRef.current?.focus(), 100);
         }
-    }, [isOpen, wordDetails, t, uiLang]);
+    }, [isOpen, wordDetails, uiLang, t]);
 
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
-
+    
     const sendMessage = async () => {
         if (!input.trim() || isAiThinking) return;
 
@@ -64,11 +67,16 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
         setIsAiThinking(true);
 
         try {
-            const response = await explainSentenceInTutor(wordDetails, input, uiLang);
+            const rawResponse = await explainSentenceInTutor(
+                wordDetails,
+                input,
+                uiLang
+            );
+            
             const aiResponse: TutorMessage = {
                 id: `ai-${Date.now()}`,
                 sender: 'ai',
-                text: response,
+                text: rawResponse,
             };
             setMessages(prev => [...prev, aiResponse]);
         } catch (error) {
@@ -86,11 +94,9 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
     };
 
     if (!isOpen) return null;
-    
-    const exampleSentence = (wordDetails.exampleSentence as any)[uiLang === 'en' ? 'english' : uiLang] || wordDetails.exampleSentence.english;
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-end sm:items-center z-[70] p-4" onClick={onClose}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-end sm:items-center z-[70] p-4" onClick={onClose}>
             <div 
                 className="glass-panel w-full sm:max-w-lg h-[80vh] sm:h-[70vh] max-h-[600px] flex flex-col rounded-t-2xl sm:rounded-2xl shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
@@ -99,9 +105,9 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
                 <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0">
                     <div>
                         <h2 className="text-xl font-semibold text-[color:var(--color-primary)]">
-                           {t('aiAssistantHeader')}
+                            {t('sentenceTutorHeader')}
                         </h2>
-                        <p className="text-xs text-[color:var(--color-text-muted)] italic">"{exampleSentence}"</p>
+                        <p className="text-xs text-[color:var(--color-text-muted)]">{t('sentenceTutorSubheader')}</p>
                     </div>
                     <button onClick={onClose} className="text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] transition-colors p-1" aria-label={t('chatClose')}>
                         <CloseIcon className="w-6 h-6" />
@@ -131,7 +137,7 @@ const SentenceTutorModal: React.FC<SentenceTutorModalProps> = ({
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder={t('pronunciationTutorPlaceholder')}
+                            placeholder={t('sentenceTutorPlaceholder')}
                             className="flex-1 bg-transparent text-sm text-[color:var(--color-text)] border border-[color:var(--color-border)] rounded-full py-2 px-4 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)]"
                             disabled={isAiThinking}
                         />
