@@ -188,6 +188,7 @@ const App: React.FC = () => {
   const [isCameraExperienceOpen, setIsCameraExperienceOpen] = useState<boolean>(false);
   const [isAiEditingMode, setIsAiEditingMode] = useState<boolean>(false);
   const [isLessonsPageOpen, setIsLessonsPageOpen] = useState<boolean>(false);
+  const [initialDictionaryFilter, setInitialDictionaryFilter] = useState<string | null>(null);
   
   // New states for Pronunciation Reconstructor
   const [pronunciationInput, setPronunciationInput] = useState<string>('');
@@ -785,6 +786,12 @@ const App: React.FC = () => {
     setIsAiEditingMode(false);
   };
 
+  const handleLetterSelectFromLessons = (letter: string) => {
+    setIsLessonsPageOpen(false);
+    setInitialDictionaryFilter(letter);
+    setIsDictionaryOpen(true);
+  };
+
   const isMicDisabled = !isSpeechRecognitionSupported || sourceLang === Language.PHOENICIAN || sourceLang === Language.PUNIC;
   const micButtonTitle = isListening ? t('micStop') : isMicDisabled ? t('micNotAvailable') : t('micStart');
     
@@ -1272,12 +1279,16 @@ const App: React.FC = () => {
       )}
        {isDictionaryOpen && (
         <PhoenicianDictionaryModal
-            onClose={() => setIsDictionaryOpen(false)}
+            onClose={() => {
+                setIsDictionaryOpen(false);
+                setInitialDictionaryFilter(null);
+            }}
             onWordSelect={handleDictionaryWordSelect}
             onSaveSentence={handleSaveSentence}
             t={t}
             speak={speak}
             isSpeaking={isSpeaking}
+            initialLetterFilter={initialDictionaryFilter}
         />
       )}
       {isCameraExperienceOpen && (
@@ -1294,6 +1305,7 @@ const App: React.FC = () => {
             onClose={() => setIsLessonsPageOpen(false)}
             t={t}
             uiLang={uiLang}
+            onLetterSelect={handleLetterSelectFromLessons}
         />
       )}
       {isTutorOpen && pronunciationResult && (

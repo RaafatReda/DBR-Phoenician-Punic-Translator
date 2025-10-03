@@ -12,6 +12,7 @@ interface LessonsPageProps {
   onClose: () => void;
   t: (key: string) => string;
   uiLang: UILang;
+  onLetterSelect: (letter: string) => void;
 }
 
 interface GrammarModuleData {
@@ -49,7 +50,7 @@ const pronunciationTableData = [
     { char: '𐤕', name: 'Taw', translit: 't', ipa: 't', arabic: 'ت' },
   ];
 
-const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
+const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang, onLetterSelect }) => {
     const [selectedDialect, setSelectedDialect] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
     const [activeTab, setActiveTab] = useState<'alphabet' | 'grammar'>('alphabet');
 
@@ -91,11 +92,16 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang }) => {
             <p className="text-center mb-6 text-[color:var(--color-text-muted)]" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{t('alphabetIntro')}</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {alphabetData.map(letter => (
-                    <div key={letter.char} className="papyrus-display rounded-lg p-4 flex flex-col items-center justify-center aspect-square transition-transform hover:scale-105">
+                    <button 
+                        key={letter.char}
+                        onClick={() => onLetterSelect(letter.char)}
+                        title={`${t('dictionaryTitle')}: ${t(letter.nameKey)}`}
+                        className="papyrus-display rounded-lg p-4 flex flex-col items-center justify-center aspect-square transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[color:var(--color-bg-start)] focus:ring-[color:var(--color-primary)] text-center"
+                    >
                         <div className={`${fontClass} ${fontSizeClass} text-[color:var(--color-primary)]`}>{letter.char}</div>
-                        <div className="font-bold text-lg">{t(letter.nameKey)} ({letter.translit})</div>
+                        <div className="font-bold text-lg text-[color:var(--color-text)]">{t(letter.nameKey)} ({letter.translit})</div>
                         <div className="text-sm text-[color:var(--color-text-muted)] capitalize">{t(letter.meaningKey)}</div>
-                    </div>
+                    </button>
                 ))}
             </div>
             <div className="prose max-w-none mt-12" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>

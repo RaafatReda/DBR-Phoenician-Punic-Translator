@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { phoenicianGlossary } from '../lib/phoenicianGlossary';
 import CloseIcon from './icons/CloseIcon';
 import SearchIcon from './icons/SearchIcon';
@@ -18,15 +18,16 @@ interface PhoenicianDictionaryModalProps {
   t: (key: string) => string;
   speak: (text: string, lang: string) => void;
   isSpeaking: boolean;
+  initialLetterFilter?: string | null;
 }
 
 const phoenicianAlphabet = ['𐤀', '𐤁', '𐤂', '𐤃', '𐤄', '𐤅', '𐤆', '𐤇', '𐤈', '𐤉', '𐤊', '𐤋', '𐤌', '𐤍', '𐤎', '𐤏', '𐤐', '𐤑', '𐤒', '𐤓', '𐤔', '𐤕'];
 
 type GlossaryLang = 'en' | 'fr' | 'ar';
 
-const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking }) => {
+const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking, initialLetterFilter }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [selectedLetter, setSelectedLetter] = useState<string | null>(initialLetterFilter || null);
   const [selectedCategory, setSelectedCategory] = useState<GlossaryEntry['category'] | null>(null);
   const [glossaryLang, setGlossaryLang] = useState<GlossaryLang>('en');
   const [scriptMode, setScriptMode] = useState<PhoenicianDialect>(PhoenicianDialect.STANDARD_PHOENICIAN);
@@ -58,21 +59,22 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
     
     return results;
   }, [searchTerm, selectedLetter, selectedCategory, glossaryLang]);
+  
+  useEffect(() => {
+    listRef.current?.scrollTo(0, 0);
+  }, [selectedLetter, selectedCategory, searchTerm]);
 
   const handleLetterSelect = (letter: string) => {
     setSelectedLetter(prev => (prev === letter ? null : letter));
-    listRef.current?.scrollTo(0, 0);
   };
   
   const handleCategorySelect = (category: GlossaryEntry['category']) => {
     setSelectedCategory(prev => (prev === category ? null : category));
-    listRef.current?.scrollTo(0, 0);
   };
 
   const handleClearFilters = () => {
     setSelectedLetter(null);
     setSelectedCategory(null);
-    listRef.current?.scrollTo(0, 0);
   };
 
   const handleEntryClick = (entry: GlossaryEntry) => {
