@@ -22,8 +22,9 @@ import ManualModal from './components/ManualModal';
 import CopyIcon from './components/icons/CopyIcon';
 import CheckIcon from './components/icons/CheckIcon';
 import { getFlagForLanguage } from './lib/languageUtils';
-import ChatFAB from './components/ChatFAB';
-import ChatModal from './components/ChatModal';
+import MultiFAB from './components/ChatFAB';
+import PracticeChatModal from './components/ChatModal';
+import KnowledgeTutorModal from './components/KnowledgeTutorModal';
 import DailyPhoenicianWord from './components/DailyPhoenicianWord';
 import Autocomplete from './components/Autocomplete';
 import { englishDictionary } from './lib/englishDictionary';
@@ -175,7 +176,8 @@ const App: React.FC = () => {
     return (localStorage.getItem('dbr-translator-theme') as Theme) || 'purple-glassy';
   });
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [isPracticeChatOpen, setIsPracticeChatOpen] = useState<boolean>(false);
+  const [isKnowledgeTutorOpen, setIsKnowledgeTutorOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isDictionaryOpen, setIsDictionaryOpen] = useState<boolean>(false);
   const [uiLang, setUiLang] = useState<UILang>(() => {
@@ -1320,8 +1322,13 @@ const App: React.FC = () => {
             onUpdatePronunciation={setPronunciationResult}
         />
       )}
-      <ChatFAB onOpen={() => setIsChatOpen(true)} t={t} />
-      {isChatOpen && <ChatModal onClose={() => setIsChatOpen(false)} t={t} uiLang={uiLang} />}
+      <MultiFAB 
+        onPracticeClick={() => setIsPracticeChatOpen(true)}
+        onKnowledgeClick={() => setIsKnowledgeTutorOpen(true)}
+        t={t}
+      />
+      {isPracticeChatOpen && <PracticeChatModal onClose={() => setIsPracticeChatOpen(false)} t={t} uiLang={uiLang} />}
+      {isKnowledgeTutorOpen && <KnowledgeTutorModal onClose={() => setIsKnowledgeTutorOpen(false)} t={t} uiLang={uiLang} />}
       <Keyboard
         isOpen={isKeyboardOpen}
         sourceLang={(appMode === 'translator') ? sourceLang : Language.PHOENICIAN}

@@ -24,8 +24,10 @@ export const useSpeechSynthesis = () => {
     
     // Some browsers need a moment to cancel before speaking again.
     setTimeout(() => {
-        if (text !== '') {
-            const utterThis = new SpeechSynthesisUtterance(text);
+        // Clean the text of markdown characters to prevent TTS from reading them aloud.
+        const cleanText = text.replace(/(\*\*|\*|_|#|`)/g, '');
+        if (cleanText !== '') {
+            const utterThis = new SpeechSynthesisUtterance(cleanText);
             utterThis.lang = lang;
             
             const voices = synth.getVoices();

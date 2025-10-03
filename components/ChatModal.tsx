@@ -10,7 +10,7 @@ import { UILang } from '../lib/i18n';
 import ScriptModeToggle from './ScriptModeToggle';
 import { KeyboardLayoutName } from '../lib/keyboardLayouts';
 
-interface ChatModalProps {
+interface PracticeChatModalProps {
   onClose: () => void;
   t: (key: string) => string;
   uiLang: UILang;
@@ -82,7 +82,7 @@ const parseAiResponse = (text: string): { phoenician: string, hint: string } => 
     return { phoenician: text.trim(), hint: '' };
 };
 
-const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
+const PracticeChatModal: React.FC<PracticeChatModalProps> = ({ onClose, t, uiLang }) => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isAiThinking, setIsAiThinking] = useState(true);
@@ -133,7 +133,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
                 const errorMessage: ChatMessage = {
                     id: Date.now().toString(),
                     sender: 'ai',
-                    text: t('chatErrorInit'),
+                    text: t('practiceChatErrorInit'),
                 };
                 setMessages([errorMessage]);
             } finally {
@@ -168,7 +168,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
             const errorMessage: ChatMessage = {
                 id: `ai-error-${Date.now()}`,
                 sender: 'ai',
-                text: t('chatErrorResponse'),
+                text: t('practiceChatErrorResponse'),
             };
             setMessages(prev => [...prev, errorMessage]);
         } finally {
@@ -236,13 +236,13 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
                     <header className="flex justify-between items-center p-4 border-b border-[color:var(--color-border)] flex-shrink-0">
                         <div>
                             <h2 className="text-xl font-semibold text-[color:var(--color-primary)]">
-                                {scriptMode === PhoenicianDialect.PUNIC ? t('chatHeaderPunic') : t('chatHeaderPhoenician')}
+                                {scriptMode === PhoenicianDialect.PUNIC ? t('practiceChatHeaderPunic') : t('practiceChatHeaderPhoenician')}
                             </h2>
-                            <p className="text-xs text-[color:var(--color-text-muted)]">{t('chatSubheader')}</p>
+                            <p className="text-xs text-[color:var(--color-text-muted)]">{t('practiceChatSubheader')}</p>
                         </div>
                         <div className="flex items-center space-x-2">
                            <ScriptModeToggle scriptMode={scriptMode} setScriptMode={setScriptMode} t={t} />
-                           <button onClick={onClose} className="text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] transition-colors p-1" aria-label={t('chatClose')}>
+                           <button onClick={onClose} className="text-[color:var(--color-text)] hover:text-[color:var(--color-primary)] transition-colors p-1" aria-label={t('practiceChatClose')}>
                                 <CloseIcon className="w-6 h-6" />
                             </button>
                         </div>
@@ -265,7 +265,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder={scriptMode === PhoenicianDialect.PUNIC ? t('chatPlaceholderPunic') : t('chatPlaceholderPhoenician')}
+                                placeholder={scriptMode === PhoenicianDialect.PUNIC ? t('practiceChatPlaceholderPunic') : t('practiceChatPlaceholderPhoenician')}
                                 className={`flex-1 bg-transparent text-[color:var(--color-text)] border border-[color:var(--color-border)] rounded-full py-2 px-4 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)] ${inputFontClass}`}
                                 disabled={isAiThinking}
                                 autoFocus
@@ -302,4 +302,4 @@ const ChatModal: React.FC<ChatModalProps> = ({ onClose, t, uiLang }) => {
     );
 };
 
-export default ChatModal;
+export default PracticeChatModal;

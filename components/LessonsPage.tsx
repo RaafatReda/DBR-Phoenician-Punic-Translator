@@ -110,7 +110,7 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang, onLetterS
                 <table>
                     <thead>
                         <tr>
-                            <th>{t('phoenicianLetter')}</th>
+                            <th>{selectedDialect === PhoenicianDialect.PUNIC ? t('punicLetter') : t('phoenicianLetter')}</th>
                             <th>{t('letterName')}</th>
                             <th>{t('latinTransliteration')}</th>
                             <th>{t('ipaPronunciation')}</th>
@@ -120,7 +120,15 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang, onLetterS
                     <tbody>
                         {pronunciationTableData.map(item => (
                             <tr key={item.char}>
-                                <td className={`${fontClass} text-2xl text-center`}>{item.char}</td>
+                                <td className="p-0">
+                                    <button
+                                        onClick={() => onLetterSelect(item.char)}
+                                        className={`${fontClass} text-2xl text-center w-full h-full p-2 rounded-md hover:bg-[color:var(--color-primary)]/10 transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--color-primary)]`}
+                                        aria-label={`${t('dictionaryTitle')}: ${item.name}`}
+                                    >
+                                        {item.char}
+                                    </button>
+                                </td>
                                 <td>{item.name}</td>
                                 <td className="text-center"><code>{item.translit}</code></td>
                                 <td className="text-center"><code>{item.ipa}</code></td>
