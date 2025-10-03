@@ -90,6 +90,10 @@ interface KnowledgeTutorModalProps {
 
 const getSystemInstruction = (lang: UILang): string => {
   const languageName = lang === 'fr' ? 'French' : lang === 'ar' ? 'Arabic' : 'English';
+  const greetingConstraint = (lang === 'en' || lang === 'fr') 
+    ? `Do NOT use greetings from other languages, such as Arabic greetings like 'Ahlan wa sahlan'.` 
+    : '';
+
   return `You are a world-class historian and linguist AI named Tanit, specializing in ancient Phoenician and Carthaginian cultures. Your purpose is to be an engaging, informative, and friendly knowledge hub.
 RULES:
 1.  **Language:** You MUST communicate exclusively in ${languageName}.
@@ -97,7 +101,7 @@ RULES:
 3.  **Source Material:** Base all your answers on established, academic historical and linguistic knowledge. Do not invent facts.
 4.  **Topics:** You are an expert on Phoenician & Punic grammar, the history of Phoenicia, the history of Carthage, religion, iconography (like symbols), daily life, trade routes, and their influence on other cultures.
 5.  **Interaction:** Keep answers conversational but concise. If a user asks a simple question, give a direct answer. If they ask a broad question, provide a summary and then ask a follow-up question to guide the conversation.
-6.  **Conversation Starter:** Begin the conversation by introducing yourself as Tanit and welcoming the user.`;
+6.  **Conversation Starter:** Begin the conversation by introducing yourself as Tanit and welcoming the user. ${greetingConstraint}`;
 };
 
 const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, uiLang }) => {
@@ -122,6 +126,35 @@ const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, u
     return 'en-US';
   };
 
+  const sendMessage = useCallback(async (messageText: string) => {
+    if (!messageText.trim() || isAiThinking || !chat.current) return;
+
+    if(isSpeaking) cancel();
+    
+    const userMessage: ChatMessage = { id: `user-${Date.now()}`, sender: 'user', text: messageText };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsAiThinking(true);
+
+    try {
+      const response = await chat.current.sendMessage({ message: messageText });
+      const aiResponseText = response.text;
+      const aiMessage: ChatMessage = { id: `ai-${Date.now()}`, sender: 'ai', text: aiResponseText };
+      setMessages(prev => [...prev, aiMessage]);
+      speak(aiResponseText, getLangCode(uiLang));
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      setMessages(prev => [...prev, { id: `ai-error-${Date.now()}`, sender: 'ai', text: t('practiceChatErrorResponse') }]);
+    } finally {
+      setIsAiThinking(false);
+    }
+  }, [isAiThinking, isSpeaking, cancel, t, uiLang, speak]);
+
+  const sendMessageRef = useRef(sendMessage);
+  useEffect(() => {
+      sendMessageRef.current = sendMessage;
+  }, [sendMessage]);
+
   useEffect(() => {
     const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognitionAPI) {
@@ -137,8 +170,8 @@ const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, u
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
-        // Automatically send the message after successful recognition
-        sendMessage(transcript);
+        // Automatically send the message after successful recognition by calling the latest version of the function via ref
+        sendMessageRef.current(transcript);
       };
     }
   }, [uiLang]);
@@ -175,30 +208,6 @@ const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, u
         }
     };
   }, [t, uiLang, speak, cancel]);
-
-  const sendMessage = async (messageText: string) => {
-    if (!messageText.trim() || isAiThinking || !chat.current) return;
-
-    if(isSpeaking) cancel();
-    
-    const userMessage: ChatMessage = { id: `user-${Date.now()}`, sender: 'user', text: messageText };
-    setMessages(prev => [...prev, userMessage]);
-    if (input) setInput('');
-    setIsAiThinking(true);
-
-    try {
-      const response = await chat.current.sendMessage({ message: messageText });
-      const aiResponseText = response.text;
-      const aiMessage: ChatMessage = { id: `ai-${Date.now()}`, sender: 'ai', text: aiResponseText };
-      setMessages(prev => [...prev, aiMessage]);
-      speak(aiResponseText, getLangCode(uiLang));
-    } catch (error) {
-      console.error("Failed to send message:", error);
-      setMessages(prev => [...prev, { id: `ai-error-${Date.now()}`, sender: 'ai', text: t('practiceChatErrorResponse') }]);
-    } finally {
-      setIsAiThinking(false);
-    }
-  };
   
   const handleToggleListen = () => {
     if (isSpeaking) cancel();
