@@ -39,6 +39,8 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤌𐤄', latin: 'dmh', meaning: { en: 'To be like', fr: 'Être comme', ar: 'يشبه' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤌𐤌', latin: 'dmm', meaning: { en: 'To be silent', fr: 'Être silencieux', ar: 'يصمت' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤍', latin: 'dn', meaning: { en: 'To judge', fr: 'Juger', ar: 'يدين' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤃𐤍𐤉𐤍', latin: 'dnyn', meaning: { en: 'Danunian, an Anatolian ethnonym from the Karatepe bilingual.', fr: 'Danunien, un ethnonyme anatolien du bilingue de Karatepe.', ar: 'دنوني، اسم قومي أناضولي من نقش كاراتبه ثنائي اللغة.' }, grammar: { pos: 'Noun' }, category: 'personal_name' },
+  { phoenician: '𐤃𐤍𐤍𐤉', latin: 'dnny', meaning: { en: 'Danunian, group local to Azatiwada (Cilicia).', fr: 'Danunien, groupe local d\'Azatiwada (Cilicie).', ar: 'دنوني، مجموعة محلية لأزاتيوادا (قيليقية).' }, grammar: { pos: 'Noun' }, category: 'personal_name' },
   { phoenician: '𐤃𐤏𐤄', latin: "dʿh", meaning: { en: 'Knowledge', fr: 'Connaissance', ar: 'معرفة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤏𐤕', latin: "dʿt", meaning: { en: 'Knowledge', fr: 'Connaissance', ar: 'معرفة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤃𐤒', latin: 'dq', meaning: { en: 'Thin, small', fr: 'Mince, petit', ar: 'رقيق، صغير' }, grammar: { pos: 'Adjective' } },

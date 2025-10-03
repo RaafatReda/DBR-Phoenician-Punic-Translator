@@ -4,7 +4,8 @@ import HomeIcon from './icons/HomeIcon';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 import FontSizeManager from './FontSizeManager';
-import FontSizeIcon from './icons/FontSizeIcon';
+// FIX: Changed FontSizeIcon to SearchIcon as it was the intended component.
+import SearchIcon from './icons/SearchIcon';
 
 type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
 type FontSize = 'small' | 'medium' | 'large';
@@ -115,7 +116,7 @@ const MainMenu: React.FC<MainMenuProps> = ({
                     aria-label={t('fontSizeManagerTitle')}
                     title={t('fontSizeManagerTitle')}
                 >
-                    <FontSizeIcon className="w-5 h-5" />
+                    <SearchIcon className="w-5 h-5" />
                 </button>
                 {isFontSizeManagerOpen && (
                     <FontSizeManager

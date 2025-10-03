@@ -12,6 +12,7 @@ export const pe: GlossaryEntry[] = [
   { phoenician: '𐤐𐤅', latin: 'pw', meaning: { en: 'Here', fr: 'Ici', ar: 'هنا' }, grammar: { pos: 'Adverb' } },
   { phoenician: '𐤐𐤅𐤄', latin: 'pwh', meaning: { en: 'To blow, speak', fr: 'Souffler, parler', ar: 'ينفخ، يتكلم' }, grammar: { pos: 'Verb', stem: 'C-stem' } },
   { phoenician: '𐤐𐤅𐤑', latin: 'pwṣ', meaning: { en: 'To scatter', fr: 'Disperser', ar: 'يشتت' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤐𐤇𐤌', latin: 'pḥm', meaning: { en: 'Deep Red / Dark Red. Indicates a deep or dark red, sometimes ruby-purple. From the root for "coal".', fr: 'Rouge foncé. Indique un rouge profond ou foncé, parfois rubis-pourpre. De la racine pour "charbon".', ar: 'أحمر داكن. يشير إلى لون أحمر عميق أو داكن، وأحيانًا أرجواني ياقوتي. من جذر "فحم".' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤐𐤇𐤃', latin: 'pḥd', meaning: { en: 'To fear, dread', fr: 'Craindre, redouter', ar: 'يخاف، يخشى' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤐𐤉𐤋', latin: 'pīl', meaning: { en: 'Elephant (possible loanword)', fr: 'Éléphant (emprunt possible)', ar: 'فيل (كلمة دخيلة محتملة)' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤐𐤈𐤏', latin: "pṭʿ", meaning: { en: 'Suddenly', fr: 'Soudainement', ar: 'فجأة' }, grammar: { pos: 'Adverb' } },
