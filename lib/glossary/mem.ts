@@ -71,4 +71,7 @@ export const mem: GlossaryEntry[] = [
   { phoenician: '𐤌𐤔𐤐𐤇𐤄', latin: 'mšpḥh', meaning: { en: 'Family, clan', fr: 'Famille, clan', ar: 'عائلة، عشيرة' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤌𐤔𐤐𐤈', latin: 'mšpṭ', meaning: { en: 'Judgment', fr: 'Jugement', ar: 'حكم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤌𐤕', latin: 'mt', meaning: { en: 'To die', fr: 'Mourir', ar: 'يموت' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
+  { phoenician: '𐤌𐤃𐤁𐤓', latin: 'mdbr', meaning: { en: 'wilderness or desert', fr: 'désert ou étendue sauvage', ar: 'برية أو صحراء' }, grammar: { pos: 'Noun', notes: 'reconstructed from common Semitic usage' } },
+  { phoenician: '𐤌𐤀𐤎𐤐𐤕', latin: 'mʿspt', meaning: { en: 'gathering place', fr: 'lieu de rassemblement', ar: 'مكان تجمع' }, grammar: { pos: 'Noun' } },
+  { phoenician: '𐤌𐤀𐤔', latin: 'mʿš', meaning: { en: 'that which, whatever', fr: 'ce que, quoi que ce soit', ar: 'الذي، أياً كان' }, grammar: { pos: 'Pronoun' } },
 ];

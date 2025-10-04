@@ -43,4 +43,5 @@ export const kaph: GlossaryEntry[] = [
   { phoenician: '𐤊𐤕𐤉', latin: 'ktī', meaning: { en: 'Kitionite, an inhabitant of Kition (Cyprus).', fr: 'Kitiote, un habitant de Kition (Chypre).', ar: 'كيتي، من سكان كتيون (قبرص).' }, grammar: { pos: 'Noun' }, category: 'personal_name' },
   { phoenician: '𐤊𐤕𐤍', latin: 'ktn', meaning: { en: 'Tunic, coat', fr: 'Tunique, manteau', ar: 'قميص، معطف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤊𐤕𐤐', latin: 'ktp', meaning: { en: 'Shoulder', fr: 'Épaule', ar: 'كتف' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤊𐤌𐤀𐤔', latin: 'kmʿš', meaning: { en: 'as though', fr: 'comme si', ar: 'كأن' }, grammar: { pos: 'Conjunction' } },
 ];

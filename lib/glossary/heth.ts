@@ -65,4 +65,7 @@ export const heth: GlossaryEntry[] = [
   { phoenician: '𐤇𐤕𐤌', latin: 'ḥtm', meaning: { en: 'Seal or signet ring', fr: 'Sceau ou chevalière', ar: 'ختم أو خاتم توقيع' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Administrative/legal tool.' } },
   { phoenician: '𐤇𐤕𐤌𐤕', latin: 'ḥtmt', meaning: { en: 'Seal', fr: 'Sceau', ar: 'ختم' }, grammar: { pos: 'Noun', gender: 'f', number: 's', notes: 'General term.' } },
   { phoenician: '𐤇𐤕𐤇𐤓', latin: 'ḥtḥr', meaning: { en: "Hathor — goddess of love, music, and fertility", fr: "Hathor — déesse de l'amour, de la musique et de la fertilité", ar: "حتحور — إلهة الحب والموسيقى والخصوبة" }, grammar: { pos: 'Noun', gender: 'f', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤇𐤅𐤐', latin: 'ḥwp', meaning: { en: 'shore / coast', fr: 'rivage / côte', ar: 'شاطئ / ساحل' }, grammar: { pos: 'Noun', notes: 'standard Semitic term' } },
+  { phoenician: '𐤇𐤌𐤋𐤊', latin: 'ḥmlk', meaning: { en: 'Himilco, "Milqart is my brother"', fr: 'Himilcon, "Milqart est mon frère"', ar: 'حملك، "ملقرط أخي"' }, grammar: { pos: 'Noun' }, category: 'personal_name' },
+  { phoenician: '𐤇𐤓𐤔 𐤀𐤓𐤍𐤕', latin: 'ḥrš ʾrnt', meaning: { en: 'sarcophagus', fr: 'sarcophage', ar: 'تابوت' }, grammar: { pos: 'Noun' } },
 ];

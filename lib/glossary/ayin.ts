@@ -49,4 +49,6 @@ export const ayin: GlossaryEntry[] = [
   { phoenician: '𐤏𐤔𐤓', latin: 'ʿšr', meaning: { en: 'Ten', fr: 'Dix', ar: 'عشرة' }, grammar: { pos: 'Numeral' } },
   { phoenician: '𐤏𐤔𐤒', latin: 'ʿšq', meaning: { en: 'To oppress', fr: 'Opprimer', ar: 'يظلم' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤏𐤔𐤕𐤓𐤕', latin: 'ʻštrt', meaning: { en: 'Venus (associated with Astarte)', fr: 'Vénus (associée à Astarté)', ar: 'الزهرة (مرتبط بعشتروت)' }, grammar: { pos: 'Noun', gender: 'f', number: 's' }, category: 'theonym' },
+  { phoenician: '𐤏𐤌𐤒', latin: 'ʿmq', meaning: { en: 'valley', fr: 'vallée', ar: 'وادٍ' }, grammar: { pos: 'Noun', notes: 'common Semitic word' } },
+  { phoenician: '𐤏𐤋𐤕𐤁𐤓𐤔', latin: 'ʿltbrš', meaning: { en: 'Althiburos, Tunisia', fr: 'Althiburos, Tunisie', ar: 'ألتيبوروس، تونس' }, grammar: { pos: 'Noun', notes: 'Altbrš' }, category: 'location' },
 ];
