@@ -3,13 +3,15 @@ import { phoenicianGlossary } from '../lib/phoenicianGlossary';
 import CloseIcon from './icons/CloseIcon';
 import SearchIcon from './icons/SearchIcon';
 import { UILang } from '../lib/i18n';
-import { PhoenicianDialect, GlossaryEntry, Language, PhoenicianWordDetails } from '../types';
+import { PhoenicianDialect, GlossaryEntry, Language, PhoenicianWordDetails, GlossaryLang } from '../types';
 import ScriptModeToggle from './ScriptModeToggle';
 import { generateGlossaryHtmlForPdf } from '../lib/exportUtils';
 import PdfIcon from './icons/PdfIcon';
 import Keyboard from './Keyboard';
 import KeyboardIcon from './icons/KeyboardIcon';
 import WordDetailModal from './WordDetailModal';
+import { translateGlossaryBatch } from '../services/geminiService';
+import Loader from './Loader';
 
 interface PhoenicianDictionaryModalProps {
   onClose: () => void;
@@ -23,8 +25,6 @@ interface PhoenicianDictionaryModalProps {
 
 const phoenicianAlphabet = ['𐤀', '𐤁', '𐤂', '𐤃', '𐤄', '𐤅', '𐤆', '𐤇', '𐤈', '𐤉', '𐤊', '𐤋', '𐤌', '𐤍', '𐤎', '𐤏', '𐤐', '𐤑', '𐤒', '𐤓', '𐤔', '𐤕'];
 
-type GlossaryLang = 'en' | 'fr' | 'ar';
-
 const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking, initialLetterFilter }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLetter, setSelectedLetter] = useState<string | null>(initialLetterFilter || null);
@@ -34,11 +34,45 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
   const [selectedEntry, setSelectedEntry] = useState<GlossaryEntry | null>(null);
+
+  const [dictionary, setDictionary] = useState<GlossaryEntry[]>(phoenicianGlossary);
+  const [translatedLangs, setTranslatedLangs] = useState(new Set(['en', 'fr', 'ar']));
+  const [isTranslating, setIsTranslating] = useState(false);
   
   const currentUiLang: UILang = (localStorage.getItem('dbr-translator-lang') as UILang) || 'en';
 
+  const handleGlossaryLangChange = async (lang: GlossaryLang) => {
+    setGlossaryLang(lang);
+    if (translatedLangs.has(lang)) {
+      return; // Already translated
+    }
+
+    setIsTranslating(true);
+    try {
+      const termsToTranslate = dictionary.map(entry => entry.meaning.en);
+      const translations = await translateGlossaryBatch(termsToTranslate, lang);
+      
+      const newDictionary = dictionary.map((entry, index) => ({
+        ...entry,
+        meaning: {
+          ...entry.meaning,
+          [lang]: translations[index],
+        }
+      }));
+      
+      setDictionary(newDictionary);
+      setTranslatedLangs(prev => new Set(prev).add(lang));
+
+    } catch (e) {
+      console.error(e);
+      // Optional: show an error toast to the user
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
   const filteredDictionary = useMemo(() => {
-    let results = phoenicianGlossary;
+    let results = dictionary;
 
     if (selectedLetter) {
       results = results.filter(entry => entry.phoenician.startsWith(selectedLetter));
@@ -53,12 +87,12 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
       results = results.filter(entry =>
         entry.phoenician.includes(searchTerm) ||
         entry.latin.toLowerCase().includes(lowercasedTerm) ||
-        (entry.meaning[glossaryLang] && entry.meaning[glossaryLang].toLowerCase().includes(lowercasedTerm))
+        (entry.meaning[glossaryLang] && entry.meaning[glossaryLang]!.toLowerCase().includes(lowercasedTerm))
       );
     }
     
     return results;
-  }, [searchTerm, selectedLetter, selectedCategory, glossaryLang]);
+  }, [searchTerm, selectedLetter, selectedCategory, glossaryLang, dictionary]);
   
   useEffect(() => {
     listRef.current?.scrollTo(0, 0);
@@ -94,8 +128,21 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
     }
   };
 
+  const languages: { code: GlossaryLang; labelKey: string }[] = [
+      { code: 'en', labelKey: 'english' },
+      { code: 'fr', labelKey: 'french' },
+      { code: 'ar', labelKey: 'arabic' },
+      { code: 'es', labelKey: 'spanish' },
+      { code: 'it', labelKey: 'italian' },
+      { code: 'de', labelKey: 'german' },
+      { code: 'el', labelKey: 'greek' },
+      { code: 'tr', labelKey: 'turkish' },
+      { code: 'zh', labelKey: 'chinese' },
+      { code: 'ja', labelKey: 'japanese' },
+  ];
+
   const langButtonClass = (isActive: boolean) => 
-    `px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${isActive ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`;
+    `px-3 py-1.5 text-xs rounded-md font-semibold transition-colors ${isActive ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`;
 
   const categoryButtonClass = (category: GlossaryEntry['category'] | null) => 
     `px-4 py-1.5 text-sm rounded-md font-semibold transition-colors ${selectedCategory === category ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`;
@@ -172,13 +219,18 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
             </div>
 
             <div>
-               <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-4">
-                  <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-[color:var(--color-text-muted)]">{t('searchMeaningIn')}:</span>
-                      <button onClick={() => setGlossaryLang('en')} className={langButtonClass(glossaryLang === 'en')} aria-pressed={glossaryLang === 'en'}>{t('english')}</button>
-                      <button onClick={() => setGlossaryLang('fr')} className={langButtonClass(glossaryLang === 'fr')} aria-pressed={glossaryLang === 'fr'}>{t('french')}</button>
-                      <button onClick={() => setGlossaryLang('ar')} className={`${langButtonClass(glossaryLang === 'ar')} text-base`} aria-pressed={glossaryLang === 'ar'}>{t('arabic')}</button>
-                  </div>
+               <div className="flex flex-wrap items-center gap-y-2 gap-x-3 mb-4">
+                  <span className="text-sm font-semibold text-[color:var(--color-text-muted)]">{t('searchMeaningIn')}:</span>
+                  {languages.map(lang => (
+                    <button 
+                        key={lang.code} 
+                        onClick={() => handleGlossaryLangChange(lang.code)} 
+                        className={langButtonClass(glossaryLang === lang.code)} 
+                        aria-pressed={glossaryLang === lang.code}
+                    >
+                        {t(lang.labelKey)}
+                    </button>
+                ))}
               </div>
 
               <div className="flex flex-wrap gap-1 justify-center">
@@ -207,7 +259,12 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
             {`${filteredDictionary.length.toLocaleString()} ${t('dictionaryFound')} ${phoenicianGlossary.length.toLocaleString()} ${t('dictionaryTotal')}`}
           </div>
 
-          <main className="flex-grow overflow-y-auto">
+          <main className="flex-grow overflow-y-auto relative">
+             {isTranslating && (
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
+                  <Loader className="w-8 h-8 text-[color:var(--color-primary)]" />
+                </div>
+              )}
             {filteredDictionary.length === 0 ? (
               <div className="text-center text-[color:var(--color-text-muted)] py-16">
                 <p className="text-lg font-semibold">{t('dictionaryNone')}</p>
@@ -260,6 +317,7 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
         speak={speak}
         isSpeaking={isSpeaking}
         dialect={scriptMode}
+        glossaryLang={glossaryLang}
       />
     </>
   );

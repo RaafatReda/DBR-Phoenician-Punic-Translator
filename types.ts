@@ -17,6 +17,9 @@ export enum Language {
   GERMAN = 'German',
 }
 
+export type GlossaryLang = 'en' | 'fr' | 'ar' | 'es' | 'it' | 'de' | 'el' | 'tr' | 'zh' | 'ja';
+
+
 export enum PhoenicianDialect {
   STANDARD_PHOENICIAN = 'Standard Phoenician',
   PUNIC = 'Punic',
@@ -105,6 +108,13 @@ export interface GlossaryEntry {
     en: string;
     fr: string;
     ar: string;
+    es?: string;
+    it?: string;
+    de?: string;
+    el?: string;
+    tr?: string;
+    zh?: string;
+    ja?: string;
   };
   grammar: {
     pos: 'Noun' | 'Verb' | 'Adjective' | 'Adverb' | 'Preposition' | 'Conjunction' | 'Pronoun' | 'Numeral' | 'Particle' | 'Interjection';

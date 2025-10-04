@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject, AIAssistantResponse, PronunciationResult } from '../types';
+import { Language, PhoenicianDialect, TransliterationOutput, PhoenicianWordDetails, RecognizedObject, AIAssistantResponse, PronunciationResult, GlossaryLang } from '../types';
 import { UILang } from "../lib/i18n";
 
 // FIX: Initialize Gemini API client. The API key must be an environment variable.
@@ -297,14 +297,62 @@ Generate an example sentence that uses the word "${word}" with its most common m
     }
 };
 
-const getLanguageName = (langCode: UILang): string => {
+const getLanguageName = (langCode: UILang | GlossaryLang): string => {
     switch (langCode) {
         case 'fr': return 'French';
         case 'ar': return 'Arabic';
+        case 'es': return 'Spanish';
+        case 'it': return 'Italian';
+        case 'de': return 'German';
+        case 'zh': return 'Chinese';
+        case 'ja': return 'Japanese';
+        case 'tr': return 'Turkish';
+        case 'el': return 'Greek';
         case 'en':
         default: return 'English';
     }
 };
+
+export const translateGlossaryBatch = async (
+    terms: string[],
+    targetLangCode: GlossaryLang
+  ): Promise<string[]> => {
+    if (terms.length === 0) return [];
+    const targetLanguage = getLanguageName(targetLangCode);
+  
+    const systemInstruction = `You are a highly skilled translator. You will be given a JSON array of English terms. Translate each term into ${targetLanguage}. You MUST respond with a JSON array of strings of the exact same length as the input array, where each string is the translation of the corresponding term in the input array. Do not add any extra explanations or markdown.`;
+  
+    const prompt = JSON.stringify(terms);
+  
+    const schema = {
+      type: Type.ARRAY,
+      items: { type: Type.STRING }
+    };
+  
+    try {
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          systemInstruction,
+          responseMimeType: "application/json",
+          responseSchema: schema,
+        },
+      });
+  
+      const jsonText = response.text.trim();
+      const result = JSON.parse(jsonText);
+      if (Array.isArray(result) && result.length === terms.length) {
+          return result as string[];
+      } else {
+          console.error("Mismatched translation count from API. Input:", terms.length, "Output:", result.length);
+          throw new Error("Mismatched translation count from API.");
+      }
+    } catch (error) {
+      console.error(`Gemini API glossary translation error to ${targetLanguage}:`, error);
+      throw new Error(`Failed to translate glossary to ${targetLanguage}.`);
+    }
+  };
 
 export const getTranslationCorrection = async (
   sourceText: string,

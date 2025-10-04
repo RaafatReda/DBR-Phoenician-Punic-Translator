@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GlossaryEntry, PhoenicianWordDetails, PronunciationResult, PhoenicianDialect } from '../types';
+import { GlossaryEntry, PhoenicianWordDetails, PronunciationResult, PhoenicianDialect, GlossaryLang } from '../types';
 import { getPhoenicianWordDetails, reconstructPronunciation } from '../services/geminiService';
 import { UILang } from '../lib/i18n';
 import Loader from './Loader';
@@ -20,9 +20,10 @@ interface WordDetailModalProps {
   speak: (text: string, lang: string) => void;
   isSpeaking: boolean;
   dialect: PhoenicianDialect;
+  glossaryLang: GlossaryLang;
 }
 
-const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClose, onUseWord, onSaveSentence, t, speak, isSpeaking, dialect }) => {
+const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClose, onUseWord, onSaveSentence, t, speak, isSpeaking, dialect, glossaryLang }) => {
   const [details, setDetails] = useState<PhoenicianWordDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -90,9 +91,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
   const fontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-5xl' : '[font-family:var(--font-phoenician)] text-4xl';
   const sentenceFontClass = dialect === PhoenicianDialect.PUNIC ? '[font-family:var(--font-punic)] text-3xl' : '[font-family:var(--font-phoenician)] text-2xl';
   
-  const uiIsRtl = uiLang === 'ar';
-  
-  const meaning = (entry.meaning as any)[uiLang] || entry.meaning.en;
+  const meaning = (entry.meaning as any)[glossaryLang] || entry.meaning.en;
 
   const exampleTranslation = 
     details ? (
@@ -133,13 +132,13 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                     <div dir="rtl">{(pronunciation.word_pronunciations[0] || {}).tts}</div>
                 </div>
 
-                <p className="text-lg capitalize font-semibold" dir={uiIsRtl ? 'rtl' : 'ltr'}>{meaning}</p>
+                <p className="text-lg capitalize font-semibold" dir={glossaryLang === 'ar' ? 'rtl' : 'ltr'}>{meaning}</p>
                 
                 <hr className="border-[color:var(--color-border)] opacity-30 my-4" />
 
                 {/* Example Sentence Section */}
                 <div className="w-full text-left space-y-2">
-                    <h3 className="text-sm font-semibold uppercase text-[color:var(--color-text-muted)] tracking-wider mb-3 text-center" dir={uiIsRtl ? 'rtl' : 'ltr'}>
+                    <h3 className="text-sm font-semibold uppercase text-[color:var(--color-text-muted)] tracking-wider mb-3 text-center" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
                         {t('dailyWordUsage')}
                     </h3>
                     <div className="flex items-center justify-center gap-2">
@@ -166,7 +165,7 @@ const WordDetailModal: React.FC<WordDetailModalProps> = ({ entry, isOpen, onClos
                      <p className="text-sm text-center text-gray-400" dir="rtl">
                          <strong>Arabic:</strong> {details.exampleSentence.arabicTransliteration}
                     </p>
-                    <p className="text-base text-center text-gray-300 pt-2" dir={uiIsRtl ? 'rtl' : 'ltr'}>
+                    <p className="text-base text-center text-gray-300 pt-2" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
                         <em>&ldquo;{exampleTranslation}&rdquo;</em>
                     </p>
                 </div>
