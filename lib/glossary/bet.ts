@@ -1,3 +1,4 @@
+
 import type { GlossaryEntry } from '../../types';
 
 export const bet: GlossaryEntry[] = [
@@ -96,6 +97,8 @@ export const bet: GlossaryEntry[] = [
   { phoenician: '𐤁𐤔𐤍', latin: 'bšn', meaning: { en: 'Shame', fr: 'Honte', ar: 'خزي' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤁𐤔𐤓', latin: 'bšr', meaning: { en: 'Flesh', fr: 'Chair', ar: 'لحم' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤁𐤕', latin: 'bt', meaning: { en: 'Daughter; House of', fr: 'Fille; Maison de', ar: 'ابنة؛ بيت' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
+  { phoenician: '𐤁𐤕 𐤏𐤋𐤌', latin: 'bt ʿlm', meaning: { en: 'house for eternity, tomb, mausoleum', fr: '', ar: '' }, grammar: { pos: 'Noun' } },
+  { phoenician: '𐤁𐤕𐤕𐤍𐤓', latin: 'bttnr', meaning: { en: 'foundry (bet tannur)', fr: '', ar: '' }, grammar: { pos: 'Noun' } },
   { phoenician: '𐤁𐤕𐤅𐤋𐤄', latin: 'btwlh', meaning: { en: 'Virgin', fr: 'Vierge', ar: 'عذراء' }, grammar: { pos: 'Noun', gender: 'f', number: 's' } },
   { phoenician: '𐤁𐤕𐤊', latin: 'btk', meaning: { en: 'In the midst of', fr: 'Au milieu de', ar: 'في وسط' }, grammar: { pos: 'Preposition' } },
   { phoenician: '𐤁𐤕𐤓', latin: 'btr', meaning: { en: 'To cut in two', fr: 'Couper en deux', ar: 'يشطر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
