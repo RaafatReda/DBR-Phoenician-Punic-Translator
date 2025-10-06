@@ -52,6 +52,7 @@ export const dalet: GlossaryEntry[] = [
   { phoenician: '𐤃𐤒', latin: 'dq', meaning: { en: 'Thin, small; finely crushed, powdered', fr: 'Mince, petit; finement broyé, en poudre', ar: 'رقيق، صغير؛ مسحوق ناعم' }, grammar: { pos: 'Adjective' } },
   { phoenician: '𐤃𐤒𐤓', latin: 'dqr', meaning: { en: 'To pierce', fr: 'Percer', ar: 'يطعن' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤃𐤒𐤓', latin: 'dqr', meaning: { en: 'A kind of earthen vessel', fr: 'Une sorte de récipient en terre', ar: 'نوع من الأواني الفخارية' }, grammar: { pos: 'Noun', gender: 'f', notes: 'Plural: 𐤃𐤒𐤓𐤕 (dqrt)' } },
+  { phoenician: '𐤃𐤒𐤓𐤕', latin: 'dqrt', meaning: { en: 'Earthen vessels', fr: 'Récipients en terre', ar: 'أواني فخارية' }, grammar: { pos: 'Noun', gender: 'f', number: 'p', notes: 'Plural of 𐤃𐤒𐤓 (dqr)' } },
   { phoenician: '𐤃𐤓', latin: 'dr', meaning: { en: 'Generation, period, era', fr: 'Génération, période, ère', ar: 'جيل، فترة، عصر' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤃𐤓', latin: 'dr', meaning: { en: 'Family, clan', fr: 'Famille, clan', ar: 'عائلة، عشيرة' }, grammar: { pos: 'Noun', gender: 'm' } },
   { phoenician: '𐤃𐤓 𐤁𐤍 𐤏𐤋𐤌', latin: "dr bn ʿlm", meaning: { en: 'The family of the gods, pantheon', fr: 'La famille des dieux, panthéon', ar: 'عائلة الآلهة، مجمع الآلهة' }, grammar: { pos: 'Noun', notes: 'Expression' }, category: 'theonym' },

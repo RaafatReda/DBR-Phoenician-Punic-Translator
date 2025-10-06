@@ -31,6 +31,7 @@ export const yodh: GlossaryEntry[] = [
   { phoenician: '𐤉𐤎𐤃', latin: 'ysd', meaning: { en: 'Foundation, to found', fr: 'Fondation, fonder', ar: 'أساس، يؤسس' }, grammar: { pos: 'Noun', gender: 'm', number: 's', notes: 'Also a verb.' } },
   { phoenician: '𐤉𐤎𐤐', latin: 'ysp', meaning: { en: 'To add, increase', fr: 'Ajouter, augmenter', ar: 'يضيف، يزيد' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤎𐤓', latin: 'ysr', meaning: { en: 'To discipline', fr: 'Discipliner', ar: 'يؤدب' }, grammar: { pos: 'Verb', stem: 'D-stem' } },
+  { phoenician: '𐤉𐤏𐤃𐤉', latin: 'yʿdy', meaning: { en: 'Adana, a city located in southern present-day Turkey.', fr: 'Adana, une ville située dans le sud de la Turquie actuelle.', ar: 'أضنة، مدينة تقع في جنوب تركيا الحالية.' }, grammar: { pos: 'Noun' }, category: 'location' },
   { phoenician: '𐤉𐤏𐤋', latin: 'yaʻēl', meaning: { en: 'Ibex', fr: 'Ibex', ar: 'وعل' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤉𐤏𐤑', latin: "yʿṣ", meaning: { en: 'To advise, counsel', fr: 'Conseiller', ar: 'ينصح، يشير' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤉𐤏𐤓', latin: "yʿr", meaning: { en: 'Forest', fr: 'Forêt', ar: 'غابة' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
