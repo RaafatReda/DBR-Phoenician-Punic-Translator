@@ -7,22 +7,13 @@ import { alphabetData } from '../lib/alphabetData';
 import GrammarModule from './GrammarModule';
 import PdfIcon from './icons/PdfIcon';
 import { generateGrammarHtmlForPdf } from '../lib/exportUtils';
+import { grammarPhoenicianLevels, grammarPunicLevels, GrammarLevelData } from '../lib/lessons/structure';
 
 interface LessonsPageProps {
   onClose: () => void;
   t: (key: string) => string;
   uiLang: UILang;
   onLetterSelect: (letter: string) => void;
-}
-
-interface GrammarModuleData {
-    moduleTitleKey: string;
-    moduleContentKey: string;
-}
-
-interface GrammarLevelData {
-    levelTitleKey: string;
-    modules: GrammarModuleData[];
 }
 
 const pronunciationTableData = [
@@ -65,15 +56,7 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang, onLetterS
         }`;
 
     const handleExportPdf = () => {
-        const grammarKey = selectedDialect === PhoenicianDialect.PUNIC ? 'grammarPunicLevels' : 'grammarPhoenicianLevels';
-        let levels: GrammarLevelData[] = [];
-        try {
-            levels = JSON.parse(t(grammarKey));
-        } catch (e) {
-            console.error("Failed to parse grammar levels JSON for PDF export:", e);
-            return;
-        }
-
+        const levels: GrammarLevelData[] = selectedDialect === PhoenicianDialect.PUNIC ? grammarPunicLevels : grammarPhoenicianLevels;
         const htmlContent = generateGrammarHtmlForPdf(levels, selectedDialect, uiLang, t);
         const printWindow = window.open('', '_blank');
         if (printWindow) {
@@ -147,15 +130,8 @@ const LessonsPage: React.FC<LessonsPageProps> = ({ onClose, t, uiLang, onLetterS
     );
 
     const renderGrammar = () => {
-        const grammarKey = selectedDialect === PhoenicianDialect.PUNIC ? 'grammarPunicLevels' : 'grammarPhoenicianLevels';
-        let levels: GrammarLevelData[] = [];
-        try {
-            levels = JSON.parse(t(grammarKey));
-        } catch (e) {
-            console.error("Failed to parse grammar levels JSON:", e);
-            return <p>Error loading grammar lessons.</p>;
-        }
-
+        const levels: GrammarLevelData[] = selectedDialect === PhoenicianDialect.PUNIC ? grammarPunicLevels : grammarPhoenicianLevels;
+        
         return (
              <div className="animate-text-glow-fade-in" style={{animationDuration: '0.5s'}}>
                 {levels.map((level, levelIndex) => (

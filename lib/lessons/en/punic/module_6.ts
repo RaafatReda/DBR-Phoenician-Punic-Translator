@@ -1,0 +1,1 @@
+export const content = `<h3>Construct State (Genitive)</h3><p>The construct state works like in Phoenician: two nouns are placed together to indicate possession. The definite article can only appear on the second noun in the chain.</p><ul><li><strong>Example:</strong> <code class="punic">𐤒𐤁𐤓 𐤄𐤌𐤋𐤊</code> (qbr h-mlk) = ‘grave of the king’.</li></ul>`;
