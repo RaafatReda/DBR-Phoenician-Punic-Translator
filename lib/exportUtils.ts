@@ -8,7 +8,6 @@ const escapeHtml = (unsafe: string | undefined): string => {
 };
 
 const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAQQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAA...`;
-
 export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang): string => {
     const translationsHtml = translations.map(item => {
         const isPunic = item.dialect === PhoenicianDialect.PUNIC || item.targetLang === Language.PUNIC || item.sourceLang === Language.PUNIC;
@@ -467,20 +466,53 @@ export const generateGlossaryHtmlForPdf = (
   const titleKey = isPunic ? 'punicGlossaryTitle' : 'phoenicianGlossaryTitle';
   const pdfTitle = t(titleKey);
 
+  const getCategoryIcon = (category?: GlossaryEntry['category']) => {
+    const icons = {
+      theonym: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\' fill=\'currentColor\'%3E%3Cpath fill-rule=\'evenodd\' d=\'M10 2.5a.75.75 0 01.75.75v.255a.25.25 0 00.5 0V3.25a.75.75 0 011.5 0v.255a.25.25 0 00.5 0V3.25a.75.75 0 011.5 0v.51a.25.25 0 00.485.122l.33-.66a.75.75 0 011.353.676l-.33.66a.25.25 0 00.122.485h.51a.75.75 0 010 1.5h-.51a.25.25 0 00-.122.485l.33.66a.75.75 0 01-1.353.676l-.33-.66a.25.25 0 00-.485.122v.51a.75.75 0 01-1.5 0v-.51a.25.25 0 00-.485-.122l-.33.66a.75.75 0 01-1.353-.676l.33-.66a.25.25 0 00-.122-.485h-.51a.75.75 0 010-1.5h.51a.25.25 0 00.122-.485l-.33-.66a.75.75 0 011.353-.676l.33.66a.25.25 0 00.485-.122v-.51a.75.75 0 01-1.5 0v-.255a.25.25 0 00-.5 0V3.25a.75.75 0 01-.75-.75zM10 8a2 2 0 100 4 2 2 0 000-4zM8.25 4.5a.75.75 0 000 1.5h-.51a.25.25 0 01-.122.485l-.33.66a.75.75 0 001.353.676l.33-.66a.25.25 0 01.485.122v.51a.75.75 0 001.5 0v-.51a.25.25 0 01.485-.122l.33.66a.75.75 0 001.353-.676l-.33-.66a.25.25 0 01-.122-.485h-.51a.75.75 0 000-1.5h.51a.25.25 0 01.122-.485l.33-.66a.75.75 0 00-1.353-.676l-.33.66a.25.25 0 01-.485-.122V3.25a.75.75 0 00-1.5 0v.51a.25.25 0 01-.485-.122l-.33-.66a.75.75 0 00-1.353.676l.33.66a.25.25 0 01.122.485h.51a.75.75 0 000-1.5h-.255a.25.25 0 01-.5 0H8.25zM12 15.75a.75.75 0 00-1.5 0v.255a.25.25 0 01-.5 0V15.75a.75.75 0 00-1.5 0v.255a.25.25 0 01-.5 0V15.75a.75.75 0 00-1.5 0v.51a.25.25 0 01-.485.122l-.33-.66a.75.75 0 00-1.353.676l.33.66a.25.25 0 01.122.485h.51a.75.75 0 000 1.5h-.51a.25.25 0 01-.122.485l-.33.66a.75.75 0 001.353.676l.33-.66a.25.25 0 01.485.122v.51a.75.75 0 001.5 0v-.51a.25.25 0 01.485-.122l.33.66a.75.75 0 001.353.676l-.33-.66a.25.25 0 01.122-.485h.51a.75.75 0 000-1.5h-.51a.25.25 0 01-.122-.485l.33-.66a.75.75 0 00-1.353-.676l-.33.66a.25.25 0 01-.485-.122v-.51a.75.75 0 00-1.5 0v.255a.25.25 0 01-.5 0V15.75z\' clip-rule=\'evenodd\' /%3E%3C/svg%3E',
+      personal_name: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\' fill=\'currentColor\'%3E%3Cpath d=\'M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.095a1.23 1.23 0 00.41-1.412A9.99 9.99 0 0010 12a9.99 9.99 0 00-6.535 2.493z\' /%3E%3C/svg%3E',
+      location: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\' fill=\'currentColor\'%3E%3Cpath fill-rule=\'evenodd\' d=\'M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.1.4-.27.61-.47c.21-.2.419-.413.618-.638c.199-.225.385-.46.56-.713c.174-.253.328-.517.468-.795a10.06 10.06 0 00.673-2.383c.023-.223.038-.447.051-.671c.013-.224.019-.448.019-.673c0-2.228-1.5-4.242-3.75-4.945c-2.25-.703-4.5.242-5.25 2.495c-.75 2.253.242 4.5 2.495 5.25c.394.123.796.223 1.2.301c.404.078.81.134 1.22.167c.41.033.82.046 1.23.046c.412 0 .824-.013 1.236-.046c.412-.033.82-.09 1.224-.167c.403-.078.806-.178 1.2-.301c2.253-.75 3.242-3 2.495-5.25c-.75-2.253-3-3.242-5.25-2.495c-2.25.703-3.75 2.717-3.75 4.945c0 .225.006.449.019.673c.013.224.028.448.051.671a10.06 10.06 0 00.673 2.383c.14.278.294.542.468.795c.175.253.361.488.56.713c.199.225.409.438.618.638c.21.2.424.37.61.47c.101.055.202.106.296.155a5.741 5.741 0 00.281.14l.018.008l.006.003zM10 12a2 2 0 100-4 2 2 0 000 4z\' clip-rule=\'evenodd\' /%3E%3C/svg%3E'
+    };
+    if (!category || !icons[category]) return '';
+    return `<img src="${icons[category]}" class="category-icon" alt="${category} icon">`;
+  };
+
+  const getCategoryTranslationKey = (category: GlossaryEntry['category']) => {
+    if (category === 'theonym') return 'theonyms';
+    if (category === 'personal_name') return 'personalNames';
+    if (category === 'location') return 'locationNames';
+    return category || '';
+  }
+
   const entriesHtml = entries.map(entry => {
     const meaning = (entry.meaning as any)[uiLang] || entry.meaning.en;
+    const grammarDetails = [
+      entry.grammar.pos ? t(entry.grammar.pos.toLowerCase()) : '',
+      entry.grammar.gender,
+      entry.grammar.number,
+      entry.grammar.stem
+    ].filter(Boolean).join(', ');
+
     return `
       <div class="entry">
-        <div class="term">
-          <span class="phoenician-script ${fontClass}">${escapeHtml(entry.phoenician)}</span>
-          <span class="latin">(${escapeHtml(entry.latin)})</span>
+        <div class="main-info">
+          <div class="term-group">
+            <span class="phoenician-script ${fontClass}">${escapeHtml(entry.phoenician)}</span>
+            <span class="latin">(${escapeHtml(entry.latin)})</span>
+          </div>
+          <div class="meaning" lang="${uiLang}" dir="${uiLang === 'ar' ? 'rtl' : 'ltr'}">
+              ${escapeHtml(meaning)}
+          </div>
         </div>
-        <div class="meaning" lang="${uiLang}" dir="${uiLang === 'ar' ? 'rtl' : 'ltr'}">
-            ${escapeHtml(meaning)}
+        <div class="meta-info">
+           <span class="grammar">${escapeHtml(grammarDetails)}</span>
+           ${entry.category ? `<span class="category">${getCategoryIcon(entry.category)} ${escapeHtml(t(getCategoryTranslationKey(entry.category)))}</span>` : ''}
         </div>
+        ${entry.grammar.notes ? `<div class="notes">${escapeHtml(entry.grammar.notes)}</div>` : ''}
       </div>
     `;
   }).join('');
+
+  const coverTitle = uiLang === 'ar' ? 'مسرد اللغة الفينيقية والبونيقية' : 'Phoenician & Punic Glossary';
 
   return `
     <!DOCTYPE html>
@@ -490,7 +522,7 @@ export const generateGlossaryHtmlForPdf = (
         <title>${escapeHtml(pdfTitle)}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Cinzel:wght@700&family=Handlee&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@300;400;700&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
         <style>
           @font-face {
             font-family: 'Punic LDR';
@@ -498,71 +530,222 @@ export const generateGlossaryHtmlForPdf = (
             font-weight: normal;
             font-style: normal;
           }
+          :root {
+            --color-purple: #800080;
+            --color-sky-blue: #87CEEB;
+            --color-text: #1a1a1a;
+            --color-text-muted: #6c757d;
+            --color-bg: #FFFFFF;
+            --color-border: #e0e0e0;
+            --font-sans: 'Poppins', sans-serif;
+            --font-ar: 'Cairo', sans-serif;
+          }
+          @page {
+            size: A4;
+            margin: 1.5cm;
+            @bottom-center {
+                content: "Page " counter(page);
+                font-family: var(--font-sans);
+                font-size: 9pt;
+                color: #888;
+            }
+          }
           body {
-            font-family: 'Handlee', cursive;
-            margin: 20px;
-            color: #333;
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            line-height: 1.6;
+            counter-reset: page 1;
           }
           html[lang="ar"] body {
-            font-family: 'Cairo', sans-serif;
+            font-family: var(--font-ar);
           }
           @media print {
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           }
-          h1 {
+          
+          .cover-page {
+            height: 267mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            color: #800080;
-            border-bottom: 2px solid #EADCBF;
-            padding-bottom: 10px;
-            font-family: 'Cinzel', serif;
+            box-sizing: border-box;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+            background: var(--color-bg);
           }
+          .cover-page::before, .cover-page::after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            opacity: 0.15;
+          }
+          .cover-page::before {
+            bottom: -25%;
+            left: -25%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--color-sky-blue), transparent 60%);
+            transform: rotate(-30deg);
+          }
+           .cover-page::after {
+            top: -25%;
+            right: -25%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--color-purple), transparent 60%);
+            transform: rotate(15deg);
+          }
+          .cover-content {
+            position: relative;
+            z-index: 2;
+            border: 5px solid var(--color-text);
+            padding: 2rem 3rem;
+          }
+          .cover-content h1 {
+            font-family: var(--font-sans);
+            font-size: 2.5em;
+            color: var(--color-text);
+            margin: 0;
+            font-weight: 700;
+            border-bottom: 2px solid var(--color-purple);
+            padding-bottom: 0.5rem;
+          }
+          html[lang="ar"] .cover-content h1 {
+            font-family: var(--font-ar);
+            font-size: 3em;
+          }
+          .cover-content .logo {
+            font-family: 'Punic LDR', serif;
+            font-size: 4em;
+            color: var(--color-purple);
+            margin-bottom: 1.5rem;
+          }
+
           .container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
           }
+          h1.page-title {
+            text-align: center;
+            color: var(--color-purple);
+            font-size: 2em;
+            margin: 0 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-border);
+          }
+          html[lang="ar"] h1.page-title {
+             font-family: var(--font-ar);
+          }
+          
           .entry {
+            border-left: 3px solid var(--color-sky-blue);
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            background-color: #fdfdfd;
+            border-radius: 0 4px 4px 0;
+          }
+          html[dir="rtl"] .entry {
+            border-left: none;
+            border-right: 3px solid var(--color-sky-blue);
+            border-radius: 4px 0 0 4px;
+          }
+          
+          .main-info {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            border-bottom: 1px solid #eee;
-            padding: 10px 5px;
-            page-break-inside: avoid;
+            gap: 1rem;
           }
-          .term {
+          .term-group {
+            flex-basis: 40%;
             display: flex;
             align-items: baseline;
-            gap: 15px;
-            flex-basis: 45%;
-            flex-shrink: 0;
+            gap: 10px;
             direction: rtl;
           }
           .phoenician-script {
-            color: #800080;
+            color: var(--color-purple);
           }
           .phoenician-script.phoenician {
             font-family: 'Noto Sans Phoenician', serif;
-            font-size: 1.6em;
+            font-size: 1.8em;
           }
           .phoenician-script.punic {
              font-family: 'Punic LDR', serif;
-             font-size: 1.9em;
+             font-size: 2em;
           }
           .latin {
             font-size: 0.9em;
-            color: #777;
+            color: var(--color-text-muted);
             font-style: italic;
             direction: ltr;
-            font-family: 'Handlee', cursive;
           }
           .meaning {
-            flex-basis: 55%;
-            text-align: ${uiLang === 'ar' ? 'right' : 'left'};
+            flex-basis: 60%;
+            font-weight: 400;
+          }
+          html[dir="rtl"] .meaning {
+            text-align: left;
+          }
+          .meta-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.8em;
+            color: var(--color-text-muted);
+            margin-top: 5px;
+            padding-left: 5px;
+          }
+           html[dir="rtl"] .meta-info {
+            padding-left: 0;
+            padding-right: 5px;
+            justify-content: flex-end;
+          }
+          .grammar {
+            font-style: italic;
+          }
+          .category {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+          }
+          .category-icon {
+            width: 12px;
+            height: 12px;
+            opacity: 0.7;
+          }
+          .notes {
+            font-size: 0.8em;
+            color: #555;
+            margin-top: 5px;
+            padding-left: 5px;
+            border-left: 2px solid #eee;
+          }
+           html[dir="rtl"] .notes {
+            padding-left: 0;
+            padding-right: 5px;
+            border-left: none;
+            border-right: 2px solid #eee;
           }
         </style>
     </head>
     <body>
+        <div class="cover-page">
+            <div class="cover-content">
+                <div class="logo">𐤀</div>
+                <h1>${escapeHtml(coverTitle)}</h1>
+            </div>
+        </div>
         <div class="container">
-            <h1>${escapeHtml(pdfTitle)}</h1>
+            <h1 class="page-title">${escapeHtml(pdfTitle)}</h1>
             ${entriesHtml}
         </div>
     </body>
