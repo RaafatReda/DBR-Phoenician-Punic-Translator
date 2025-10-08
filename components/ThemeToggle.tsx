@@ -1,5 +1,4 @@
 import React from 'react';
-import SparklesIcon from './icons/SparklesIcon';
 
 type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold';
 
@@ -19,7 +18,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle, t }) => {
       return { icon: <span className="text-2xl">𓇉</span>, title: t('themeSwitchPapyrus') };
     }
     if (theme === 'papyrus') {
-      return { icon: <SparklesIcon className="w-5 h-5" />, title: t('themeSwitchPurple') };
+      return { icon: <span className="text-2xl">𓇺</span>, title: t('themeSwitchPurple') };
     }
     if (theme === 'purple-glassy') {
       return { icon: <span className="text-2xl">𓎰</span>, title: t('themeSwitchGlassmorphism') };

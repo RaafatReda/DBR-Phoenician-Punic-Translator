@@ -10,44 +10,12 @@ interface ManualModalProps {
 }
 
 const manualSections = [
-  {
-    titleKey: 'manual_s1_title',
-    content: [
-      { key: 'manual_s1_item1' },
-      { key: 'manual_s1_item2' },
-      { key: 'manual_s1_item3' },
-    ]
-  },
-  {
-    titleKey: 'manual_s2_title',
-    content: [
-      { key: 'manual_s2_item1' },
-      { key: 'manual_s2_item2' },
-      { key: 'manual_s2_item3' },
-    ]
-  },
-  {
-    titleKey: 'manual_s3_title',
-    content: [
-      { key: 'manual_s3_item1' },
-      { key: 'manual_s3_item2' },
-      { key: 'manual_s3_item3' },
-    ]
-  },
-  {
-    titleKey: 'manual_s4_title',
-    content: [
-      { key: 'manual_s4_item1' },
-      { key: 'manual_s4_item2' },
-    ]
-  },
-  {
-    titleKey: 'manual_s5_title',
-    content: [
-      { key: 'manual_s5_item1' },
-      { key: 'manual_s5_item2' },
-    ]
-  },
+  { titleKey: 'manual_s1_title', contentKey: 'manual_s1_content' },
+  { titleKey: 'manual_s2_title', contentKey: 'manual_s2_content' },
+  { titleKey: 'manual_s3_title', contentKey: 'manual_s3_content' },
+  { titleKey: 'manual_s4_title', contentKey: 'manual_s4_content' },
+  { titleKey: 'manual_s5_title', contentKey: 'manual_s5_content' },
+  { titleKey: 'manual_s6_title', contentKey: 'manual_s6_content' },
 ];
 
 
@@ -95,11 +63,7 @@ const ManualModal: React.FC<ManualModalProps> = ({ onClose, t, uiLang }) => {
                 </button>
                 <div className={`manual-accordion-content ${openSection === index ? 'open' : ''}`}>
                   <div className="manual-accordion-content-inner">
-                    <ul dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>
-                      {section.content.map(item => (
-                        <li key={item.key} dangerouslySetInnerHTML={{ __html: t(item.key) }} />
-                      ))}
-                    </ul>
+                    <div dir={uiLang === 'ar' ? 'rtl' : 'ltr'} dangerouslySetInnerHTML={{ __html: t(section.contentKey) }} />
                   </div>
                 </div>
               </div>
