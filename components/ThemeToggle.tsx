@@ -3,8 +3,9 @@ import SunIcon from './icons/SunIcon';
 import MoonIcon from './icons/MoonIcon';
 import SparklesIcon from './icons/SparklesIcon';
 import SwirlIcon from './icons/SwirlIcon';
+import DatabaseIcon from './icons/DatabaseIcon';
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold';
 
 interface ThemeToggleProps {
   theme: Theme;
@@ -37,7 +38,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle, t }) => {
     if (theme === 'purple-glassy') {
       return { icon: <SwirlIcon className="w-5 h-5" />, title: t('themeSwitchGlassmorphism') };
     }
-    // theme is 'glassmorphism'
+    if (theme === 'glassmorphism') {
+      return { icon: <DatabaseIcon className="w-5 h-5" />, title: t('themeSwitchDeepSeaGold') };
+    }
+    // theme is 'deep-sea-gold'
     return { icon: <SunIcon className="w-5 h-5" />, title: t('themeSwitchLight') };
   };
 

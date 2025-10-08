@@ -140,7 +140,7 @@ declare global {
   }
 }
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold';
 type FontSize = 'small' | 'medium' | 'large';
 type AppMode = 'translator' | 'comparison' | 'pronunciation';
 
@@ -428,7 +428,8 @@ const App: React.FC = () => {
       if (prevTheme === 'dark') return 'papyrus';
       if (prevTheme === 'papyrus') return 'purple-glassy';
       if (prevTheme === 'purple-glassy') return 'glassmorphism';
-      return 'light'; // glassmorphism -> light
+      if (prevTheme === 'glassmorphism') return 'deep-sea-gold';
+      return 'light'; // deep-sea-gold -> light
     });
   };
 

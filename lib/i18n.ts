@@ -179,6 +179,7 @@ export const translations: Record<UILang, Record<string, string>> = {
     themeSwitchPapyrus: 'Switch to papyrus mode',
     themeSwitchPurple: 'Switch to purple-glassy mode',
     themeSwitchGlassmorphism: 'Switch to glassmorphism mode',
+    themeSwitchDeepSeaGold: 'Switch to deep sea gold theme',
     
     openChatOptions: 'Open AI Tutor Options',
     practiceChatTitle: 'Language Practice',
@@ -495,6 +496,7 @@ export const translations: Record<UILang, Record<string, string>> = {
     themeSwitchPapyrus: 'Passer en mode papyrus',
     themeSwitchPurple: 'Passer en mode verre violet',
     themeSwitchGlassmorphism: 'Passer en mode glassmorphism',
+    themeSwitchDeepSeaGold: 'Passer au thème or des profondeurs',
     openChatOptions: 'Ouvrir les options du tuteur IA',
     practiceChatTitle: 'Pratique linguistique',
     knowledgeHubTitle: 'Pôle de connaissances',
@@ -808,6 +810,7 @@ export const translations: Record<UILang, Record<string, string>> = {
     themeSwitchPapyrus: 'التحويل إلى وضع ورق البردي',
     themeSwitchPurple: 'التحويل إلى وضع الزجاج الأرجواني',
     themeSwitchGlassmorphism: 'التحويل إلى وضع الزجاجية',
+    themeSwitchDeepSeaGold: 'التحويل إلى سمة الذهب البحري العميق',
     openChatOptions: 'فتح خيارات مدرس الذكاء الاصطناعي',
     practiceChatTitle: 'ممارسة اللغة',
     knowledgeHubTitle: 'مركز المعرفة',

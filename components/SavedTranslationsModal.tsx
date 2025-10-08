@@ -16,7 +16,7 @@ interface SavedTranslationsModalProps {
   onDelete: (id: string) => void;
   onClearAll: () => void;
   onUpdateNote: (id: string, notes: string) => void;
-  theme: 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
+  theme: 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold';
   t: (key: string) => string;
   uiLang: UILang;
 }
@@ -119,6 +119,8 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
             bgColor = '#1E0F4C';
         } else if (theme === 'glassmorphism') {
             bgColor = '#0A1931';
+        } else if (theme === 'deep-sea-gold') {
+            bgColor = '#041C32';
         }
 
         const canvas = await window.html2canvas(exportContainer, {
