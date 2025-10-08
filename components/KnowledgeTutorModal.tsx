@@ -219,14 +219,14 @@ const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, u
     }
   };
 
-  const orbClass = `w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-br from-purple-400 to-blue-600 transition-all duration-500`;
+  const orbClass = `w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-br from-[color:var(--color-primary)] to-[color:var(--color-secondary)] transition-all duration-500`;
   const orbAnimation = isListening ? 'animate-pulse' : 'animate-[orb-pulse-deep_5s_ease-in-out_infinite]';
 
   return (
-    <div className="fixed inset-0 bg-[#0C0A1A]/80 backdrop-blur-lg z-50 flex flex-col items-center p-4" onClick={onClose}>
-        <div className="w-full max-w-2xl h-full flex flex-col" onClick={e => e.stopPropagation()}>
-            <header className="flex-shrink-0 text-right p-2">
-                <button onClick={onClose} className="p-2 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex flex-col items-center p-4" onClick={onClose}>
+        <div className="w-full max-w-2xl h-full flex flex-col glass-panel rounded-2xl shadow-2xl" onClick={e => e.stopPropagation()}>
+            <header className="flex-shrink-0 flex justify-end p-2 border-b border-[color:var(--color-border)]">
+                <button onClick={onClose} className="p-2 rounded-full text-[color:var(--color-text-muted)] hover:text-[color:var(--color-primary)] hover:bg-[color:var(--color-primary)]/10 transition-colors">
                     <CloseIcon className="w-7 h-7" />
                 </button>
             </header>
@@ -235,24 +235,24 @@ const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, u
                  {messages.length <= 1 && !isAiThinking && (
                     <div className="text-center mb-8 animate-text-glow-fade-in">
                         <div className={`${orbClass} ${orbAnimation} mx-auto mb-6`}></div>
-                        <h1 className="text-3xl font-bold text-white">{t('knowledgeHubWelcome')}</h1>
-                        <p className="text-gray-300 mt-2 max-w-md">{t('knowledgeHubSub')}</p>
+                        <h1 className="text-3xl font-bold text-[color:var(--color-text)]">{t('knowledgeHubWelcome')}</h1>
+                        <p className="text-[color:var(--color-text-muted)] mt-2 max-w-md">{t('knowledgeHubSub')}</p>
                     </div>
                 )}
                 
                 <div className="w-full space-y-4 px-2">
                     {messages.map((msg) => (
                         <div key={msg.id} className={`flex items-start gap-3 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                            {msg.sender === 'ai' && <div className="w-8 h-8 rounded-full bg-purple-500 flex-shrink-0 mt-1 flex items-center justify-center font-bold text-white text-lg">T</div>}
-                            <div className={`px-4 py-3 rounded-2xl max-w-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-800 text-gray-200 rounded-bl-none'}`}>
-                                <p className="text-sm leading-relaxed">{msg.text}</p>
+                            {msg.sender === 'ai' && <div className="w-8 h-8 rounded-full bg-[color:var(--color-secondary)] text-[color:var(--keyboard-active-button-text)] flex-shrink-0 mt-1 flex items-center justify-center font-bold text-lg">T</div>}
+                            <div className={`px-4 py-3 rounded-2xl max-w-sm ${msg.sender === 'user' ? 'bg-[color:var(--color-primary)] text-[color:var(--keyboard-active-button-text)] rounded-br-none' : 'bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)] rounded-bl-none'}`}>
+                                <p className="text-sm leading-relaxed whitespace-pre-wrap" dir={uiLang === 'ar' ? 'rtl' : 'ltr'}>{msg.text}</p>
                             </div>
                         </div>
                     ))}
                      {isAiThinking && messages.length > 0 && (
                         <div className="flex items-start gap-3 flex-row">
-                            <div className="w-8 h-8 rounded-full bg-purple-500 flex-shrink-0 mt-1 flex items-center justify-center font-bold text-white text-lg">T</div>
-                            <div className="px-4 py-3 rounded-2xl bg-gray-800 text-gray-200">
+                            <div className="w-8 h-8 rounded-full bg-[color:var(--color-secondary)] text-[color:var(--keyboard-active-button-text)] flex-shrink-0 mt-1 flex items-center justify-center font-bold text-white text-lg">T</div>
+                            <div className="px-4 py-3 rounded-2xl bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)]">
                                 <Loader className="w-5 h-5" />
                             </div>
                         </div>
@@ -261,24 +261,25 @@ const KnowledgeTutorModal: React.FC<KnowledgeTutorModalProps> = ({ onClose, t, u
                 </div>
             </main>
             
-            <footer className="flex-shrink-0 w-full pt-4">
+            <footer className="flex-shrink-0 w-full p-4 border-t border-[color:var(--color-border)]">
                 <div className="flex items-center gap-3">
-                    <form onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} className="flex-grow flex items-center bg-gray-800/50 border border-gray-600 rounded-full pr-2">
+                    <form onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} className="flex-grow flex items-center bg-[color:var(--color-surface-solid)] border border-[color:var(--color-border)] rounded-full pr-2">
                         <input
                             ref={inputRef}
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder={t('knowledgeHubPlaceholder')}
-                            className="flex-grow bg-transparent text-white placeholder-gray-400 px-5 py-3 focus:outline-none"
+                            className="flex-grow bg-transparent text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-muted)] px-5 py-3 focus:outline-none"
                             disabled={isAiThinking}
+                            dir={uiLang === 'ar' ? 'rtl' : 'ltr'}
                         />
-                         <button type="submit" disabled={!input.trim() || isAiThinking} className="p-2 rounded-full text-white disabled:text-gray-500">
+                         <button type="submit" disabled={!input.trim() || isAiThinking} className="p-2 rounded-full text-[color:var(--color-primary)] hover:text-[color:var(--color-glow)] disabled:text-[color:var(--color-text-muted)] transition-colors">
                             <SendIcon className="w-6 h-6"/>
                         </button>
                     </form>
-                    <button onClick={handleToggleListen} className={`w-14 h-14 flex items-center justify-center rounded-full transition-colors duration-300 ${isListening ? 'bg-red-500' : 'bg-blue-600'}`} disabled={isAiThinking}>
-                        <MicrophoneIcon className="w-7 h-7 text-white" isListening={isListening} />
+                    <button onClick={handleToggleListen} className={`w-14 h-14 flex items-center justify-center rounded-full transition-colors duration-300 ${isListening ? 'bg-red-500 text-white' : 'bg-[color:var(--color-primary)] text-[color:var(--keyboard-active-button-text)]'}`} disabled={isAiThinking}>
+                        <MicrophoneIcon className="w-7 h-7" isListening={isListening} />
                     </button>
                 </div>
             </footer>

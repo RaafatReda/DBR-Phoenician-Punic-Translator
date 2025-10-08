@@ -1,4 +1,3 @@
-
 import type { GlossaryEntry } from '../../types';
 
 export const aleph: GlossaryEntry[] = [
@@ -23,6 +22,7 @@ export const aleph: GlossaryEntry[] = [
   { phoenician: '𐤀𐤁𐤒', latin: 'ʾbq', meaning: { en: 'Dust', fr: 'Poussière', ar: 'غبار' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤀𐤂𐤃', latin: 'ʾgd', meaning: { en: 'To bind', fr: 'Lier, attacher', ar: 'يربط، يقيد' }, grammar: { pos: 'Verb', stem: 'G-stem' } },
   { phoenician: '𐤀𐤂𐤃𐤉𐤓', latin: 'ʾgdyr', meaning: { en: 'Gadir (Cádiz, Spain)', fr: 'Gadir (Cadix, Espagne)', ar: 'غادير (قادس، إسبانيا)' }, grammar: { pos: 'Noun' }, category: 'location' },
+  { phoenician: '𐤀𐤂𐤆', latin: 'ʾgz', meaning: { en: 'Walnut', fr: 'Noix', ar: 'جوز' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤀𐤂𐤌', latin: 'ʾgm', meaning: { en: 'Marsh, reed-bed', fr: 'Marais, roselière', ar: 'مستنقع، قصب' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤀𐤂𐤍', latin: 'ʾgn', meaning: { en: 'Basin, bowl', fr: 'Bassin, bol', ar: 'حوض، وعاء' }, grammar: { pos: 'Noun', gender: 'm', number: 's' } },
   { phoenician: '𐤀𐤂𐤓', latin: 'ʾgr', meaning: { en: 'To hire, rent', fr: 'Engager, louer', ar: 'يستأجر، يؤجر' }, grammar: { pos: 'Verb', stem: 'G-stem' } },

@@ -801,8 +801,7 @@ const App: React.FC = () => {
     
   const hasPhoenicianResult = appMode === 'translator' && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC) && typeof translationResult === 'object' && translationResult.phoenician;
   
-  // FIX: Corrected typo PHOENician to PHOENICIAN.
-  const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && transliterationMode === TransliterationMode.PHOENICIAN && typeof translationResult === 'object' && !!translationResult.grammar;
+  const showGrammarUI = isGrammarHelperOn && hasPhoenicianResult && typeof translationResult === 'object' && !!translationResult.grammar;
 
   const showPhoenicianControls = appMode !== 'translator' || isPhoenicianFamilySelected;
   const targetLangIsPhoenicianFamily = appMode === 'translator' && (targetLang === Language.PHOENICIAN || targetLang === Language.PUNIC);

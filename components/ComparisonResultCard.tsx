@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { TransliterationOutput, TransliterationMode, GrammarToken, PhoenicianDialect } from '../types';
 import GrammarHighlightedText from './GrammarHighlightedText';
@@ -42,7 +38,7 @@ const ComparisonResultCard: React.FC<ComparisonResultCardProps> = ({ dialect, re
   const lang = isPhoenician ? 'phn' : isArabic ? 'ar' : undefined;
   const dir = isPhoenician || isArabic ? 'rtl' : 'ltr';
 
-  const showGrammar = isGrammarHelperOn && isPhoenician && result.grammar && result.grammar.length > 0;
+  const showGrammar = isGrammarHelperOn && result.grammar && result.grammar.length > 0;
   
   const dialectToKey = (dialect: string): string => {
     return dialect === PhoenicianDialect.STANDARD_PHOENICIAN ? 'standardPhoenician' : 'punic';
