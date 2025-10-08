@@ -1,9 +1,5 @@
 import React from 'react';
-import SunIcon from './icons/SunIcon';
-import MoonIcon from './icons/MoonIcon';
 import SparklesIcon from './icons/SparklesIcon';
-import SwirlIcon from './icons/SwirlIcon';
-import DatabaseIcon from './icons/DatabaseIcon';
 
 type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold';
 
@@ -15,34 +11,24 @@ interface ThemeToggleProps {
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle, t }) => {
 
-  const CottonIcon: React.FC<{className?: string}> = ({ className = "w-6 h-6" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="M12 15.5A2.5 2.5 0 0 0 9.5 13a2.5 2.5 0 0 0-5 0A2.5 2.5 0 0 0 7 15.5"/>
-        <path d="M12 15.5A2.5 2.5 0 0 1 14.5 13a2.5 2.5 0 0 1 5 0A2.5 2.5 0 0 1 17 15.5"/>
-        <path d="M12 15.5V9"/>
-        <path d="M12 9a3 3 0 0 0-3-3 3 3 0 0 1-3-3"/>
-        <path d="M12 9a3 3 0 0 1 3-3 3 3 0 0 0 3-3"/>
-    </svg>
-  );
-
   const getNextThemeInfo = () => {
     if (theme === 'light') {
-      return { icon: <MoonIcon className="w-5 h-5" />, title: t('themeSwitchDark') };
+      return { icon: <span className="text-2xl">𓇼</span>, title: t('themeSwitchDark') };
     }
     if (theme === 'dark') {
-      return { icon: <CottonIcon className="w-5 h-5" />, title: t('themeSwitchPapyrus') };
+      return { icon: <span className="text-2xl">𓇉</span>, title: t('themeSwitchPapyrus') };
     }
     if (theme === 'papyrus') {
       return { icon: <SparklesIcon className="w-5 h-5" />, title: t('themeSwitchPurple') };
     }
     if (theme === 'purple-glassy') {
-      return { icon: <SwirlIcon className="w-5 h-5" />, title: t('themeSwitchGlassmorphism') };
+      return { icon: <span className="text-2xl">𓎰</span>, title: t('themeSwitchGlassmorphism') };
     }
     if (theme === 'glassmorphism') {
-      return { icon: <DatabaseIcon className="w-5 h-5" />, title: t('themeSwitchDeepSeaGold') };
+      return { icon: <span className="text-2xl">𓊝</span>, title: t('themeSwitchDeepSeaGold') };
     }
     // theme is 'deep-sea-gold'
-    return { icon: <SunIcon className="w-5 h-5" />, title: t('themeSwitchLight') };
+    return { icon: <span className="text-2xl">𓇳</span>, title: t('themeSwitchLight') };
   };
 
   const { icon, title } = getNextThemeInfo();
@@ -50,7 +36,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle, t }) => {
   return (
     <button
       onClick={onToggle}
-      className="p-2 rounded-full text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] focus:outline-none transition-colors"
+      className="p-2 rounded-full text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)] focus:outline-none transition-colors flex items-center justify-center h-9 w-9"
       aria-label={title}
       title={title}
     >

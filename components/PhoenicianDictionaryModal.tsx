@@ -12,6 +12,7 @@ import KeyboardIcon from './icons/KeyboardIcon';
 import WordDetailModal from './WordDetailModal';
 import { translateGlossaryBatch } from '../services/geminiService';
 import Loader from './Loader';
+import ChevronDownIcon from './icons/ChevronDownIcon';
 
 interface PhoenicianDictionaryModalProps {
   onClose: () => void;
@@ -25,8 +26,11 @@ interface PhoenicianDictionaryModalProps {
 
 const phoenicianAlphabet = ['𐤀', '𐤁', '𐤂', '𐤃', '𐤄', '𐤅', '𐤆', '𐤇', '𐤈', '𐤉', '𐤊', '𐤋', '𐤌', '𐤍', '𐤎', '𐤏', '𐤐', '𐤑', '𐤒', '𐤓', '𐤔', '𐤕'];
 
+type SearchMode = 'start' | 'middle' | 'end';
+
 const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ onClose, onWordSelect, onSaveSentence, t, speak, isSpeaking, initialLetterFilter }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchMode, setSearchMode] = useState<SearchMode>('middle');
   const [selectedLetter, setSelectedLetter] = useState<string | null>(initialLetterFilter || null);
   const [selectedCategory, setSelectedCategory] = useState<GlossaryEntry['category'] | null>(null);
   const [glossaryLang, setGlossaryLang] = useState<GlossaryLang>('en');
@@ -84,19 +88,46 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
 
     if (searchTerm.trim()) {
       const lowercasedTerm = searchTerm.toLowerCase();
+
+      const check = (textToSearch: string, term: string) => {
+        if (!textToSearch) return false;
+        const lowerText = textToSearch.toLowerCase();
+        switch (searchMode) {
+          case 'start':
+            return lowerText.startsWith(term);
+          case 'end':
+            return lowerText.endsWith(term);
+          case 'middle':
+          default:
+            return lowerText.includes(term);
+        }
+      };
+      
+      const checkPhoenician = (textToSearch: string, term: string) => {
+        switch (searchMode) {
+          case 'start':
+            return textToSearch.startsWith(term);
+          case 'end':
+            return textToSearch.endsWith(term);
+          case 'middle':
+          default:
+            return textToSearch.includes(term);
+        }
+      };
+
       results = results.filter(entry =>
-        entry.phoenician.includes(searchTerm) ||
-        entry.latin.toLowerCase().includes(lowercasedTerm) ||
-        (entry.meaning[glossaryLang] && entry.meaning[glossaryLang]!.toLowerCase().includes(lowercasedTerm))
+        checkPhoenician(entry.phoenician, searchTerm) ||
+        check(entry.latin, lowercasedTerm) ||
+        (entry.meaning[glossaryLang] && check(entry.meaning[glossaryLang]!, lowercasedTerm))
       );
     }
     
     return results;
-  }, [searchTerm, selectedLetter, selectedCategory, glossaryLang, dictionary]);
+  }, [searchTerm, searchMode, selectedLetter, selectedCategory, glossaryLang, dictionary]);
   
   useEffect(() => {
     listRef.current?.scrollTo(0, 0);
-  }, [selectedLetter, selectedCategory, searchTerm]);
+  }, [selectedLetter, selectedCategory, searchTerm, searchMode]);
 
   const handleLetterSelect = (letter: string) => {
     setSelectedLetter(prev => (prev === letter ? null : letter));
@@ -109,6 +140,7 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
   const handleClearFilters = () => {
     setSelectedLetter(null);
     setSelectedCategory(null);
+    setSearchTerm('');
   };
 
   const handleEntryClick = (entry: GlossaryEntry) => {
@@ -192,13 +224,14 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
 
           <div className="p-4 flex-shrink-0 border-b border-[color:var(--color-border)] space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div className="relative w-full sm:w-auto flex-grow">
+              <div className="w-full flex-grow flex items-center gap-4">
+                <div className="relative flex-grow">
                     <input
                         type="text"
                         placeholder={t('dictionarySearch')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className={`w-full bg-[color:var(--color-bg-end)] text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-muted)] rounded-lg py-2.5 px-10 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)] ${inputFontClass}`}
+                        className={`w-full bg-[color:var(--color-bg-end)] text-[color:var(--color-text)] placeholder:text-[color:var(--color-text-muted)] rounded-lg py-2.5 ps-10 pe-10 focus:outline-none focus:shadow-[0_0_10px_var(--color-glow)] ${inputFontClass}`}
                         autoFocus
                         dir={inputDir}
                     />
@@ -211,15 +244,33 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
                       </button>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                    <button onClick={() => handleCategorySelect('theonym')} className={categoryButtonClass('theonym')} aria-pressed={selectedCategory === 'theonym'}>{t('theonyms')}</button>
-                    <button onClick={() => handleCategorySelect('personal_name')} className={categoryButtonClass('personal_name')} aria-pressed={selectedCategory === 'personal_name'}>{t('personalNames')}</button>
-                    <button onClick={() => handleCategorySelect('location')} className={categoryButtonClass('location')} aria-pressed={selectedCategory === 'location'}>{t('locationNames')}</button>
+                <div className="relative w-52 flex-shrink-0">
+                    <select
+                        value={searchMode}
+                        onChange={(e) => setSearchMode(e.target.value as SearchMode)}
+                        className="appearance-none w-full bg-[color:var(--color-bg-end)] text-[color:var(--color-text)] text-sm rounded-lg focus:shadow-[0_0_15px_var(--color-glow)] focus:outline-none block p-2.5 cursor-pointer border border-[color:var(--color-border)]"
+                        aria-label="Search mode"
+                    >
+                        <option value="start" className="bg-[color:var(--color-surface-solid)]">{t('searchModeStart')}</option>
+                        <option value="middle" className="bg-[color:var(--color-surface-solid)]">{t('searchModeMiddle')}</option>
+                        <option value="end" className="bg-[color:var(--color-surface-solid)]">{t('searchModeEnd')}</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[color:var(--color-text-muted)]">
+                        <ChevronDownIcon className="w-4 h-4"/>
+                    </div>
                 </div>
+              </div>
             </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 flex-shrink-0 justify-center">
+                  <button onClick={() => handleCategorySelect(null)} className={categoryButtonClass(null)} aria-pressed={selectedCategory === null}>{t('dictionaryAll')}</button>
+                  <button onClick={() => handleCategorySelect('theonym')} className={categoryButtonClass('theonym')} aria-pressed={selectedCategory === 'theonym'}>{t('theonyms')}</button>
+                  <button onClick={() => handleCategorySelect('personal_name')} className={categoryButtonClass('personal_name')} aria-pressed={selectedCategory === 'personal_name'}>{t('personalNames')}</button>
+                  <button onClick={() => handleCategorySelect('location')} className={categoryButtonClass('location')} aria-pressed={selectedCategory === 'location'}>{t('locationNames')}</button>
+              </div>
 
-            <div>
-               <div className="flex flex-wrap items-center gap-y-2 gap-x-3 mb-4">
+               <div className="flex flex-wrap items-center gap-y-2 gap-x-3">
                   <span className="text-sm font-semibold text-[color:var(--color-text-muted)]">{t('searchMeaningIn')}:</span>
                   {languages.map(lang => (
                     <button 
@@ -236,10 +287,10 @@ const PhoenicianDictionaryModal: React.FC<PhoenicianDictionaryModalProps> = ({ o
               <div className="flex flex-wrap gap-1 justify-center">
                 <button
                   onClick={handleClearFilters}
-                  className={`px-3 py-1 text-sm rounded-md font-semibold transition-colors ${!selectedLetter && !selectedCategory ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
-                  aria-pressed={!selectedLetter && !selectedCategory}
+                  className={`px-3 py-1 text-sm rounded-md font-semibold transition-colors ${!selectedLetter && !selectedCategory && !searchTerm ? 'keyboard-layout-btn-active' : 'keyboard-btn text-[color:var(--color-text)]'}`}
+                  aria-pressed={!selectedLetter && !selectedCategory && !searchTerm}
                 >
-                  {t('dictionaryAll')}
+                  {t('reset')}
                 </button>
                 {phoenicianAlphabet.map(letter => (
                   <button
