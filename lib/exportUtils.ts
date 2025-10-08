@@ -7,9 +7,9 @@ const escapeHtml = (unsafe: string | undefined): string => {
     return unsafe.replace(/[&<"']/g, m => ({ '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": '&#039;' }[m]!));
 };
 
-const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAQQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAA...`;
-export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang): string => {
-    const translationsHtml = translations.map(item => {
+const PUNIC_FONT_BASE64 = `AAEAAAARAQAABAAQR0RFRgB3AADQAAB4AAAAHEdQT1O1L3LGAAB4iAAAJVpPU/to+qQ0AACEyAAABpZjbWFwABEBLAAAHVAAAABqZ2FzcAAAABAAAAeIAAAACGdseWYpPEeyAAAdhAAANPBoZWFkAgkL/wAA24QAAAA2aGhlYQYF/wIAANuMAAAAIWhobXgMEAAAAADbjAAAACRsb2NhAKoAAAAA29wAAAAWbWF4cAAEAA4AANv8AAAAIG5hbWUaFRQNAADc/AAAAehwb3N0AAMAAAAA3xwAAABeAAEAAAADAFUAAQAAAAAAHAADAAEAAAAAHAADAAEAAAAAHAADAAAAAAAAAIAAAADAAAAFAADAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAgAAAAAAAAABAAEAAQAAAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAAAQABAAEAAAAAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAAQABAAEAA...`;
+export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: UILang, t: (key: string) => string): string => {
+    const translationsHtml = translations.map((item, index) => {
         const isPunic = item.dialect === PhoenicianDialect.PUNIC || item.targetLang === Language.PUNIC || item.sourceLang === Language.PUNIC;
         const fontClass = isPunic ? 'punic' : 'phoenician';
         
@@ -22,38 +22,41 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
             const latin = escapeHtml(item.translatedText.latin);
             const arabic = escapeHtml(item.translatedText.arabic);
             transliterationHtml += `<div class="transliteration">`;
-            if (uiLang === 'en' || uiLang === 'fr') {
-                transliterationHtml += `<p class="latin">${latin}</p>`;
-            } else { // Arabic UI
-                transliterationHtml += `<p class="latin">${latin}</p>`;
+            transliterationHtml += `<p class="latin">${latin}</p>`;
+            if (uiLang === 'ar') {
                 transliterationHtml += `<p class="arabic">${arabic}</p>`;
             }
             transliterationHtml += `</div>`;
         }
         
+        const dialectToKey = (dialect: PhoenicianDialect) => dialect === PhoenicianDialect.PUNIC ? 'punic' : 'standardPhoenician';
+
         return `
-        <div class="translation-item">
+        <div class="translation-item ${index === 0 ? 'first-item' : ''}">
             <div class="header">
-                <span class="lang">${getFlagForLanguage(item.sourceLang)} ${escapeHtml(item.sourceLang)}</span>
+                <span class="lang">${getFlagForLanguage(item.sourceLang)} ${escapeHtml(t(item.sourceLang.toLowerCase()))}</span>
                 <span class="arrow">&rarr;</span>
-                <span class="lang">${getFlagForLanguage(item.targetLang)} ${escapeHtml(item.targetLang)} ${item.dialect ? `(${escapeHtml(item.dialect)})` : ''}</span>
+                <span class="lang">${getFlagForLanguage(item.targetLang)} ${escapeHtml(t(item.targetLang.toLowerCase()))} ${item.dialect ? `(${escapeHtml(t(dialectToKey(item.dialect)))})` : ''}</span>
             </div>
             <p class="source-text">${escapeHtml(item.sourceText)}</p>
             <p class="translated-text">${translatedTextDisplay}</p>
             ${transliterationHtml}
-            ${item.notes ? `<div class="notes"><strong>Notes:</strong><p>${escapeHtml(item.notes).replace(/\n/g, '<br>')}</p></div>` : ''}
+            ${item.notes ? `<div class="notes"><p>${escapeHtml(item.notes).replace(/\n/g, '<br>')}</p></div>` : ''}
         </div>
     `}).join('');
 
+    const coverTitle = t('savedTranslationsPDFTitle');
+    const subtitle = t('savedTranslationsPDFSubtitle');
+
     return `
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="${uiLang}" dir="${uiLang === 'ar' ? 'rtl' : 'ltr'}">
         <head>
             <meta charset="UTF-8">
-            <title>DBR Translations</title>
+            <title>${escapeHtml(coverTitle)}</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Cinzel:wght@700&family=Handlee&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@300;400;700&family=Noto+Sans+Phoenician&display=swap" rel="stylesheet">
             <style>
                 @font-face {
                   font-family: 'Punic LDR';
@@ -61,108 +64,174 @@ export const generatePrintableHtml = (translations: SavedTranslation[], uiLang: 
                   font-weight: normal;
                   font-style: normal;
                 }
-                body { 
-                    font-family: 'Handlee', cursive; 
-                    margin: 20px; 
-                    color: #333; 
+                :root {
+                  --color-purple: #800080;
+                  --color-sky-blue: #87CEEB;
+                  --color-text: #1a1a1a;
+                  --color-bg: #FFFFFF;
+                  --color-light-gray: #f8f9fa;
+                  --font-sans: 'Poppins', sans-serif;
+                  --font-ar: 'Cairo', sans-serif;
                 }
-                @media print { 
-                    body { 
-                        -webkit-print-color-adjust: exact; 
-                        print-color-adjust: exact; 
-                    } 
+                @page {
+                  size: A4;
+                  margin: 1.5cm;
+                  @bottom-center {
+                      content: "Page " counter(page);
+                      font-family: var(--font-sans);
+                      font-size: 9pt;
+                      color: #888;
+                  }
                 }
-                h1 { 
-                    text-align: center; 
-                    color: #800080; 
-                    border-bottom: 2px solid #e8e6da; 
-                    padding-bottom: 10px; 
-                    font-family: 'Cinzel', serif;
+                body {
+                  font-family: var(--font-sans);
+                  color: var(--color-text);
+                  background-color: var(--color-bg);
+                  line-height: 1.6;
+                  counter-reset: page 1;
                 }
-                .container { 
-                    max-width: 800px; 
-                    margin: 0 auto; 
+                html[lang="ar"] body {
+                  font-family: var(--font-ar);
                 }
-                .translation-item { 
-                    border: 1px solid #ccc; 
-                    border-radius: 8px; 
-                    padding: 15px; 
-                    margin-bottom: 20px; 
-                    page-break-inside: avoid; 
-                    background-color: #f8f7f2 !important; 
+                @media print {
+                  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                }
+
+                .cover-page {
+                  height: 267mm;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  text-align: center;
+                  box-sizing: border-box;
+                  page-break-after: always;
+                  position: relative;
+                  overflow: hidden;
+                  background: var(--color-bg);
+                }
+                .cover-page::before {
+                  content: '';
+                  position: absolute;
+                  bottom: -50%;
+                  left: -30%;
+                  width: 150%;
+                  height: 150%;
+                  background: linear-gradient(45deg, var(--color-purple), var(--color-sky-blue));
+                  transform: rotate(-15deg);
+                  opacity: 0.1;
+                  z-index: 1;
+                }
+                .cover-content {
+                  position: relative;
+                  z-index: 2;
+                }
+                .cover-content h1 {
+                  font-family: var(--font-sans);
+                  font-size: 2.8em;
+                  color: var(--color-purple);
+                  margin: 0;
+                  font-weight: 700;
+                }
+                html[lang="ar"] .cover-content h1 {
+                  font-family: var(--font-ar);
+                  font-size: 3.2em;
+                }
+                .cover-content h2 {
+                  font-family: var(--font-sans);
+                  font-size: 1.2em;
+                  color: #555;
+                  margin-top: 1rem;
+                  font-weight: 300;
+                }
+                html[lang="ar"] .cover-content h2 {
+                  font-family: var(--font-ar);
+                }
+                .cover-content .logo {
+                  font-family: 'Punic LDR', serif;
+                  font-size: 5em;
+                  color: var(--color-purple);
+                  margin-bottom: 2rem;
+                  opacity: 0.8;
+                }
+
+                .container {
+                  width: 100%;
+                }
+                .translation-item {
+                    border: 1px solid #ddd;
+                    border-left: 4px solid var(--color-sky-blue);
+                    padding: 1em 1.2em;
+                    margin-bottom: 20px;
+                    page-break-inside: avoid;
+                    background-color: var(--color-light-gray) !important;
+                    border-radius: 0 8px 8px 0;
+                }
+                .translation-item:first-of-type {
+                    page-break-before: auto;
+                }
+                html[dir="rtl"] .translation-item {
+                    border-left: none;
+                    border-right: 4px solid var(--color-sky-blue);
+                    border-radius: 8px 0 0 8px;
                 }
                 .header { 
-                    font-weight: bold; 
-                    margin-bottom: 10px; 
-                    color: #319795; 
-                    font-size: 1.1em; 
+                    font-weight: 700; 
+                    margin-bottom: 0.8em; 
+                    color: var(--color-purple); 
+                    font-size: 1em; 
+                    border-bottom: 1px solid #e0e0e0;
+                    padding-bottom: 0.5em;
                 }
-                .arrow { 
-                    margin: 0 10px; 
-                }
+                .arrow { margin: 0 10px; }
                 .source-text { 
-                    margin-bottom: 10px; 
-                    padding-left: 10px; 
-                    border-left: 3px solid #ccc; 
+                    margin-bottom: 0.8em; 
+                    color: #444; 
+                    font-size: 0.95em;
                 }
                 .translated-text { 
-                    font-size: 1.5em; 
-                    color: #800080; 
-                    margin-bottom: 5px;
+                    font-size: 1.4em; 
+                    color: var(--color-text);
+                    margin-bottom: 0.2em;
                     direction: rtl; 
                     text-align: right;
                 }
-                .translated-text .phoenician {
-                    font-family: 'Noto Sans Phoenician', serif;
+                html[dir="rtl"] .translated-text {
+                    text-align: right;
                 }
-                .translated-text .punic {
-                    font-family: 'Punic LDR', serif;
-                    font-size: 1.2em; /* relative to 1.5em */
-                }
+                .translated-text .phoenician { font-family: 'Noto Sans Phoenician', serif; }
+                .translated-text .punic { font-family: 'Punic LDR', serif; font-size: 1.1em; }
                 .transliteration {
                     text-align: right;
-                    padding-right: 2px;
-                    font-size: 0.9em;
-                    color: #4A5568;
-                    margin-bottom: 10px;
+                    font-size: 0.85em;
+                    color: #555;
+                    margin-bottom: 0.8em;
                 }
-                .transliteration .latin {
-                    margin: 0;
-                    font-style: italic;
-                    direction: ltr;
-                }
-                .transliteration .arabic {
-                    margin: 2px 0 0;
-                    direction: rtl;
-                    font-family: 'Cairo', sans-serif;
-                }
+                 html[dir="rtl"] .transliteration { text-align: right; }
+                .transliteration p { margin: 0; }
+                .transliteration .latin { font-style: italic; direction: ltr; }
+                .transliteration .arabic { direction: rtl; font-family: var(--font-ar); }
                 .notes { 
-                    margin-top: 15px; 
-                    padding: 10px; 
-                    background-color: #e8e6da !important; 
+                    margin-top: 1em; 
+                    padding: 0.8em; 
+                    background-color: #e9ecef !important; 
                     border-radius: 4px; 
-                    font-size: 0.9em; 
+                    font-size: 0.85em; 
+                    color: #333;
                 }
-                .notes strong { 
-                    color: #333; 
-                }
-                .notes p { 
-                    margin: 5px 0 0; 
-                    white-space: pre-wrap; 
-                }
-                .footer { 
-                    text-align: center; 
-                    margin-top: 20px; 
-                    font-size: 0.8em; 
-                    color: #777; 
-                }
+                .notes p { margin: 0; white-space: pre-wrap; }
             </style>
         </head>
         <body>
+            <div class="cover-page">
+              <div class="cover-content">
+                  <div class="logo">𐤃𐤁𐤓</div>
+                  <h1>${escapeHtml(coverTitle)}</h1>
+                  <h2>${escapeHtml(subtitle)}</h2>
+              </div>
+            </div>
             <div class="container">
-                <h1>DBR Translations</h1>
                 ${translationsHtml}
-                <div class="footer">Exported from DBR Translator</div>
             </div>
         </body>
         </html>

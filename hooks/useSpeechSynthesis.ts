@@ -3,8 +3,6 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 export const useSpeechSynthesis = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [supported, setSupported] = useState(false);
-  // Using a ref for synth to avoid re-renders when it's accessed.
-  // FIX: Added useRef import.
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
   useEffect(() => {
@@ -32,30 +30,59 @@ export const useSpeechSynthesis = () => {
             
             const voices = synth.getVoices();
             let selectedVoice: SpeechSynthesisVoice | null = null;
-
-            // Filter for voices matching the language (e.g., 'ar' for 'ar-SA')
+            
             const langCode = lang.split('-')[0];
             const langVoices = voices.filter(v => v.lang.startsWith(langCode));
 
             if (langVoices.length > 0) {
-                const femaleKeywords = ['female', 'woman', 'femme', 'frau', 'kobieta', 'امرأة', 'laila', 'zira', 'monica', 'paulina'];
-                const maleKeywords = ['male', 'man', 'homme', 'mann', 'mężczyzna', 'رجل', 'maged', 'david', 'zaki', 'diego', 'jorge'];
+                const qualityKeywords = ['natural', 'premium', 'enhanced', 'neural', 'pro', 'google', 'microsoft'];
+                const femaleKeywords = ['female', 'woman', 'femme', 'frau', 'kobieta', 'امرأة', 'zira', 'monica', 'paulina'];
                 
-                // 1. Try to find a female voice by positive match
-                selectedVoice = langVoices.find(v => femaleKeywords.some(kw => v.name.toLowerCase().includes(kw))) || null;
+                // Prioritize voices based on a scoring system for a more natural sound
+                const scoredVoices = langVoices.map(voice => {
+                    let score = 0;
+                    const nameLower = voice.name.toLowerCase();
+            
+                    // Highest priority: voices with descriptive quality keywords
+                    if (qualityKeywords.some(kw => nameLower.includes(kw))) {
+                        score += 10;
+                    }
+            
+                    // High priority: local service voices are often higher quality
+                    if (voice.localService) {
+                        score += 5;
+                    }
+                    
+                    // Preference for female voices, which can sound warmer
+                    if (femaleKeywords.some(kw => nameLower.includes(kw))) {
+                        score += 3;
+                    }
+
+                    // Slight preference for default system voices
+                    if (voice.default) {
+                        score += 2;
+                    }
+                    
+                    // Slight preference for voices matching the full lang code (e.g., 'en-US' over 'en')
+                    if (voice.lang === lang) {
+                        score += 1;
+                    }
+                    
+                    return { voice, score };
+                });
+            
+                // Sort by score descending to find the best available voice
+                scoredVoices.sort((a, b) => b.score - a.score);
                 
-                // 2. If not found, try to find one that DOESN'T match a male voice (negative match)
-                if (!selectedVoice) {
-                     selectedVoice = langVoices.find(v => !maleKeywords.some(kw => v.name.toLowerCase().includes(kw))) || null;
-                }
-                
-                // 3. Fallback to the first available voice for the language if gender search still fails
-                if (!selectedVoice) {
-                    selectedVoice = langVoices.find(v => v.lang === lang) || langVoices[0];
-                }
+                selectedVoice = scoredVoices.length > 0 ? scoredVoices[0].voice : langVoices[0];
             }
             
             utterThis.voice = selectedVoice;
+
+            // Adjust speech parameters for a more natural, warm, and expressive tone
+            utterThis.pitch = 1.1; // A slightly higher pitch adds expressiveness and avoids a monotone delivery.
+            utterThis.rate = 0.9;  // A slightly slower rate improves clarity and mimics a more natural speaking pace.
+            utterThis.volume = 1;  // Use maximum volume.
 
 
             utterThis.onend = () => {

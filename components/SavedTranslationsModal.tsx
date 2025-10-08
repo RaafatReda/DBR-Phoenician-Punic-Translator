@@ -71,7 +71,7 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
     const selected = getSelectedTranslations();
     if (selected.length === 0) return;
 
-    const htmlContent = generatePrintableHtml(selected, uiLang);
+    const htmlContent = generatePrintableHtml(selected, uiLang, t);
     const printWindow = window.open('', '_blank');
     if (printWindow) {
       printWindow.document.write(htmlContent);
@@ -93,7 +93,7 @@ const SavedTranslationsModal: React.FC<SavedTranslationsModalProps> = ({ transla
     exportContainer.style.left = '-9999px';
     exportContainer.style.width = '800px';
 
-    const htmlContent = generatePrintableHtml(selected, uiLang);
+    const htmlContent = generatePrintableHtml(selected, uiLang, t);
     const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*)<\/body>/i);
     const styleMatch = htmlContent.match(/<style[^>]*>([\s\S]*)<\/style>/i);
 
