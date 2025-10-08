@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo, ChangeEvent, KeyboardEvent } from 'react';
 import { Language, PhoenicianDialect, SavedTranslation, TransliterationMode, TransliterationOutput, GrammarToken, Cognate, AIAssistantResponse, PronunciationResult, PhoenicianWordDetails } from './types';
 import { translateText, comparePhoenicianDialects, getTranslationHintsFromImage, reconstructPronunciation } from './services/geminiService';
+import LanguageSelector from './components/LanguageSelector';
 import DialectSelector from './components/DialectSelector';
 import TextArea from './components/TextArea';
 import Loader from './components/Loader';
@@ -960,24 +961,26 @@ const App: React.FC = () => {
                       />
                   </div>
               )}
+              
+              <div className="w-full max-w-5xl mx-auto mb-8">
+                <LanguageSelector
+                    sourceLang={sourceLang}
+                    targetLang={targetLang}
+                    onSourceLangChange={handleSourceLangChange}
+                    onTargetLangChange={handleTargetLangChange}
+                    onSwap={handleSwapLanguages}
+                    isLoading={isLoading}
+                    t={t}
+                />
+              </div>
 
               <div className="w-full max-w-7xl flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                 {/* SOURCE PANEL */}
                 <div ref={sourceTextAreaRef} className="relative w-full min-h-[18rem] glass-panel rounded-[var(--border-radius)] flex flex-col">
-                  <div className="flex-shrink-0 flex items-center p-1.5 h-[60px]">
-                      <select
-                        value={sourceLang}
-                        onChange={(e) => handleSourceLangChange(e.target.value as Language)}
-                        disabled={isLoading}
-                        className="lang-select"
-                        aria-label="Select source language"
-                      >
-                        {availableLanguages.map((lang) => (
-                          <option key={`source-${lang}`} value={lang} className="bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)]">
-                            {getFlagForLanguage(lang)} {t(lang.toLowerCase())}
-                          </option>
-                        ))}
-                      </select>
+                  <div className="flex-shrink-0 flex items-center p-3 h-[60px]">
+                      <span className="text-lg font-semibold text-[color:var(--color-text)] px-2">
+                        {getFlagForLanguage(sourceLang)} {t(sourceLang.toLowerCase())}
+                      </span>
                   </div>
                   <div className="flex-grow flex items-stretch border-t border-[color:var(--color-border)]">
                       <div className="flex-grow relative">
@@ -1022,20 +1025,10 @@ const App: React.FC = () => {
 
                 {/* RESULT PANEL */}
                 <div className="w-full min-h-[18rem] glass-panel rounded-[var(--border-radius)] flex flex-col">
-                    <div className="flex-shrink-0 flex justify-between items-center p-1.5 h-[60px]">
-                        <select
-                          value={targetLang}
-                          onChange={(e) => handleTargetLangChange(e.target.value as Language)}
-                          disabled={isLoading}
-                          className="lang-select"
-                          aria-label="Select target language"
-                        >
-                          {availableLanguages.map((lang) => (
-                            <option key={`target-${lang}`} value={lang} className="bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)]">
-                              {getFlagForLanguage(lang)} {t(lang.toLowerCase())}
-                            </option>
-                          ))}
-                        </select>
+                    <div className="flex-shrink-0 flex justify-between items-center p-3 h-[60px]">
+                        <span className="text-lg font-semibold text-[color:var(--color-text)] px-2">
+                            {getFlagForLanguage(targetLang)} {t(targetLang.toLowerCase())}
+                        </span>
                         
                         {currentTranslatedTextString && !isGroupEditMode && !isAiEditingMode && (
                             <div className="flex items-center space-x-1">

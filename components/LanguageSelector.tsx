@@ -51,7 +51,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           onChange={(e) => onSourceLangChange(e.target.value as Language)}
           disabled={isLoading}
           className={selectStyles}
-          aria-label="Select source language"
+          aria-label={t('selectSourceLang')}
         >
           {availableLanguages.map((lang) => (
             <option key={`source-${lang}`} value={lang} className="bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)]">
@@ -68,7 +68,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           onClick={onSwap}
           disabled={isLoading}
           className="p-3 rounded-full glass-panel text-[color:var(--color-primary)] hover:shadow-[0_0_15px_var(--color-glow)] focus:outline-none active:rotate-180 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-          aria-label="Swap languages"
+          aria-label={t('swapLanguages')}
         >
           <SwapIcon className="w-5 h-5" />
         </button>
@@ -79,7 +79,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           onChange={(e) => onTargetLangChange(e.target.value as Language)}
           disabled={isLoading}
           className={selectStyles}
-          aria-label="Select target language"
+          aria-label={t('selectTargetLang')}
         >
           {availableLanguages.map((lang) => (
             <option key={`target-${lang}`} value={lang} className="bg-[color:var(--color-surface-solid)] text-[color:var(--color-text)]">
