@@ -1,6 +1,6 @@
 import React from 'react';
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold' | 'e-ink';
 
 interface ThemeToggleProps {
   theme: Theme;
@@ -26,7 +26,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle, t }) => {
     if (theme === 'glassmorphism') {
       return { icon: <span className="text-2xl">𓊝</span>, title: t('themeSwitchDeepSeaGold') };
     }
-    // theme is 'deep-sea-gold'
+    if (theme === 'deep-sea-gold') {
+      return { icon: <span className="text-2xl">𓏜</span>, title: t('themeSwitchEInk') };
+    }
+    // theme is 'e-ink'
     return { icon: <span className="text-2xl">𓇳</span>, title: t('themeSwitchLight') };
   };
 

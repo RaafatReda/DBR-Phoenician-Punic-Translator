@@ -6,7 +6,7 @@ import ThemeToggle from './ThemeToggle';
 import FontSizeManager from './FontSizeManager';
 import MagnifyingGlassPlusIcon from './icons/ArtifactIcon';
 
-type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism';
+type Theme = 'light' | 'dark' | 'papyrus' | 'purple-glassy' | 'glassmorphism' | 'deep-sea-gold' | 'e-ink';
 type FontSize = 'small' | 'medium' | 'large';
 
 interface MainMenuProps {
